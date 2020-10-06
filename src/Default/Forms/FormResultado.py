@@ -215,26 +215,10 @@ class FormResultado:
 
         self.window.mainloop()
 
-    # def save_file(self, window):
-    #     """Save the current file as a new file."""
-    #     filepath = asksaveasfilename(
-    #         defaultextension="txt",
-    #         filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
-    #     )
-    #     if not filepath:
-    #         return
-    #     # with open(filepath, "w") as output_file:
-    #         # text = txt_edit.get("1.0", tk.END)
-    #         # output_file.write(text)
-    #     # window.title(f"Simple Text Editor - {filepath}")
-
     def onFrameConfigure(self, canvas):
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def ScrollTab(self, tablayout, resultadoTarefa):
-        # showinfo("Success", "It works!");
-        # print(self.tablayout.index("current"))
-        # print(self.tablayout.tab(self.tablayout.select(), 'text'))
 
         self.scroll.destroy()
         if len(resultadoTarefa[0]) >= 24:
