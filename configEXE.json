@@ -11,11 +11,11 @@
   },
   {
    "optionDest": "onefile",
-   "value": true
+   "value": false
   },
   {
    "optionDest": "console",
-   "value": true
+   "value": false
   },
   {
    "optionDest": "icon_file",
@@ -184,6 +184,10 @@
   {
    "optionDest": "hiddenimports",
    "value": "io"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/images;images/"
   }
  ],
  "nonPyinstallerOptions": {

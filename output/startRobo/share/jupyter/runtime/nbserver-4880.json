@@ -1,0 +1,12 @@
+{
+  "base_url": "/",
+  "hostname": "localhost",
+  "notebook_dir": "C:\\Users\\Tiago",
+  "password": false,
+  "pid": 4880,
+  "port": 8888,
+  "secure": false,
+  "sock": "",
+  "token": "3e845d85cfc6b6da59c6a6c3aff3f9c204b1ebdf9a8c47c1",
+  "url": "http://localhost:8888/"
+}
