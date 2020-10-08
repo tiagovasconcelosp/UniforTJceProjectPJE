@@ -1,3 +1,5 @@
+import sys
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support import expected_conditions as EC
@@ -25,9 +27,10 @@ class Perfil:
 
             logging.info('Perfil selecionado com sucesso! Selecionado: ' + str(desPerfil))
         except:
-            logging.exception('Falha selecionar o perfil indicado com codigo ' + str(perfil))
+            logging.exception('Falha ao autenticar ou')
+            logging.exception('Falha em selecionar o perfil indicado com codigo ' + str(perfil))
             logging.info('Perfil "' + str(desPerfil) + '" nao identificado.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
             firefox.quit()
-            exit()
+            sys.exit(0)

@@ -1,4 +1,4 @@
-import xlrd
+import sys
 import pandas as pd
 
 class OpenXls:
@@ -11,7 +11,6 @@ class OpenXls:
     def OpenFileXls(self, firefox, logging):
 
         try:
-            # xls = xlrd.open_workbook(self._pathXls, formatting_info=True)
             xls = pd.ExcelFile(self._pathXls)
             logging.debug("Arquivo XLS carregado com sucesso.")
             return xls
@@ -20,7 +19,7 @@ class OpenXls:
             logging.info('Finalizando o robo')
             logging.shutdown()
             firefox.quit()
-            exit()
+            sys.exit(0)
 
     def getDataXls(self, data, firefox, logging, xml):
 
@@ -46,11 +45,11 @@ class OpenXls:
                 logging.info('Planilha esta vazia. Finalizando o robo')
                 logging.shutdown()
                 firefox.quit()
-                exit()
+                sys.exit(0)
 
         except:
             logging.exception('Falha ao ler dados da planilha.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
             firefox.quit()
-            exit()
+            sys.exit(0)

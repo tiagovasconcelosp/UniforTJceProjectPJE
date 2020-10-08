@@ -1,3 +1,4 @@
+import sys
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -203,12 +204,12 @@ class TaskAguardandoSessaoJulgamento:
             firefox.quit()
 
             return self.listProcessos
+
         except:
 
             image = Print(firefox, caminhoImages)
-
             logging.exception('Falha ao concluir a tarefa especificada. - ' + atividade)
             logging.info('Finalizando o robo.')
             logging.shutdown()
             firefox.quit()
-            exit()
+            sys.exit(0)

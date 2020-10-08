@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/main.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/Auth.py" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/Logging.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/OpenWebDriver.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/OpenXls.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/Perfil.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/Print.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/StartRobo.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/TaskAguardandoSessaoJulgamento.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Control/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/View/FormMain.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/View/FormResultado.py" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/Default/View/__init__.py" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/Default/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/__init__.py" charset="UTF-8" />
+  </component>
+</project>

@@ -1,0 +1,193 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/main.py"
+  },
+  {
+   "optionDest": "onefile",
+   "value": true
+  },
+  {
+   "optionDest": "console",
+   "value": true
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/icon_.ico"
+  },
+  {
+   "optionDest": "name",
+   "value": "startRobo"
+  },
+  {
+   "optionDest": "ascii",
+   "value": false
+  },
+  {
+   "optionDest": "clean_build",
+   "value": true
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": false
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "win_private_assemblies",
+   "value": false
+  },
+  {
+   "optionDest": "win_no_prefer_redirects",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/logs;logs/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/driver;driver/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/src;src/"
+  },
+  {
+   "optionDest": "pathex",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject"
+  },
+  {
+   "optionDest": "hookspath",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "json"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "getmac"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pandas"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "os"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "xml.etree.ElementTree"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "urllib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "time"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "socket"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "PIL"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.by"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Control.Print"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Control.Auth"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Control.OpenWebDriver"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Control.OpenXls"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Control.Perfil"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Control.TaskAguardandoSessaoJulgamento"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Control.Logging"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.keys"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pandas._libs.tslib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "win32api"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "xml.etree.ElementTree"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/config;config/"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "sys"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.firefox.options"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "datetime"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "io"
+  }
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}

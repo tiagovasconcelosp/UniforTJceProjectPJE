@@ -1,4 +1,4 @@
-import os
+import sys
 import time
 import json
 from urllib import request
@@ -21,11 +21,9 @@ class StartRobo:
 
     def startRobo(self, log, xml, dataForm):
 
-        self.caminhoWebDrive = os.path.dirname(os.path.realpath(__file__)) + "\\..\\..\\..\\" + \
-                                [i.text for i in xml.iter('directoryDriver')][0] + "\\" + \
+        self.caminhoWebDrive = [i.text for i in xml.iter('directoryDriver')][0] + "\\" + \
                                 [i.text for i in xml.iter('driverName')][0]
-        self.caminhoImages = os.path.dirname(os.path.realpath(__file__)) + "\\..\\..\\..\\" + \
-                              [i.text for i in xml.iter('directoryImages')][0] + "\\"
+        self.caminhoImages = [i.text for i in xml.iter('directoryImages')][0] + "\\"
         self.url = [i.text for i in xml.iter('url')][0]
 
         # Abrir WebDriver
@@ -81,7 +79,7 @@ class StartRobo:
             log.info('Finalizando o robo.')
             log.shutdown()
             firefox.quit()
-            exit()
+            sys.exit(0)
 
         # Seleciona o perfil com codigo 0
         selecionarPerfil = Perfil(firefox, log, codPerfil, dataForm['perfil'])
@@ -109,4 +107,4 @@ class StartRobo:
             log.info('Finalizando o robo.')
             log.shutdown()
             firefox.quit()
-            exit()
+            sys.exit(0)

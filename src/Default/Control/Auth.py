@@ -1,3 +1,5 @@
+import sys
+
 from selenium.webdriver.common.by import By
 from src.Default.Control.Print import Print
 
@@ -16,7 +18,8 @@ class Auth:
 
             firefox.find_element(By.ID, "password").send_keys(senha)
 
-            logging.info("Autenticacao realizada com sucesso.")
+            logging.info("Tentando realizar autenticacao.")
+
             firefox.find_element(By.ID, "btnEntrar").click()
         except:
 
@@ -26,4 +29,4 @@ class Auth:
             logging.info('Finalizando o robo.')
             logging.shutdown()
             firefox.quit()
-            exit()
+            sys.exit(0)

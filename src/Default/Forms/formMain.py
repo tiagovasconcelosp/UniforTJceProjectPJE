@@ -94,12 +94,15 @@ class Form(StartRobo):
         # selectPerfil.current(0)
         selectPerfil.grid(row=7, sticky='W', padx=5, pady=2, ipady=2)
 
-        closeButton = Tkinter.Button(form, text="Fechar")
+        closeButton = Tkinter.Button(form, text="Fechar", command=lambda: self.clickClose())
         closeButton.pack(side=RIGHT, padx=5, pady=5)
         okButton = Tkinter.Button(form, text="OK", command=lambda: self.clickOk(outTblTxt, outTblTxtS, selectTask, selectPerfil))
         okButton.pack(side=RIGHT)
 
         form.mainloop()
+
+    def clickClose(self):
+        sys.exit(0)
 
     def clickOk(self, outTblTxt, outTblTxtS, selectTask, selectPerfil):
 
