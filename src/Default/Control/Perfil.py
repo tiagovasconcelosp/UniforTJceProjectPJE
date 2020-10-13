@@ -1,4 +1,5 @@
 import sys
+import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
@@ -14,8 +15,8 @@ class Perfil:
     def Perfil(self, firefox, logging, perfil, desPerfil):
 
         try:
-
-            element = WebDriverWait(firefox, 20).until(
+            # foi alterado para 120, antes estava 20
+            element = WebDriverWait(firefox, 120).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      '.menu-usuario a')))
@@ -26,6 +27,7 @@ class Perfil:
             select.select_by_visible_text(desPerfil)
 
             logging.info('Perfil selecionado com sucesso! Selecionado: ' + str(desPerfil))
+
         except:
             logging.exception('Falha ao autenticar ou')
             logging.exception('Falha em selecionar o perfil indicado com codigo ' + str(perfil))

@@ -125,8 +125,9 @@ class TaskAguardandoSessaoJulgamento:
 
             firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
-            time.sleep(1)
-
+            # time.sleep(1)
+            time.sleep(100)
+            
             firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
 
             iframe = WebDriverWait(firefox, 60).until(

@@ -1,9 +1,12 @@
 import sys
 
 from selenium import webdriver
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class OpenWebDriver():
@@ -52,12 +55,19 @@ class OpenWebDriver():
 
         firefox.maximize_window()
         firefox.delete_all_cookies()
+        firefox.set_page_load_timeout(5)
+
+        waitButtonLogin = WebDriverWait(firefox, 5)
 
         try:
-            firefox.set_page_load_timeout(10)
             firefox.get(self._pathUrl)
         except:
-            firefox.find_element(By.ID, "btnEntrar").send_keys(Keys.CONTROL + 'Escape')
+            # firefox.find_element(By.ID, "btnEntrar").send_keys(Keys.CONTROL + 'Escape')
+
+            # Interrompe o carregamento da página após error de time out, se passar de 5s
+            waitButtonLogin.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#btnEntrar')))
+            firefox.execute_script("window.stop();")
+
             logging.info('Tempo de carregamento da pagina ultrapassou 5s.')
             logging.info('Executar parada de carregamento da pagina.')
 
