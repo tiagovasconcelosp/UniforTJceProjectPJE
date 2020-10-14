@@ -14,8 +14,9 @@ class Perfil:
     def Perfil(self, firefox, logging, perfil, desPerfil):
 
         try:
-            # foi alterado para 120, antes estava 20
-            element = WebDriverWait(firefox, 120).until(
+            # foi alterado para 300s, antes estava 20s
+            # aguarda para que seja feita a autenticacao manual
+            element = WebDriverWait(firefox, 300).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      '.menu-usuario a')))
