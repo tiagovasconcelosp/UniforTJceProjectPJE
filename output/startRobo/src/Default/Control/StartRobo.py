@@ -4,6 +4,7 @@ import json
 from urllib import request
 import socket
 from getmac import get_mac_address
+import win32api
 
 from src.Default.Control.Auth import Auth
 from src.Default.Control.OpenWebDriver import OpenWebDriver
@@ -18,16 +19,46 @@ class StartRobo:
     caminhoWebDrive = ""
     caminhoImages = ""
     url = ""
+    versao = 0.0
+    webDriveName = ""
 
     def startRobo(self, log, xml, dataForm):
 
-        self.caminhoWebDrive = [i.text for i in xml.iter('directoryDriver')][0] + "\\" + \
-                                [i.text for i in xml.iter('driverName')][0]
+        # Especifica diretorio dos prints
         self.caminhoImages = [i.text for i in xml.iter('directoryImages')][0] + "\\"
         self.url = [i.text for i in xml.iter('url')][0]
 
+        # Especifica drive ser ultilizado
+        self.caminhoWebDrive = [i.text for i in xml.iter('directoryDriver')][0] + "\\"
+
+        self.versao = self.get_installed_version()
+
+        # if self._driveName == 'Driver 0.18.0 para Mozilla Superior ou Igual a Versão 27':
+        #     self.versao = 18
+        # elif self._driveName == 'Driver 0.19.0 para Mozilla Superior ou Igual a Versão 55':
+        #     self.versao = 19
+        # elif self._driveName == 'Driver 0.21.0 para Mozilla Superior ou Igual a Versão 57':
+        #     self.versao = 21
+        # elif self._driveName == 'Driver 0.26.0 para Mozilla Superior ou Igual a Versão 60':
+        #     self.versao = 26
+        # elif self._driveName == 'Driver 0.27.0 para Mozilla Superior ou Igual a Versão 79':
+        #     self.versao = 27
+
+        # Geckodrive Name
+        if self.versao < 55.0:
+            self.webDriveName = 'Driver 0.18.0 para Mozilla Superior ou Igual a Versão 27'
+        elif self.versao >= 55.0 and self.versao < 57.0:
+            self.webDriveName = 'Driver 0.19.0 para Mozilla Superior ou Igual a Versão 55'
+        elif self.versao >= 57.0 and self.versao < 60.0:
+            self.webDriveName = 'Driver 0.21.0 para Mozilla Superior ou Igual a Versão 57'
+        elif self.versao >= 60.0 and self.versao < 79.0:
+            self.webDriveName = 'Driver 0.26.0 para Mozilla Superior ou Igual a Versão 60'
+        elif self.versao >= 79.0:
+            self.webDriveName = 'Driver 0.27.0 para Mozilla Superior ou Igual a Versão 79'
+
         # Abrir WebDriver
-        webdriver = OpenWebDriver(self.caminhoWebDrive, self.url)
+        # webdriver = OpenWebDriver(self.caminhoWebDrive, dataForm['drive'], self.versao, self.url)
+        webdriver = OpenWebDriver(self.caminhoWebDrive, self.webDriveName, self.versao, self.url)
 
         # Inicia os Objetos
         xls = OpenXls(dataForm['caminhoArquivo']) # Instancia o objeto passando o caminho do arquivo
@@ -56,56 +87,64 @@ class StartRobo:
         log.info('IP Local: ' + str(IP))
         log.info('Nome da maquina: ' + str(hostname))
         log.info('Endereco MAC da maquina: ' + str(get_mac_address()))
+        log.info('Versao do Navegador: ' + str(self.versao))
         log.info('---------------------------')
 
         # Inicia Autenticacao
+
+        # Autenticacao por login
+        # #########################################################
         #auth = Auth(firefox, log, self.caminhoImages, dataForm['login'], dataForm['senha'])
+        # #########################################################
         auth = Auth(firefox, log, self.caminhoImages)
 
-        try:
-            if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral':
-                codPerfil = 0
-            elif dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral':
-                codPerfil = 1
-            elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria':
-                codPerfil = 2
-            elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão':
-                codPerfil = 3
-            elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria':
-                codPerfil = 4
-            elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão':
-                codPerfil = 5
-        except:
-            log.exception('Falha identificar o perfil')
-            log.info('Finalizando o robo.')
-            log.shutdown()
-            firefox.quit()
-            sys.exit(0)
+        # Codigo fica especificado de acordo com codigo atribuido no sistema
+        if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral':
+            codPerfil = 0
+        elif dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral':
+            codPerfil = 1
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria':
+            codPerfil = 2
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão':
+            codPerfil = 3
+        elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria':
+            codPerfil = 4
+        elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão':
+            codPerfil = 5
 
-        # Seleciona o perfil com codigo 0
+        # Seleciona o perfil
         selecionarPerfil = Perfil(firefox, log, codPerfil, dataForm['perfil'])
 
         time.sleep(3)
 
-        try:
-            if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
-                # Executa a tarefa Aguardando Sessão Julgamento
-                executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
-                                                                                   xls, xlsData,
-                                                                                   '(TR) Aguardando sessão de julgamento', xml)
+        if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
+            # Executa a tarefa Aguardando Sessão Julgamento
+            executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
+                                                                               xls, xlsData,
+                                                                               '(TR) Aguardando sessão de julgamento', xml)
 
+            try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
                 form = FormResultado(executaAguardandoSessaoJulgamento.listProcessos, log)
+            except:
+                log.exception('Falha ao gerar o formulario final')
+                log.info('Finalizando o robo.')
+                log.shutdown()
+                sys.exit(0)
 
-            elif dataForm['atividade'] == '(TR) Aguardando decurso de prazo':
-                codPerfil = 1
-            elif dataForm['atividade'] == '(TR) Concluso para decisã':
-                codPerfil = 2
+        # elif dataForm['atividade'] == '(TR) Aguardando decurso de prazo':
+        #     codPerfil = 1
+        # elif dataForm['atividade'] == '(TR) Concluso para decisã':
+        #     codPerfil = 2
 
-
+    def get_installed_version(self):
+        try:
+            firefox_filepath = r"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
+            version_info = win32api.GetFileVersionInfo(firefox_filepath, "\\")
         except:
-            log.exception('Falha identificar a atividade')
-            log.info('Finalizando o robo.')
-            log.shutdown()
-            firefox.quit()
-            sys.exit(0)
+            firefox_filepath = r"C:\Program Files\Mozilla Firefox\firefox.exe"
+            version_info = win32api.GetFileVersionInfo(firefox_filepath, "\\")
+        product_version = version_info["ProductVersionMS"]
+        product_version = float(f"{product_version >> 16}.{product_version & 0xFFFF}")
+
+        return product_version

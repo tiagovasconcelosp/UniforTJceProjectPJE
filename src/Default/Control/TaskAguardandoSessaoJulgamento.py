@@ -10,12 +10,13 @@ from src.Default.Control.Print import Print
 class TaskAguardandoSessaoJulgamento:
 
     # [processoLocalizado][encaminhados][processoNaoLocalizado] ~+ [totalEncontrado][totalEncaminhado][timeExecucao][totalProcessosNaoLocalizado]
-    listProcessos = [[],[],[], ]
+    listProcessos = [[],[],[],]
     countEncaminhados = 0
     countEnviaProcesso = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, versao):
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, versao)
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
+        self.listProcessos = [[],[],[],]
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
     def localizarProcessoEmcaminhar(self, firefox, numProcesso, logging, caminhoImages):
 
@@ -49,7 +50,7 @@ class TaskAguardandoSessaoJulgamento:
                     (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
             firefox.execute_script("arguments[0].click();", element)
 
-            logging.info('Processo ' + str(numProcesso) + ' localizado.')
+            logging.info('Processo ' + str(numProcesso) + ' foi localizado.')
             self.listProcessos[0].append(str(numProcesso))
 
             time.sleep(4)
@@ -76,6 +77,7 @@ class TaskAguardandoSessaoJulgamento:
                          'div.simple-notification-wrapper div.ng-star-inserted div.sn-content')))
 
                 # Caso seja concluido com sucesso
+                # Mensagem demora 6s para sumir
                 if element.is_displayed():
                     time.sleep(6)
                     self.listProcessos[1].append(0)
@@ -100,6 +102,7 @@ class TaskAguardandoSessaoJulgamento:
 
                 else:
                     # Caso nao tenha o botao emcaminhar
+                    # coluna encaminhado com valor 1 para não encaminhado
                     self.listProcessos[1].append(1)
 
                 firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
@@ -113,11 +116,13 @@ class TaskAguardandoSessaoJulgamento:
 
         return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, xls, xlsData, atividade, xml, versao):
+    def Execute(self, firefox, caminhoImages, logging, xls, xlsData, atividade, xml):
 
         try:
 
-            element = WebDriverWait(firefox, 20).until(
+            time.sleep(3)
+
+            element = WebDriverWait(firefox, 200).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'a[title="Abrir menu"i]')))
@@ -216,6 +221,5 @@ class TaskAguardandoSessaoJulgamento:
             logging.exception('Falha ao concluir a tarefa especificada. - ' + atividade)
             logging.info('Finalizando o robo.')
             logging.shutdown()
-            # firefox.quit()
-            # sys.exit(0)
+
             return self.listProcessos

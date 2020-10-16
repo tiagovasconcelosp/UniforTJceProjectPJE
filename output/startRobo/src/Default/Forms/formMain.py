@@ -34,17 +34,24 @@ class Form(StartRobo):
         stepOne.grid(row=0, columnspan=7, sticky='W', \
                      padx=5, pady=5, ipadx=5, ipady=5,)
 
+        # Autenticacao por login
+        # #########################################################
         # stepTwo = Tkinter.LabelFrame(frame, text=" 2. Informe os dados de autenticação: ")
         # stepTwo.grid(row=2, columnspan=7, sticky='W', \
         #              padx=5, pady=5, ipadx=5, ipady=5)
+        # #########################################################
 
         stepThree = Tkinter.LabelFrame(frame, text=" 2. Configure a Atividade: ")
-        stepThree.grid(row=3, columnspan=7, sticky='W', \
+        stepThree.grid(row=1, columnspan=7, sticky='W', \
                        padx=5, pady=5, ipadx=5, ipady=5)
 
         stepFour = Tkinter.LabelFrame(frame, text=" 3. Configure o Perfil: ")
-        stepFour.grid(row=4, columnspan=7, sticky='W', \
+        stepFour.grid(row=2, columnspan=7, sticky='W', \
                        padx=5, pady=5, ipadx=5, ipady=5)
+
+        # stepFive = Tkinter.LabelFrame(frame, text=" 4. Informe o drive ser ultilizado: ")
+        # stepFive.grid(row=3, columnspan=7, sticky='W', \
+        #              padx=5, pady=5, ipadx=5, ipady=5)
 
         inFileLbl = Tkinter.Label(stepOne, text="Selecione o arquivo: ")
         inFileLbl.grid(row=0, column=0, sticky='E', padx=(5, 2), pady=2)
@@ -55,6 +62,8 @@ class Form(StartRobo):
         inFileBtn = Tkinter.Button(stepOne, text="Selecionar ...", command=lambda: self.open_file())
         inFileBtn.grid(row=0, column=8, sticky='W', padx=5, pady=2)
 
+        # Autenticacao por login
+        # #########################################################
         # outTblLbl = Tkinter.Label(stepTwo, \
         #       text="Login: ")
         # outTblLbl.grid(row=3, column=0, sticky='W', padx=5, pady=2)
@@ -68,7 +77,9 @@ class Form(StartRobo):
         #
         # outTblTxtS = Tkinter.Entry(stepTwo, show="*")
         # outTblTxtS.grid(row=4, column=1, columnspan=3, pady=2, sticky='WE')
+        # #########################################################
 
+        # #########################################################
         selectTask = Combobox(stepThree, width=80, state="readonly")
 
         selectTask['values'] = (
@@ -78,7 +89,9 @@ class Form(StartRobo):
 
         # selectTask.current(0)
         selectTask.grid(row=6, sticky='W', padx=5, pady=2, ipady=2)
+        # #########################################################
 
+        # #########################################################
         selectPerfil = Combobox(stepFour, width=80, state="readonly")
 
         selectPerfil['values'] = (
@@ -92,10 +105,30 @@ class Form(StartRobo):
 
         # selectPerfil.current(0)
         selectPerfil.grid(row=7, sticky='W', padx=5, pady=2, ipady=2)
+        # #########################################################
+
+        # #########################################################
+
+        # selectDrive = Combobox(stepFive, width=80, state="readonly")
+        #
+        #
+        # listDrive = []
+        #
+        # for elem in self._xml:
+        #     if elem.tag == 'driverNameList':
+        #         for var in elem:
+        #             # if var.attrib.get('name') == '':
+        #             listDrive.append(var.text)
+        #
+        # selectDrive['values'] = listDrive
+        #
+        #
+        # selectDrive.grid(row=7, sticky='W', padx=5, pady=2, ipady=2)
+        # #########################################################
 
         closeButton = Tkinter.Button(form, text="Fechar", command=lambda: self.clickClose())
-        closeButton.pack(side=RIGHT, padx=5, pady=5)
-        okButton = Tkinter.Button(form, text="OK", command=lambda: self.clickOk(selectTask, selectPerfil)) # self.clickOk(outTblTxt, outTblTxtS, selectTask, selectPerfil)
+        closeButton.pack(side=RIGHT, padx=5, pady=5)                                                       # Usado com autenticacao com login
+        okButton = Tkinter.Button(form, text="OK", command=lambda: self.clickOk(selectTask, selectPerfil)) # self.clickOk(outTblTxt, outTblTxtS, selectTask, selectPerfil, selectDrive)
         okButton.pack(side=RIGHT)
 
         form.mainloop()
@@ -105,12 +138,12 @@ class Form(StartRobo):
 
     def clickOk(self, selectTask, selectPerfil):
 
-
         dataForm = {'caminhoArquivo' : str(self._inFileTxt.get()),
                    # 'login' : str(outTblTxt.get()),
                    # 'senha' : str(outTblTxtS.get()),
-                   'atividade' : str(selectTask.get()),
-                   'perfil' : str(selectPerfil.get()),
+                    'atividade' : str(selectTask.get()),
+                    'perfil' : str(selectPerfil.get()),
+                    # 'drive' : str(selectDrive.get()),
         }
 
         for i, v in dataForm.items():
@@ -118,6 +151,8 @@ class Form(StartRobo):
                 if str(i) == 'caminhoArquivo':
                     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado", message="Por favor, verifique se preencheu o campo Selecionar Arquivo corretamente.")
                     return 0
+                # Autenticacao por login
+                # #########################################################
                 # elif str(i) == 'login':
                 #     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
                 #                                    message="Por favor, verifique se preencheu o campo Login corretamente.")
@@ -128,17 +163,25 @@ class Form(StartRobo):
                 #                                    message="Por favor, verifique se preencheu o campo Senha corretamente.")
                 #     outTblTxtS.focus()
                 #     return 0
+                # #########################################################
                 elif str(i) == 'atividade':
                     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
                                                    message="Por favor, verifique se selecionou à Atividade corretamente.")
                     selectTask.focus()
                     return 0
-                else:
+                elif str(i) == 'perfil':
                     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
                                                    message="Por favor, verifique se selecionou o Perfil corretamente.")
-                    selectPerfil.focus()
+                    selectTask.focus()
                     return 0
+                # else:
+                #     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
+                #                                    message="Por favor, verifique se selecionou o Drive corretamente.")
+                #     selectPerfil.focus()
+                #     return 0
 
+        # Autenticacao por login
+        # #########################################################
         # if not cpf.validate(dataForm['login']):
         #     if not cnpj.validate(dataForm['login']):
         #         Tkinter.messagebox.showwarning(title="Login Inválido",
@@ -152,8 +195,8 @@ class Form(StartRobo):
         #                                        message="O dado de login CPF/CNPJ não é válido!")
         #         outTblTxt.focus()
         #         return 0
+        # #########################################################
 
-        # print(dataForm)
         robo = self.startRobo(self._log, self._xml, dataForm)
 
     def open_file(self):
