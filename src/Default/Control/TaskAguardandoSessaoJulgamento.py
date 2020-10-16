@@ -142,7 +142,7 @@ class TaskAguardandoSessaoJulgamento:
             firefox.switch_to.frame(iframe)
 
             element = WebDriverWait(firefox, 120).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + atividade + '"i]')))
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
 
             firefox.execute_script("arguments[0].click();", element)
 
@@ -150,7 +150,7 @@ class TaskAguardandoSessaoJulgamento:
             inicio = time.time()
 
             logging.info('---------------------------')
-            logging.info('Tarefa localizada: ' + atividade)
+            logging.info('Tarefa localizada: ' + str(atividade))
             logging.info('---------------------------')
 
             time.sleep(2)
@@ -158,7 +158,7 @@ class TaskAguardandoSessaoJulgamento:
             listDataProcessos = xls.getDataXls(xlsData, firefox, logging, xml)
 
             for i in range(len(listDataProcessos)):
-                logging.info('Buscando o processo: ' + listDataProcessos[i])
+                logging.info('Buscando o processo: ' + str(listDataProcessos[i]))
                 self.localizarProcessoEmcaminhar(firefox, listDataProcessos[i], logging, caminhoImages)
 
             logging.info('---------------------------')
@@ -218,7 +218,7 @@ class TaskAguardandoSessaoJulgamento:
         except:
 
             image = Print(firefox, caminhoImages)
-            logging.exception('Falha ao concluir a tarefa especificada. - ' + atividade)
+            logging.exception('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
