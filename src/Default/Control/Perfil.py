@@ -34,5 +34,10 @@ class Perfil:
             logging.info('Perfil "' + str(desPerfil) + '" nao identificado.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
-            firefox.quit()
+
+            try:
+                firefox.close()
+            except:
+                firefox.quit()
+
             sys.exit(0)

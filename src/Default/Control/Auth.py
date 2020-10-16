@@ -33,5 +33,5 @@ class Auth:
             logging.exception('Falha realizar autenticacao.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
-            firefox.quit()
+            # firefox.quit()
             sys.exit(0)

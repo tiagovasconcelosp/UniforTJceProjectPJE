@@ -12,10 +12,14 @@ class OpenWebDriver():
 
     pathDriver = ""
     pathUrl = ""
+    driveName = ""
+    versao = 0.0
 
-    def __init__(self, pathDriver, pathUrl):
+    def __init__(self, pathDriver, driveName, versao, pathUrl):
         self._pathUrl = pathUrl
         self._pathDriver = pathDriver
+        self._driveName = driveName
+        self._versao = versao
 
     def getPathDriver(self):
         return self._pathDriver
@@ -40,11 +44,26 @@ class OpenWebDriver():
         firefoxProfile.set_preference("browser.cache.offline.enable", False)
         firefoxProfile.set_preference("network.http.use-cache", False)
 
+        # usado na configuracao pelo formulario
+        # if self._versao == 18:
+        #     firefoxProfile.set_preference("plugin.state.java", 0)
+
+        if self._versao < 55.0:
+            firefoxProfile.set_preference("plugin.state.java", 0)
+        elif self._versao >= 55.0 and self._versao < 57.0:
+            firefoxProfile.set_preference("plugin.state.java", 0)
+        elif self._versao >= 57.0 and self._versao < 60.0:
+            firefoxProfile.set_preference("plugin.state.java", 0)
+        elif self._versao >= 60.0 and self._versao < 79.0:
+            firefoxProfile.set_preference("plugin.state.java", 0)
+        # elif self._versao >= 79.0:
+
+
         # options = FirefoxOptions()
         # options.add_argument("--headless")
 
         try:
-            firefox = webdriver.Firefox(executable_path=self._pathDriver, firefox_profile=firefoxProfile)
+            firefox = webdriver.Firefox(executable_path=self._pathDriver + self._driveName + '.exe', firefox_profile=firefoxProfile)
             logging.info("Navegador iniciado com sucesso.")
         except:
             logging.exception('Falha ao iniciar o  navegador.')
@@ -52,22 +71,42 @@ class OpenWebDriver():
             logging.shutdown()
             sys.exit(0)
 
-        firefox.maximize_window()
-        firefox.delete_all_cookies()
-        firefox.set_page_load_timeout(5)
-
         waitButtonLogin = WebDriverWait(firefox, 5)
 
-        try:
-            firefox.get(self._pathUrl)
-        except:
-            # firefox.find_element(By.ID, "btnEntrar").send_keys(Keys.CONTROL + 'Escape')
+        if self._versao < 79.0:
 
-            # Interrompe o carregamento da página após error de time out, se passar de 5s
-            waitButtonLogin.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#btnEntrar')))
-            firefox.execute_script("window.stop();")
+            try:
+                firefox.get(self._pathUrl)
 
-            logging.info('Tempo de carregamento da pagina ultrapassou 5s.')
-            logging.info('Executar parada de carregamento da pagina.')
+                firefox.maximize_window()
+                firefox.delete_all_cookies()
+                firefox.set_page_load_timeout(5)
+
+            except:
+
+                waitButtonLogin.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#btnEntrar')))
+                firefox.execute_script("window.stop();")
+
+                logging.info('Tempo de carregamento da pagina ultrapassou 5s.')
+                logging.info('Executar parada de carregamento da pagina.')
+
+        else:
+
+            firefox.maximize_window()
+            firefox.delete_all_cookies()
+            firefox.set_page_load_timeout(5)
+
+            try:
+                firefox.get(self._pathUrl)
+
+            except:
+                # firefox.find_element(By.ID, "btnEntrar").send_keys(Keys.CONTROL + 'Escape')
+
+                # Interrompe o carregamento da página após error de time out, se passar de 5s
+                waitButtonLogin.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#btnEntrar')))
+                firefox.execute_script("window.stop();")
+
+                logging.info('Tempo de carregamento da pagina ultrapassou 5s.')
+                logging.info('Executar parada de carregamento da pagina.')
 
         return firefox

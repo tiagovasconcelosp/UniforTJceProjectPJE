@@ -18,7 +18,12 @@ class OpenXls:
             logging.exception('Falha ao carregar o arquivo XLS.')
             logging.info('Finalizando o robo')
             logging.shutdown()
-            firefox.quit()
+
+            try:
+                firefox.close()
+            except:
+                firefox.quit()
+
             sys.exit(0)
 
     def getDataXls(self, data, firefox, logging, xml):
@@ -44,12 +49,22 @@ class OpenXls:
             else:
                 logging.info('Planilha esta vazia. Finalizando o robo')
                 logging.shutdown()
-                firefox.quit()
+
+                try:
+                    firefox.close()
+                except:
+                    firefox.quit()
+
                 sys.exit(0)
 
         except:
             logging.exception('Falha ao ler dados da planilha.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
-            firefox.quit()
+
+            try:
+                firefox.close()
+            except:
+                firefox.quit()
+
             sys.exit(0)

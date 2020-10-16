@@ -34,11 +34,11 @@ class Form(StartRobo):
         stepOne.grid(row=0, columnspan=7, sticky='W', \
                      padx=5, pady=5, ipadx=5, ipady=5,)
 
-        stepTwo = Tkinter.LabelFrame(frame, text=" 2. Informe os dados de autenticação: ")
-        stepTwo.grid(row=2, columnspan=7, sticky='W', \
-                     padx=5, pady=5, ipadx=5, ipady=5)
+        # stepTwo = Tkinter.LabelFrame(frame, text=" 2. Informe os dados de autenticação: ")
+        # stepTwo.grid(row=2, columnspan=7, sticky='W', \
+        #              padx=5, pady=5, ipadx=5, ipady=5)
 
-        stepThree = Tkinter.LabelFrame(frame, text=" 3. Configure a Atividade: ")
+        stepThree = Tkinter.LabelFrame(frame, text=" 2. Configure a Atividade: ")
         stepThree.grid(row=3, columnspan=7, sticky='W', \
                        padx=5, pady=5, ipadx=5, ipady=5)
 
@@ -55,19 +55,19 @@ class Form(StartRobo):
         inFileBtn = Tkinter.Button(stepOne, text="Selecionar ...", command=lambda: self.open_file())
         inFileBtn.grid(row=0, column=8, sticky='W', padx=5, pady=2)
 
-        outTblLbl = Tkinter.Label(stepTwo, \
-              text="Login: ")
-        outTblLbl.grid(row=3, column=0, sticky='W', padx=5, pady=2)
-
-        outTblTxt = Tkinter.Entry(stepTwo)
-        outTblTxt.grid(row=3, column=1, columnspan=3, pady=2, sticky='WE')
-
-        outTblLblS = Tkinter.Label(stepTwo, \
-                                  text="Senha: ")
-        outTblLblS.grid(row=4, column=0, sticky='W', padx=5, pady=2)
-
-        outTblTxtS = Tkinter.Entry(stepTwo, show="*")
-        outTblTxtS.grid(row=4, column=1, columnspan=3, pady=2, sticky='WE')
+        # outTblLbl = Tkinter.Label(stepTwo, \
+        #       text="Login: ")
+        # outTblLbl.grid(row=3, column=0, sticky='W', padx=5, pady=2)
+        #
+        # outTblTxt = Tkinter.Entry(stepTwo)
+        # outTblTxt.grid(row=3, column=1, columnspan=3, pady=2, sticky='WE')
+        #
+        # outTblLblS = Tkinter.Label(stepTwo, \
+        #                           text="Senha: ")
+        # outTblLblS.grid(row=4, column=0, sticky='W', padx=5, pady=2)
+        #
+        # outTblTxtS = Tkinter.Entry(stepTwo, show="*")
+        # outTblTxtS.grid(row=4, column=1, columnspan=3, pady=2, sticky='WE')
 
         selectTask = Combobox(stepThree, width=80, state="readonly")
 
@@ -95,7 +95,7 @@ class Form(StartRobo):
 
         closeButton = Tkinter.Button(form, text="Fechar", command=lambda: self.clickClose())
         closeButton.pack(side=RIGHT, padx=5, pady=5)
-        okButton = Tkinter.Button(form, text="OK", command=lambda: self.clickOk(outTblTxt, outTblTxtS, selectTask, selectPerfil))
+        okButton = Tkinter.Button(form, text="OK", command=lambda: self.clickOk(selectTask, selectPerfil)) # self.clickOk(outTblTxt, outTblTxtS, selectTask, selectPerfil)
         okButton.pack(side=RIGHT)
 
         form.mainloop()
@@ -103,12 +103,12 @@ class Form(StartRobo):
     def clickClose(self):
         sys.exit(0)
 
-    def clickOk(self, outTblTxt, outTblTxtS, selectTask, selectPerfil):
+    def clickOk(self, selectTask, selectPerfil):
 
 
         dataForm = {'caminhoArquivo' : str(self._inFileTxt.get()),
-                   'login' : str(outTblTxt.get()),
-                   'senha' : str(outTblTxtS.get()),
+                   # 'login' : str(outTblTxt.get()),
+                   # 'senha' : str(outTblTxtS.get()),
                    'atividade' : str(selectTask.get()),
                    'perfil' : str(selectPerfil.get()),
         }
@@ -118,16 +118,16 @@ class Form(StartRobo):
                 if str(i) == 'caminhoArquivo':
                     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado", message="Por favor, verifique se preencheu o campo Selecionar Arquivo corretamente.")
                     return 0
-                elif str(i) == 'login':
-                    Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
-                                                   message="Por favor, verifique se preencheu o campo Login corretamente.")
-                    outTblTxt.focus()
-                    return 0
-                elif str(i) == 'senha':
-                    Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
-                                                   message="Por favor, verifique se preencheu o campo Senha corretamente.")
-                    outTblTxtS.focus()
-                    return 0
+                # elif str(i) == 'login':
+                #     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
+                #                                    message="Por favor, verifique se preencheu o campo Login corretamente.")
+                #     outTblTxt.focus()
+                #     return 0
+                # elif str(i) == 'senha':
+                #     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
+                #                                    message="Por favor, verifique se preencheu o campo Senha corretamente.")
+                #     outTblTxtS.focus()
+                #     return 0
                 elif str(i) == 'atividade':
                     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
                                                    message="Por favor, verifique se selecionou à Atividade corretamente.")
@@ -139,19 +139,19 @@ class Form(StartRobo):
                     selectPerfil.focus()
                     return 0
 
-        if not cpf.validate(dataForm['login']):
-            if not cnpj.validate(dataForm['login']):
-                Tkinter.messagebox.showwarning(title="Login Inválido",
-                                               message="O dado de login CPF/CNPJ não é válido!")
-                outTblTxt.focus()
-                return 0
-
-        if not cnpj.validate(dataForm['login']):
-            if not cpf.validate(dataForm['login']):
-                Tkinter.messagebox.showwarning(title="Login Inválido",
-                                               message="O dado de login CPF/CNPJ não é válido!")
-                outTblTxt.focus()
-                return 0
+        # if not cpf.validate(dataForm['login']):
+        #     if not cnpj.validate(dataForm['login']):
+        #         Tkinter.messagebox.showwarning(title="Login Inválido",
+        #                                        message="O dado de login CPF/CNPJ não é válido!")
+        #         outTblTxt.focus()
+        #         return 0
+        #
+        # if not cnpj.validate(dataForm['login']):
+        #     if not cpf.validate(dataForm['login']):
+        #         Tkinter.messagebox.showwarning(title="Login Inválido",
+        #                                        message="O dado de login CPF/CNPJ não é válido!")
+        #         outTblTxt.focus()
+        #         return 0
 
         # print(dataForm)
         robo = self.startRobo(self._log, self._xml, dataForm)

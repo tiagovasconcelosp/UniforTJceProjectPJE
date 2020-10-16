@@ -32,7 +32,8 @@ class TaskAguardandoSessaoJulgamento:
 
             time.sleep(1)
 
-            element = firefox.find_element(By.CSS_SELECTOR, 'span[title="Quantidade de processos na tarefa"]').text
+            # element = firefox.find_element(By.CSS_SELECTOR, 'span[title="Quantidade de processos na tarefa"]').text
+            element = firefox.find_element(By.CSS_SELECTOR, 'div#divProcessosTarefa div.painel-listagem div.row span.badge').text
 
             # Verifica se retornou mais de um processo
             if int(element) > 1:
@@ -126,7 +127,7 @@ class TaskAguardandoSessaoJulgamento:
             firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
             time.sleep(1)
-
+            
             firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
 
             iframe = WebDriverWait(firefox, 60).until(

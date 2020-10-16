@@ -47,7 +47,7 @@ class StartRobo:
         log.info('---------------------------')
         log.info('O robo iniciou com os seguintes dados: ')
         log.info('O caminho do arquivo informado foi: ' + dataForm['caminhoArquivo'])
-        log.info('O usuario utilizado foi: ' + dataForm['login'])
+        #log.info('O usuario utilizado foi: ' + dataForm['login'])
         log.info('A atividade selecionada foi: ' + dataForm['atividade'])
         log.info('O perfil selecionado foi: ' + dataForm['perfil'])
         log.info('---------------------------')
@@ -59,7 +59,8 @@ class StartRobo:
         log.info('---------------------------')
 
         # Inicia Autenticacao
-        auth = Auth(firefox, log, self.caminhoImages, dataForm['login'], dataForm['senha'])
+        #auth = Auth(firefox, log, self.caminhoImages, dataForm['login'], dataForm['senha'])
+        auth = Auth(firefox, log, self.caminhoImages)
 
         try:
             if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral':

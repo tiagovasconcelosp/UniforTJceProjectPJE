@@ -14,8 +14,8 @@ class TaskAguardandoSessaoJulgamento:
     countEncaminhados = 0
     countEnviaProcesso = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, versao):
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, versao)
 
     def localizarProcessoEmcaminhar(self, firefox, numProcesso, logging, caminhoImages):
 
@@ -32,7 +32,9 @@ class TaskAguardandoSessaoJulgamento:
 
             time.sleep(1)
 
-            element = firefox.find_element(By.CSS_SELECTOR, 'span[title="Quantidade de processos na tarefa"]').text
+            # caminho no ambiente da unifor
+            # element = firefox.find_element(By.CSS_SELECTOR, 'span[title="Quantidade de processos na tarefa"]').text
+            element = firefox.find_element(By.CSS_SELECTOR, 'div#divProcessosTarefa div.painel-listagem div.row span.badge').text
 
             # Verifica se retornou mais de um processo
             if int(element) > 1:
@@ -111,7 +113,7 @@ class TaskAguardandoSessaoJulgamento:
 
         return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, xls, xlsData, atividade, xml):
+    def Execute(self, firefox, caminhoImages, logging, xls, xlsData, atividade, xml, versao):
 
         try:
 
@@ -125,8 +127,7 @@ class TaskAguardandoSessaoJulgamento:
 
             firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
-            # time.sleep(1)
-            time.sleep(100)
+            time.sleep(1)
             
             firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
 
@@ -202,7 +203,10 @@ class TaskAguardandoSessaoJulgamento:
 
             firefox.switch_to.default_content()
 
-            firefox.quit()
+            try:
+                firefox.close()
+            except:
+                firefox.quit()
 
             return self.listProcessos
 
@@ -212,5 +216,6 @@ class TaskAguardandoSessaoJulgamento:
             logging.exception('Falha ao concluir a tarefa especificada. - ' + atividade)
             logging.info('Finalizando o robo.')
             logging.shutdown()
-            firefox.quit()
-            sys.exit(0)
+            # firefox.quit()
+            # sys.exit(0)
+            return self.listProcessos
