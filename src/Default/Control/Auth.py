@@ -33,7 +33,11 @@ class Auth:
             # firefox.find_element(By.ID, "btnEntrar").click()
             # #########################################################
 
-            time.sleep(4)
+            firefox.find_element(By.ID, "username").send_keys('60013884310')
+            firefox.find_element(By.ID, "password").send_keys('12345')
+
+            #time.sleep(4)
+
             logging.info("Realizando autenticacao.")
         except:
 

@@ -25,6 +25,8 @@ class Form(StartRobo):
 
         getFld = Tkinter.IntVar()
 
+        form.iconbitmap(self.resource_path('icon_pje.ico'))
+
         form.wm_title([i.text for i in self._xml.iter('title')][0])
 
         frame = Tkinter.Frame(form, relief=RAISED, borderwidth=1)
@@ -85,6 +87,10 @@ class Form(StartRobo):
         selectTask['values'] = (
             "Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão",
             "Inclusão de processos na relação de julgamento",
+            "Certidão de trânsito em julgado/devolver para origem ou para o arquivo (depende da classe)",
+            "Lançamento de movimentação TPU",
+            "Assinatura de decisão sobre recurso",
+            "Assinatura de inteiro teor de acórdãos",
         )
 
         # selectTask.current(0)
@@ -211,3 +217,13 @@ class Form(StartRobo):
                 self._inFileTxt.configure(state="readonly")
         except:
             file = ''
+
+    def resource_path(self, relative_path):
+        """ Obtenha o caminho absoluto para o recurso, funciona para dev e para PyInstaller """
+        try:
+            # PyInstaller cria uma pasta temporária e armazena o caminho em _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)

@@ -15,6 +15,7 @@ class TaskAguardandoSessaoJulgamento:
     countEnviaProcesso = 0
 
     def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
+        # Feito para zerar lista de processos
         self.listProcessos = [[],[],[],]
         self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
@@ -116,7 +117,7 @@ class TaskAguardandoSessaoJulgamento:
 
         return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, xls, xlsData, atividade, xml):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
 
         try:
 
@@ -155,7 +156,7 @@ class TaskAguardandoSessaoJulgamento:
 
             time.sleep(2)
 
-            listDataProcessos = xls.getDataXls(xlsData, firefox, logging, xml)
+            listDataProcessos = openXls.getDataProcessAguardandoSessaoXLS(xlsData, firefox, logging, xml)
 
             for i in range(len(listDataProcessos)):
                 logging.info('Buscando o processo: ' + str(listDataProcessos[i]))

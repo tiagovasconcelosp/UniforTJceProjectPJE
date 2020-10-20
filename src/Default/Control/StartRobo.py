@@ -11,6 +11,7 @@ from src.Default.Control.OpenWebDriver import OpenWebDriver
 from src.Default.Control.OpenXls import OpenXls
 from src.Default.Control.Perfil import Perfil
 from src.Default.Control.TaskAguardandoSessaoJulgamento import TaskAguardandoSessaoJulgamento
+from src.Default.Control.TaskInclusaoProcessos import TaskInclusaoProcessos
 from src.Default.Forms.FormResultado import FormResultado
 
 
@@ -61,11 +62,11 @@ class StartRobo:
         webdriver = OpenWebDriver(self.caminhoWebDrive, self.webDriveName, self.versao, self.url)
 
         # Inicia os Objetos
-        xls = OpenXls(dataForm['caminhoArquivo']) # Instancia o objeto passando o caminho do arquivo
+        openXls = OpenXls(dataForm['caminhoArquivo']) # Instancia o objeto passando o caminho do arquivo
         firefox = webdriver.Open(log)
 
         # Abre o arquivo XLS
-        xlsData = xls.OpenFileXls(firefox, log)
+        xlsData = openXls.OpenFileXls(firefox, log)
 
         # Captura o IP externo
         url = request.urlopen('http://ip-api.com/json').read()
@@ -91,7 +92,6 @@ class StartRobo:
         log.info('---------------------------')
 
         # Inicia Autenticacao
-
         # Autenticacao por login
         # #########################################################
         #auth = Auth(firefox, log, self.caminhoImages, dataForm['login'], dataForm['senha'])
@@ -118,9 +118,10 @@ class StartRobo:
         time.sleep(3)
 
         if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
+
             # Executa a tarefa Aguardando Sessão Julgamento
             executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
-                                                                               xls, xlsData,
+                                                                               openXls, xlsData,
                                                                                '(TR) Aguardando sessão de julgamento', xml)
 
             try:
@@ -132,8 +133,20 @@ class StartRobo:
                 log.shutdown()
                 sys.exit(0)
 
-        # elif dataForm['atividade'] == '(TR) Aguardando decurso de prazo':
-        #     codPerfil = 1
+        elif dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
+
+            # Executa a tarefa Aguardando Sessão Julgamento
+            executaInclusaoProcessos = TaskInclusaoProcessos(firefox, self.caminhoImages, log,
+                                                                               openXls, xlsData,
+                                                                               'Inclusão de processos na relação de julgamento',
+                                                                               xml)
+
+
+            time.sleep(99999)
+
+
+
+
         # elif dataForm['atividade'] == '(TR) Concluso para decisã':
         #     codPerfil = 2
 

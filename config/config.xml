@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <title>Executor de Atividades PJCE - 2.0</title>
+    <title>Executor de Atividades PJCE - 3.0</title>
     <url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>
     <directoryLog>Logs</directoryLog>
     <directoryImages>Images</directoryImages>
@@ -15,4 +15,6 @@
     <filterXLS>X</filterXLS>
     <columnRobo>0</columnRobo>
     <columnProcess>1</columnProcess>
+    <columnData>2</columnData>
+    <columnHour>3</columnHour>
 </config>
