@@ -115,10 +115,6 @@ class OpenXls:
             # ['13:30:00', '17:30:00']
             listAllProcess = [listDataProcessos, listDateProcessos, listHourProcessos]
 
-            print(listAllProcess)
-
-            time.sleep(99999)
-
             if len(listDataProcessos) > 0:
                 if len(listDateProcessos) == len(listDataProcessos):
                     if len(listHourProcessos) == len(listDataProcessos):

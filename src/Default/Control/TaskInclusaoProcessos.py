@@ -16,9 +16,30 @@ class TaskInclusaoProcessos:
         self.listProcessos = [[],[],[],]
         self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
-    def localizarProcessoEmcaminhar(self, firefox, numProcesso, logging, caminhoImages):
+    def localizarProcessoIncluir(self, firefox, numProcess, dayProcess, hourProcess, logging, caminhoImages):
 
-        time.sleep(3)
+        # Mapeamento dos dados da planilha
+        # Numero do processo, dia, mes, ano, hora e minuto
+        # Usados para localizar os respectivos dias e horarios no calendario
+        dayProce = dayProcess[0:2]
+        monthProcess = dayProcess[3:5]
+        yearProcess = dayProcess[6:10]
+        hourProce = hourProcess[0:2]
+        minProcess = hourProcess[3:5]
+
+        # trazer dia da planilha
+        # procura dia no calendario atual
+        element = firefox.find_element_by_xpath("//span[@class='text-center' and contains(text(),'20')]")
+
+        # Verifica se achou o respectivo dia no calendario
+        if element:
+            # Verifica se dia está aberto
+            # A Aberta
+            # R Realizada
+            # F Finalizada
+            element = firefox.find_element_by_xpath("//span[@class='ml-10' and contains(text(),'- A')]")
+            if element:
+                element.click()
 
     def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
 
@@ -52,10 +73,18 @@ class TaskInclusaoProcessos:
 
             time.sleep(1)
 
+            # ['3000323-07.2017.8.06.0004', '3000746-69.2019.8.06.0012']
+            # ['13-11-2020', '14-11-2020']
+            # ['13:30:00', '17:30:00']
             listDataProcessos = openXls.getDataProcessInclusaoXLS(xlsData, firefox, logging, xml)
 
 
 
+            for i in range(len(listDataProcessos[0])):
+                logging.info('Incluindo o processo: ' + str(listDataProcessos[0][i]))
+                self.localizarProcessoIncluir(firefox, listDataProcessos[0][i], listDataProcessos[1][i], listDataProcessos[2][i], logging, caminhoImages)
+
+            logging.info('---------------------------')
 
 
 
@@ -64,16 +93,6 @@ class TaskInclusaoProcessos:
 
 
 
-
-            # trazer dia da planilha
-            # procura dia no calendario atual
-            element = firefox.find_element_by_xpath("//span[@class='text-center' and contains(text(),'20')]")
-
-            if element:
-                # verifica se dia está aberto
-                element = firefox.find_element_by_xpath("//span[@class='ml-10' and contains(text(),'- A')]")
-                if element:
-                    element.click()
 
 
 
