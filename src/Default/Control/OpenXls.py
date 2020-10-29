@@ -96,7 +96,13 @@ class OpenXls:
             getXdata = getX[df.columns[int([i.text for i in xml.iter('columnData')][0])]]
 
             # Armazena os valores
-            listDateProcessos = getXdata.dt.strftime('%d-%m-%Y').tolist()
+            listDateProcessos = getXdata.dt.strftime('%d-%m-%Y')
+
+            # Captura todas as dadas da planilha sem repeticao
+            getCalendar = listDateProcessos.unique().tolist()
+
+            # Armazena os valores convertendo em list
+            listDateProcessos = listDateProcessos.tolist()
 
             ########################################
 
@@ -110,15 +116,34 @@ class OpenXls:
 
             ########################################
 
-            # ['3000323-07.2017.8.06.0004', '3000746-69.2019.8.06.0012']
-            # ['13-11-2020', '14-11-2020']
-            # ['13:30:00', '17:30:00']
-            listAllProcess = [listDataProcessos, listDateProcessos, listHourProcessos]
-
             if len(listDataProcessos) > 0:
                 if len(listDateProcessos) == len(listDataProcessos):
                     if len(listHourProcessos) == len(listDataProcessos):
-                        return listAllProcess
+
+                        # ['3000323-07.2017.8.06.0004', '3000746-69.2019.8.06.0012']
+                        # ['13-11-2020', '14-11-2020']
+                        # ['13:30:00', '17:30:00']
+                        listAllProcess = [listDataProcessos, listDateProcessos, listHourProcessos]
+                        dictAllProcess = {}
+
+
+                        for x in range(len(getCalendar)):
+
+                            dictAllProcess[getCalendar[x]] = []
+
+                            for i in range(len(listAllProcess[0])):
+                                if (listAllProcess[1][i] == getCalendar[x]):
+                                    # {'29-10-2020': [['3000746-69.2019.8.06.0012', '29-10-2020', '10:00:00'],
+                                    #                 ['3000074-61.2017.8.06.9964', '29-10-2020', '11:00:00'],
+                                    #                 ['3000323-07.2017.8.06.0008', '29-10-2020', '13:30:00']],
+                                    #  '30-10-2020': [['3000323-07.2017.8.06.0007', '30-10-2020', '17:30:00']],
+                                    #  '15-11-2020': [['3000323-07.2017.8.06.0006', '15-11-2020', '11:30:00']],
+                                    #  '20-11-2020': [['3000323-07.2017.8.06.0004', '20-11-2020', '09:30:00'],
+                                    #                 ['3000323-07.2017.8.06.0005', '20-11-2020', '10:30:00']]
+                                    #                 }
+                                    dictAllProcess[getCalendar[x]].append([listAllProcess[0][i], listAllProcess[1][i], listAllProcess[2][i]])
+
+                        return dictAllProcess
                     else:
                         logging.info('Planilha esta com coluna Hora faltando registro. Finalizando o robo')
                         logging.shutdown()

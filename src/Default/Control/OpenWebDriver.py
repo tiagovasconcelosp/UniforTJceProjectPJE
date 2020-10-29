@@ -59,11 +59,14 @@ class OpenWebDriver():
         # elif self._versao >= 79.0:
 
 
-        # options = FirefoxOptions()
-        # options.add_argument("--headless")
+        options = FirefoxOptions()
+        options.add_argument("--headless")
 
         try:
-            firefox = webdriver.Firefox(executable_path=self._pathDriver + self._driveName + '.exe', firefox_profile=firefoxProfile)
+            firefox = webdriver.Firefox(executable_path=self._pathDriver + self._driveName + '.exe',
+                                        firefox_profile=firefoxProfile,
+                                        #options=options
+                                        )
             logging.info("Navegador iniciado com sucesso.")
         except:
             logging.exception('Falha ao iniciar o  navegador.')
