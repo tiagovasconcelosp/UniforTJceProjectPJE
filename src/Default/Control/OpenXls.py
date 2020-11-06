@@ -81,15 +81,18 @@ class OpenXls:
             # Captura a coluna 0 do xml -> robo
             getX = df.loc[df[df.columns[int([i.text for i in xml.iter('columnRobo')][0])]].str.upper() == str([i.text for i in xml.iter('filterXLS')][0]).upper()]
 
-            # Ordena os processos por DATA e em seguida por HORA
-            getX = getX.sort_values([df.columns[int([i.text for i in xml.iter('columnData')][0])], df.columns[int([i.text for i in xml.iter('columnHour')][0])]])
+            # Ordena os processos por DATA e em seguida por Sessao
+            getX = getX.sort_values([df.columns[int([i.text for i in xml.iter('columnData')][0])], df.columns[int([i.text for i in xml.iter('columnSession')][0])]])
 
+            ########################################
+            # Processos
             # Captura os valores do filtro
             # Captura a coluna 1 do xml -> cod processo
             getXdata = getX[df.columns[int([i.text for i in xml.iter('columnProcess')][0])]]
 
             # Armazena os valores
-            listDataProcessos = getXdata.values.tolist()
+            listProcessos = getXdata.values.tolist()
+            ########################################
 
             ########################################
             # Captura a Data
@@ -107,23 +110,25 @@ class OpenXls:
             ########################################
 
             ########################################
-            # Captura o horario
-            getXdata = getX[df.columns[int([i.text for i in xml.iter('columnHour')][0])]]
+            # Captura o Sessao
+            getXdata = getX[df.columns[int([i.text for i in xml.iter('columnSession')][0])]]
+
+            # Formatada hora
+            # listSessionProcessos = getXdata.apply(lambda h: '{}'.format(h))
 
             # Armazena os valores
-            listHourProcessos = getXdata.apply(lambda h: '{}'.format(h))
-            listHourProcessos = listHourProcessos.tolist()
+            listSessionProcessos = getXdata.values.tolist()
 
             ########################################
 
-            if len(listDataProcessos) > 0:
-                if len(listDateProcessos) == len(listDataProcessos):
-                    if len(listHourProcessos) == len(listDataProcessos):
+            if len(listProcessos) > 0:
+                if len(listProcessos) == len(listDateProcessos):
+                    if len(listProcessos) == len(listSessionProcessos):
 
                         # ['3000323-07.2017.8.06.0004', '3000746-69.2019.8.06.0012']
                         # ['13-11-2020', '14-11-2020']
-                        # ['13:30:00', '17:30:00']
-                        listAllProcess = [listDataProcessos, listDateProcessos, listHourProcessos]
+                        # ['5', '8']
+                        listAllProcess = [listProcessos, listDateProcessos, listSessionProcessos]
                         dictAllProcess = {}
 
 
@@ -133,13 +138,13 @@ class OpenXls:
 
                             for i in range(len(listAllProcess[0])):
                                 if (listAllProcess[1][i] == getCalendar[x]):
-                                    # {'29-10-2020': [['3000746-69.2019.8.06.0012', '29-10-2020', '10:00:00'],
-                                    #                 ['3000074-61.2017.8.06.9964', '29-10-2020', '11:00:00'],
-                                    #                 ['3000323-07.2017.8.06.0008', '29-10-2020', '13:30:00']],
-                                    #  '30-10-2020': [['3000323-07.2017.8.06.0007', '30-10-2020', '17:30:00']],
-                                    #  '15-11-2020': [['3000323-07.2017.8.06.0006', '15-11-2020', '11:30:00']],
-                                    #  '20-11-2020': [['3000323-07.2017.8.06.0004', '20-11-2020', '09:30:00'],
-                                    #                 ['3000323-07.2017.8.06.0005', '20-11-2020', '10:30:00']]
+                                    # {'29-10-2020': [['3000746-69.2019.8.06.0012', '29-10-2020', '5'],
+                                    #                 ['3000074-61.2017.8.06.9964', '29-10-2020', '5'],
+                                    #                 ['3000323-07.2017.8.06.0008', '29-10-2020', '5']],
+                                    #  '30-10-2020': [['3000323-07.2017.8.06.0007', '30-10-2020', '8']],
+                                    #  '15-11-2020': [['3000323-07.2017.8.06.0006', '15-11-2020', '5']],
+                                    #  '20-11-2020': [['3000323-07.2017.8.06.0004', '20-11-2020', '8'],
+                                    #                 ['3000323-07.2017.8.06.0005', '20-11-2020', '8']]
                                     #                 }
                                     dictAllProcess[getCalendar[x]].append([listAllProcess[0][i], listAllProcess[1][i], listAllProcess[2][i]])
 

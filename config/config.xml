@@ -16,5 +16,5 @@
     <columnRobo>0</columnRobo>
     <columnProcess>1</columnProcess>
     <columnData>2</columnData>
-    <columnHour>3</columnHour>
+    <columnSession>3</columnSession>
 </config>
