@@ -156,6 +156,8 @@ class TaskAguardandoSessaoJulgamento:
 
             time.sleep(2)
 
+            logging.info('Iniciando a busca pelo os processos...')
+
             listDataProcessos = openXls.getDataProcessAguardandoSessaoXLS(xlsData, firefox, logging, xml)
 
             for i in range(len(listDataProcessos)):
@@ -163,6 +165,10 @@ class TaskAguardandoSessaoJulgamento:
                 self.localizarProcessoEmcaminhar(firefox, listDataProcessos[i], logging, caminhoImages)
 
             logging.info('---------------------------')
+
+            ###################################
+            # Verificacao dos processos localizado e encaminhados
+            ###################################
 
             if len(self.listProcessos[0]) > 0:
                 logging.info('Lista de processos encontrados:')
@@ -179,6 +185,10 @@ class TaskAguardandoSessaoJulgamento:
 
             logging.info('---------------------------')
 
+            ###################################
+            # Calculo do tempo de execucao
+            ###################################
+
             # Registra horario que finalizou a tarefa
             fim = time.time()
 
@@ -194,6 +204,10 @@ class TaskAguardandoSessaoJulgamento:
                 self.listProcessos.append(str(timeTotal // 60) + ' minutos')
 
             logging.info('---------------------------')
+
+            ###################################
+            # Vericacao dos processos nao localizados
+            ###################################
 
             if len(self.listProcessos[2]) > 0:
                 logging.info('Lista de processos nao foram encontrados:')
@@ -223,4 +237,5 @@ class TaskAguardandoSessaoJulgamento:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
+            # Retorna valor caso haja algum erro durante a execucao
             return self.listProcessos

@@ -17,11 +17,11 @@ class FormResultado:
     scroll2 = ""
     window = ""
 
-    def __init__(self, resultadoTarefa, log):
+    def __init__(self, resultadoTarefa, valorDescricao, log):
         self._log = log
-        self.criaForm(resultadoTarefa)
+        self.criaForm(resultadoTarefa, valorDescricao)
 
-    def criaForm(self, resultadoTarefa):
+    def criaForm(self, resultadoTarefa, valorDescricao):
 
         self.window = Tk()
         self.window.title("Resultado da Atividade Executada")
@@ -96,7 +96,14 @@ class FormResultado:
                             label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                             self.tab1.grid_columnconfigure(column, weight=1)
                         else:
-                            label = Label(self.tab1, text="Encaminhado", bg="#f0f0f0", fg="black", relief=RAISED, padx=3, pady=3)
+                            if valorDescricao == 0:
+                                descricao = 'Encaminhado'
+                            elif valorDescricao == 1:
+                                descricao = 'Incluído'
+
+                            label = Label(self.tab1, text=descricao, bg="#f0f0f0", fg="black", relief=RAISED,
+                                              padx=3, pady=3)
+
                             label.config(font=('Arial', 14))
                             label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                             self.tab1.grid_columnconfigure(column, weight=1)
@@ -109,7 +116,12 @@ class FormResultado:
 
                             if (resultadoTarefa[1][row-1]) == 0:
                                 Cor = 'green'
-                                Texto = 'Enviado com sucesso'
+
+                                if valorDescricao == 0:
+                                    Texto = 'Enviado com sucesso'
+                                elif valorDescricao == 1:
+                                    Texto = 'Incluído com sucesso'
+
                             else:
                                 Cor = 'red'
                                 Texto = 'Houve falha ao enviar'

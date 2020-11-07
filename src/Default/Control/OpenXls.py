@@ -34,6 +34,8 @@ class OpenXls:
             # Ler o arquivo
             df = pd.read_excel(data)
 
+            logging.info('Calculando os dados para execucao do robo...')
+
             # Filtra pelo dado X
             # Captura a coluna 0 do xml -> robo
             getX = df.loc[df[df.columns[int([i.text for i in xml.iter('columnRobo')][0])]].str.upper() == str([i.text for i in xml.iter('filterXLS')][0]).upper()]
@@ -46,10 +48,13 @@ class OpenXls:
             listDataProcessos = getXdata.values.tolist()
 
             if len(listDataProcessos) > 0:
+
+                logging.info('Elaboracao dos dados realizada com sucesso.')
+
                 # ['3002930-23.2018.8.06.0112', '3000885-35.2019.8.06.0072',
                 return listDataProcessos
             else:
-                logging.info('Planilha esta vazia. Finalizando o robo')
+                logging.info('Planilha esta vazia. Finalizando o robo.')
                 logging.shutdown()
 
                 try:
@@ -77,12 +82,14 @@ class OpenXls:
             # Ler o arquivo
             df = pd.read_excel(data)
 
+            logging.info('Calculando os dados para execucao do robo.')
+
             # Filtra pelo dado X
             # Captura a coluna 0 do xml -> robo
             getX = df.loc[df[df.columns[int([i.text for i in xml.iter('columnRobo')][0])]].str.upper() == str([i.text for i in xml.iter('filterXLS')][0]).upper()]
 
             # Ordena os processos por DATA e em seguida por Sessao
-            getX = getX.sort_values([df.columns[int([i.text for i in xml.iter('columnData')][0])], df.columns[int([i.text for i in xml.iter('columnSession')][0])]])
+            getX = getX.sort_values([df.columns[int([i.text for i in xml.iter('columnData')][0])], df.columns[int([i.text for i in xml.iter('columnSession')][0])], df.columns[int([i.text for i in xml.iter('columnProcess')][0])]])
 
             ########################################
             # Processos
@@ -131,7 +138,6 @@ class OpenXls:
                         listAllProcess = [listProcessos, listDateProcessos, listSessionProcessos]
                         dictAllProcess = {}
 
-
                         for x in range(len(getCalendar)):
 
                             dictAllProcess[getCalendar[x]] = []
@@ -148,9 +154,11 @@ class OpenXls:
                                     #                 }
                                     dictAllProcess[getCalendar[x]].append([listAllProcess[0][i], listAllProcess[1][i], listAllProcess[2][i]])
 
+                        logging.info('Elaboracao dos dados realizada com sucesso.')
+
                         return dictAllProcess
                     else:
-                        logging.info('Planilha esta com coluna Hora faltando registro. Finalizando o robo')
+                        logging.info('Planilha esta com coluna Sessao faltando. Finalizando o robo.')
                         logging.shutdown()
 
                         try:
@@ -160,7 +168,7 @@ class OpenXls:
 
                         sys.exit(0)
                 else:
-                    logging.info('Planilha esta com coluna Data faltando registro. Finalizando o robo')
+                    logging.info('Planilha esta com coluna Data faltando. Finalizando o robo.')
                     logging.shutdown()
 
                     try:

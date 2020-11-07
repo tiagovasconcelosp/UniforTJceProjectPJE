@@ -34,18 +34,8 @@ class StartRobo:
 
         self.versao = self.get_installed_version()
 
-        # if self._driveName == 'Driver 0.18.0 para Mozilla Superior ou Igual a Versão 27':
-        #     self.versao = 18
-        # elif self._driveName == 'Driver 0.19.0 para Mozilla Superior ou Igual a Versão 55':
-        #     self.versao = 19
-        # elif self._driveName == 'Driver 0.21.0 para Mozilla Superior ou Igual a Versão 57':
-        #     self.versao = 21
-        # elif self._driveName == 'Driver 0.26.0 para Mozilla Superior ou Igual a Versão 60':
-        #     self.versao = 26
-        # elif self._driveName == 'Driver 0.27.0 para Mozilla Superior ou Igual a Versão 79':
-        #     self.versao = 27
-
         # Geckodrive Name
+        # Selecionar a versao de acordo com mozilla instalado na maquina
         if self.versao < 55.0:
             self.webDriveName = 'Driver 0.18.0 para Mozilla Superior ou Igual a Versão 27'
         elif self.versao >= 55.0 and self.versao < 57.0:
@@ -126,9 +116,9 @@ class StartRobo:
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaAguardandoSessaoJulgamento.listProcessos, log)
+                form = FormResultado(executaAguardandoSessaoJulgamento.listProcessos, 0, log)
             except:
-                log.exception('Falha ao gerar o formulario final')
+                log.exception('Falha ao gerar o formulario final.')
                 log.info('Finalizando o robo.')
                 log.shutdown()
                 sys.exit(0)
@@ -140,7 +130,14 @@ class StartRobo:
                                                                                openXls, xlsData,
                                                                                'Inclusão de processos na relação de julgamento',
                                                                                xml)
-
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaInclusaoProcessos.listProcessos, 1, log)
+            except:
+                log.exception('Falha ao gerar o formulario final.')
+                log.info('Finalizando o robo.')
+                log.shutdown()
+                sys.exit(0)
 
             time.sleep(99999)
 
