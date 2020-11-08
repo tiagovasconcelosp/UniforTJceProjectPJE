@@ -8,17 +8,80 @@ from src.Default.Control.Print import Print
 
 
 class TaskInclusaoProcessos:
-
-    listProcessos = [[], [], [],]
+    listProcessos = [[], [], [], ]
     countIncluidos = 0
     countEnviaProcesso = 0
 
     def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
         # Feito para zerar lista de processos
-        self.listProcessos = [[],[],[],]
+        self.listProcessos = [[], [], [], ]
         self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
-    def processoIncluir(self, firefox, process, dayProcess, logging, caminhoImages):
+    def pecorreProcesso(self, firefox, process, element, logging, caminhoImages):
+
+        # Localiza os processos do dia e marca
+        ##########################################################
+
+        for i in range(len(process)):
+            # Usado para verificar se o processo nao foi localizado
+            count = 0
+
+            for x in range(len(element)):
+
+                try:  # Para verificar se o processo existe na listagem
+
+                    firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
+                        x + 1) + "]/td[2]/div/div/h6/a[contains(text(), '" + process[i][0] + "')]")
+
+                    try:
+                        firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
+                            x + 1) + "]/td[1]/form/center/input").click()
+
+                        # Inclui lista de processos localizados
+                        self.listProcessos[0].append(str(process[i][0]))
+                        logging.info('Processo selecionado: ' + str(process[i][0]))
+
+                        # Processo incluido
+                        self.listProcessos[1].append(0)
+
+                        self.countIncluidos += 1
+
+                        # Processo localizado
+                        count += 1
+
+                    except:
+
+                        # Caso acontece de nao existir o botao marcar
+                        logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
+                        # Inclui lista de processos localizados
+                        self.listProcessos[0].append(str(process[i][0]))
+                        print('nao clicou')
+                        # Processo incluido
+                        self.listProcessos[1].append(1)
+
+                    # Aguarda loading do click
+                    # Verifica time de click
+                    time.sleep(1)
+
+                    # break
+
+                except:
+                    continue
+
+            # Caso o processo nao seja localizado, incluir na lista de nao localizados
+            if count == 0:
+                # Inclui lista de processos nao localizados
+                self.listProcessos[2].append(str(process[i][0]))
+
+                image = Print(firefox, caminhoImages)
+                logging.info('---------------------------')
+                logging.info('Ocorreu um processo de nao ser localizado na sessao.')
+                logging.info('Processo nao localizado: ' + str(process[i][0]))
+                logging.info('---------------------------')
+
+        ##########################################################
+
+    def processoIncluir(self, firefox, process, dayProcess, logging, caminhoImages, countDef):
 
         try:
             # Mapeamento dos dados da planilha
@@ -27,15 +90,30 @@ class TaskInclusaoProcessos:
             monthProcess = dayProcess[3:5]
             yearProcess = dayProcess[6:10]
 
+            processVirtual = []
+            processPresencial = []
+
+            for x in range(len(process)):
+                if (str(process[x][2]).upper()).strip() == (str('Virtual').upper()).strip():
+                    processVirtual.append([process[x][0]])
+                elif (str(process[x][2]).upper()).strip() == (str('Presencial').upper()).strip():
+                    processPresencial.append([process[x][0]])
+                else:
+                    logging.info('---------------------------')
+                    logging.info('A coluna da sessao por um dado incorreto. O valor deve ser Virtual ou Presencial')
+                    logging.info('O valor da coluna atual: ' + str(process[x][2]))
+                    logging.info('Numero do processo: ' + str(process[x][0]))
+                    logging.info('---------------------------')
+
             # Procura dia no calendario atual
             # A Aberta
             # R Realizada
             # F Finalizada
-
             logging.info('Buscando o dia da sessao.')
             logging.info('---------------------------')
 
-            element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- EASP')]")
+            element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(
+                dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- EASP')]")
 
             # Verifica se achou o respectivo dia no calendario
             if element:
@@ -46,6 +124,63 @@ class TaskInclusaoProcessos:
                 element.click()
 
                 time.sleep(1)
+
+                # Identifica se tem mais de uma sessao e qual deve entrar
+                ##########################################################
+                try:
+                    element = firefox.find_elements_by_css_selector("table#sessaoRelacaoJulgamentoDt tr.rich-table-row")
+
+                    for x in range(len(element)):
+
+                        try:
+
+                            if len(processPresencial) > 0 and countDef == 0:
+                                # firefox.find_element(By.XPATH, "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[" + str(
+                                #     x + 1) + "]/td[contains(text(), 'Presencial')]//ancestor::tr[" + str(
+                                #     x + 1) + "]/td[1]/a").click()
+
+                                firefox.find_element(By.XPATH,
+                                                     "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[1]/a").click()
+
+                                sessao = 'Presencial'
+
+                            elif len(processVirtual) > 0 and countDef == 1:
+                                firefox.find_element(By.XPATH,
+                                                     "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[2]/td[1]/a").click()
+
+                                sessao = 'Virtual'
+
+                            elif  len(processPresencial) > 0:
+                                firefox.find_element(By.XPATH,
+                                                     "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[1]/a").click()
+
+                                sessao = 'Presencial'
+
+                            elif len(processVirtual) > 0:
+                                firefox.find_element(By.XPATH,
+                                                     "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[2]/td[1]/a").click()
+
+                                sessao = 'Virtual'
+
+                        except:
+
+                            logging.info('Houver uma divergencia nos dados. Por favor verificar a planilha')
+                            logging.info('---------------------------')
+                            logging.info('Presencial:')
+                            logging.info(str(processPresencial))
+                            logging.info('Virtual:')
+                            logging.info(str(processVirtual))
+                            logging.info('---------------------------')
+                            continue
+
+                    firefox.find_element(By.CSS_SELECTOR, "span#fecharModal").click()
+
+                except:
+
+                    logging.info('Entrando na sessao...')
+                ##########################################################
+
+                time.sleep(2)
 
                 logging.info('Localizando a nova janela aberta.')
                 logging.info('---------------------------')
@@ -98,72 +233,23 @@ class TaskInclusaoProcessos:
                 element = firefox.find_elements_by_css_selector("table#pautaJulgamentoList tbody tr.rich-table-row")
                 ##########################################################
 
-                # Localiza os processos do dia e marca
-                ##########################################################
-                for i in range(len(process)):
-                    # Usado para verificar se o processo nao foi localizado
-                    count = 0
-                    for x in range(len(element)):
+                # Para verificar se caso entrou em uma sessao especifica
+                try:
+                    if sessao == 'Presencial':
+                        processList = processPresencial
+                        countDef += 1
+                    elif sessao == 'Virtual':
+                        processList = processVirtual
+                        countDef += 1
 
-                        try:
+                    self.pecorreProcesso(firefox, processList, element, logging, caminhoImages)
 
-                            firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
-                                x + 1) + "]/td[2]/div/div/h6/a[contains(text(), '" + process[i][0] + "')]")
+                except:
 
-                            try:
-                                firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
-                                    x + 1) + "]/td[1]/form/center/input").click()
-
-                                # Inclui lista de processos localizados
-                                self.listProcessos[0].append(str(process[i][0]))
-
-                                # Processo incluido
-                                self.listProcessos[1].append(0)
-
-                                logging.info('Processo selecionado: ' + str(process[i][0]))
-
-                                self.countIncluidos += 1
-
-                                # Processo localizado
-                                count+=1
-
-                            except:
-
-                                # Caso acontece de nao existir o botao marcar
-                                logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
-
-                                # Inclui lista de processos localizados
-                                self.listProcessos[0].append(str(process[i][0]))
-
-                                # Processo incluido
-                                self.listProcessos[1].append(1)
-
-
-                            # Aguarda loading do click
-                            # Verifica time de click
-                            time.sleep(1)
-
-                            break
-
-                        except:
-                            continue
-
-                    # Caso o processo nao seja localizado, incluir na lista de nao localizados
-                    if count == 0:
-                        # Inclui lista de processos nao localizados
-                        self.listProcessos[2].append(str(process[i][0]))
-
-                        image = Print(firefox, caminhoImages)
-                        logging.info('---------------------------')
-                        logging.info('Ocorreu um processo de nao ser localizado na sessao.')
-                        logging.info('Processo nao localizado: ' + str(process[i][0]))
-                        logging.info('---------------------------')
-
-                ##########################################################
+                    self.pecorreProcesso(firefox, process, element, logging, caminhoImages)
 
                 logging.info('Processos selecionados...')
                 logging.info('---------------------------')
-
 
                 # Clica em incluir processos
                 # Finaliza atividade
@@ -179,7 +265,7 @@ class TaskInclusaoProcessos:
                 logging.info('---------------------------')
 
                 # Verificar quanto tempo demora a inclusao
-                time.sleep(2)
+                time.sleep(1)
 
                 # Fecha popup
                 try:
@@ -189,6 +275,11 @@ class TaskInclusaoProcessos:
 
                 # Para sair do objeto popup
                 firefox.switch_to.window(main_window_handle)  # or driver.switch_to_default_content()
+
+                time.sleep(1)
+
+                if len(processPresencial) > 0 and len(processVirtual) > 0 and countDef == 1:
+                    self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages, countDef)
 
                 logging.info('Processos incluidos com sucesso.')
                 logging.info('---------------------------')
@@ -205,74 +296,78 @@ class TaskInclusaoProcessos:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-    def localizarDataCalendarioIncluir(self, firefox, process, dayProcess,  logging, caminhoImages):
+    def localizarDataCalendarioIncluir(self, firefox, process, dayProcess, logging, caminhoImages):
 
-        try:
-            # Mapeamento dos dados da planilha
-            monthProcess = dayProcess[3:5]
+        # try:
+        # Mapeamento dos dados da planilha
+        monthProcess = dayProcess[3:5]
 
-            data = date.today()
+        data = date.today()
 
-            # Salva a data atual
-            dataAtual = data.strftime('%d-%m-%Y')
+        # Salva a data atual
+        dataAtual = data.strftime('%d-%m-%Y')
 
-            # Usado para capturar a descricao no mes atual
-            valMes = int(monthProcess) - 1
+        # Usado para capturar a descricao no mes atual
+        valMes = int(monthProcess) - 1
 
-            Meses = ('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
+        Meses = ('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
 
+        logging.info('---------------------------')
+        logging.info('Iniciando a busca pela sessao dos processos.')
+        logging.info('---------------------------')
+
+        if dataAtual[3:5] != monthProcess:
+
+            logging.info('Selecionado o proximo mes para buscar a sessao.')
             logging.info('---------------------------')
-            logging.info('Iniciando a busca pela sessao dos processos.')
+
+            logging.info('A busca atual não encontrou os processos no mes selecionado no calendario.')
+            logging.info('Buscando a sessao no proximo mes: ' + str(Meses[valMes]))
             logging.info('---------------------------')
 
-            if dataAtual[3:5] != monthProcess:
+            # Contador usado para parar o loop somente quando o mes for encontrado
+            count = 0
+            while count == 0:
+                try:
+                    element = firefox.find_element(By.XPATH,
+                                                   "//div[@class='rich-calendar-tool-btn' and contains(text(), '" + str(
+                                                       Meses[valMes]) + "')]")
+                    count + 1
 
-                logging.info('Selecionado o proximo mes para buscar a sessao.')
-                logging.info('---------------------------')
+                    logging.info('Encontrado o mes correto para o processo.')
+                    logging.info('---------------------------')
+                    break
 
-                logging.info('A busca atual não encontrou os processos no mes selecionado no calendario.')
-                logging.info('Buscando a sessao no proximo mes: ' + str(Meses[valMes]))
-                logging.info('---------------------------')
+                except:
 
-                # Contador usado para parar o loop somente quando o mes for encontrado
-                count = 0
-                while count == 0:
-                    try:
-                        element = firefox.find_element(By.XPATH, "//div[@class='rich-calendar-tool-btn' and contains(text(), '" + str(
-                            Meses[valMes]) + "')]")
-                        count+1
+                    # Avança o calendário mes
+                    element = WebDriverWait(firefox, 20).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH,
+                             "//div[./text()='>']")))
+                    element.click()
 
-                        logging.info('Encontrado o mes correto para o processo.')
-                        logging.info('---------------------------')
-                        break
+                    logging.info('Avancando para o proximo mes.')
+                    logging.info('---------------------------')
 
-                    except:
+                    # Aguarda mudar o mês
+                    time.sleep(2)
 
-                        # Avança o calendário mes
-                        element = WebDriverWait(firefox, 20).until(
-                            EC.presence_of_element_located(
-                                (By.XPATH,
-                                 "//div[./text()='>']")))
-                        element.click()
+        logging.info('---------------------------')
+        logging.info('Iniciando a inclusao dos processos')
+        logging.info('---------------------------')
 
-                        logging.info('Avancando para o proximo mes.')
-                        logging.info('---------------------------')
+        # Usado para chamada recursiva do metodo
+        countDef = 0
+        self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages, countDef)
 
-                        # Aguarda mudar o mês
-                        time.sleep(2)
-
-            logging.info('---------------------------')
-            logging.info('Iniciando a inclusao dos processos')
-            logging.info('---------------------------')
-            self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages)
-
-        except:
-
-            image = Print(firefox, caminhoImages)
-            logging.exception('Falha ao concluir a tarefa especificada.')
-            logging.info('Finalizando o robo.')
-            logging.shutdown()
+        # except:
+        #
+        #     image = Print(firefox, caminhoImages)
+        #     logging.exception('Falha ao concluir a tarefa especificada.')
+        #     logging.info('Finalizando o robo.')
+        #     logging.shutdown()
 
     def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
 
@@ -325,7 +420,7 @@ class TaskInclusaoProcessos:
                 logging.info('---------------------------')
                 logging.info('Buscando a sessao...')
                 logging.info('---------------------------')
-                self.localizarDataCalendarioIncluir(firefox, listDataProcessos[i], str(i),  logging, caminhoImages)
+                self.localizarDataCalendarioIncluir(firefox, listDataProcessos[i], str(i), logging, caminhoImages)
 
             logging.info('---------------------------')
 
