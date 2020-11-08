@@ -298,76 +298,76 @@ class TaskInclusaoProcessos:
 
     def localizarDataCalendarioIncluir(self, firefox, process, dayProcess, logging, caminhoImages):
 
-        # try:
-        # Mapeamento dos dados da planilha
-        monthProcess = dayProcess[3:5]
+        try:
+            # Mapeamento dos dados da planilha
+            monthProcess = dayProcess[3:5]
 
-        data = date.today()
+            data = date.today()
 
-        # Salva a data atual
-        dataAtual = data.strftime('%d-%m-%Y')
+            # Salva a data atual
+            dataAtual = data.strftime('%d-%m-%Y')
 
-        # Usado para capturar a descricao no mes atual
-        valMes = int(monthProcess) - 1
+            # Usado para capturar a descricao no mes atual
+            valMes = int(monthProcess) - 1
 
-        Meses = ('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
+            Meses = ('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
 
-        logging.info('---------------------------')
-        logging.info('Iniciando a busca pela sessao dos processos.')
-        logging.info('---------------------------')
-
-        if dataAtual[3:5] != monthProcess:
-
-            logging.info('Selecionado o proximo mes para buscar a sessao.')
+            logging.info('---------------------------')
+            logging.info('Iniciando a busca pela sessao dos processos.')
             logging.info('---------------------------')
 
-            logging.info('A busca atual não encontrou os processos no mes selecionado no calendario.')
-            logging.info('Buscando a sessao no proximo mes: ' + str(Meses[valMes]))
+            if dataAtual[3:5] != monthProcess:
+
+                logging.info('Selecionado o proximo mes para buscar a sessao.')
+                logging.info('---------------------------')
+
+                logging.info('A busca atual não encontrou os processos no mes selecionado no calendario.')
+                logging.info('Buscando a sessao no proximo mes: ' + str(Meses[valMes]))
+                logging.info('---------------------------')
+
+                # Contador usado para parar o loop somente quando o mes for encontrado
+                count = 0
+                while count == 0:
+                    try:
+                        element = firefox.find_element(By.XPATH,
+                                                       "//div[@class='rich-calendar-tool-btn' and contains(text(), '" + str(
+                                                           Meses[valMes]) + "')]")
+                        count + 1
+
+                        logging.info('Encontrado o mes correto para o processo.')
+                        logging.info('---------------------------')
+                        break
+
+                    except:
+
+                        # Avança o calendário mes
+                        element = WebDriverWait(firefox, 20).until(
+                            EC.presence_of_element_located(
+                                (By.XPATH,
+                                 "//div[./text()='>']")))
+                        element.click()
+
+                        logging.info('Avancando para o proximo mes.')
+                        logging.info('---------------------------')
+
+                        # Aguarda mudar o mês
+                        time.sleep(2)
+
+            logging.info('---------------------------')
+            logging.info('Iniciando a inclusao dos processos')
             logging.info('---------------------------')
 
-            # Contador usado para parar o loop somente quando o mes for encontrado
-            count = 0
-            while count == 0:
-                try:
-                    element = firefox.find_element(By.XPATH,
-                                                   "//div[@class='rich-calendar-tool-btn' and contains(text(), '" + str(
-                                                       Meses[valMes]) + "')]")
-                    count + 1
+            # Usado para chamada recursiva do metodo
+            countDef = 0
+            self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages, countDef)
 
-                    logging.info('Encontrado o mes correto para o processo.')
-                    logging.info('---------------------------')
-                    break
+        except:
 
-                except:
-
-                    # Avança o calendário mes
-                    element = WebDriverWait(firefox, 20).until(
-                        EC.presence_of_element_located(
-                            (By.XPATH,
-                             "//div[./text()='>']")))
-                    element.click()
-
-                    logging.info('Avancando para o proximo mes.')
-                    logging.info('---------------------------')
-
-                    # Aguarda mudar o mês
-                    time.sleep(2)
-
-        logging.info('---------------------------')
-        logging.info('Iniciando a inclusao dos processos')
-        logging.info('---------------------------')
-
-        # Usado para chamada recursiva do metodo
-        countDef = 0
-        self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages, countDef)
-
-        # except:
-        #
-        #     image = Print(firefox, caminhoImages)
-        #     logging.exception('Falha ao concluir a tarefa especificada.')
-        #     logging.info('Finalizando o robo.')
-        #     logging.shutdown()
+            image = Print(firefox, caminhoImages)
+            logging.exception('Falha ao concluir a tarefa especificada.')
+            logging.info('Finalizando o robo.')
+            logging.shutdown()
 
     def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
 
