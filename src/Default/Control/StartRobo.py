@@ -139,10 +139,6 @@ class StartRobo:
                 log.shutdown()
                 sys.exit(0)
 
-            time.sleep(99999)
-
-
-
 
         # elif dataForm['atividade'] == '(TR) Concluso para decisã':
         #     codPerfil = 2

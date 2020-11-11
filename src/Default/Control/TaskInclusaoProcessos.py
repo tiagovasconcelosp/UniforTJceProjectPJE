@@ -1,5 +1,7 @@
 import time
+from unicodedata import normalize
 from datetime import date
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -17,7 +19,7 @@ class TaskInclusaoProcessos:
         self.listProcessos = [[], [], [], ]
         self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
-    def pecorreProcesso(self, firefox, process, element, logging, caminhoImages):
+    def pecorreProcessoPauta(self, firefox, process, element, dayProcess, logging, caminhoImages):
 
         # Localiza os processos do dia e marca
         ##########################################################
@@ -49,21 +51,19 @@ class TaskInclusaoProcessos:
                         # Processo localizado
                         count += 1
 
+                        # Aguarda loading do click
+                        # Verifica time de click
+                        time.sleep(4)
+
                     except:
 
+                        #############################################
                         # Caso acontece de nao existir o botao marcar
+                        #############################################
                         logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
-                        # Inclui lista de processos localizados
-                        self.listProcessos[0].append(str(process[i][0]))
-                        print('nao clicou')
-                        # Processo incluido
+
+                        # Processo nao incluido
                         self.listProcessos[1].append(1)
-
-                    # Aguarda loading do click
-                    # Verifica time de click
-                    time.sleep(1)
-
-                    # break
 
                 except:
                     continue
@@ -75,9 +75,90 @@ class TaskInclusaoProcessos:
 
                 image = Print(firefox, caminhoImages)
                 logging.info('---------------------------')
-                logging.info('Ocorreu um processo de nao ser localizado na sessao.')
-                logging.info('Processo nao localizado: ' + str(process[i][0]))
+                logging.info('O processo nao ser localizado na sessao. Data: ' + str(dayProcess))
+                logging.info('Processo nao foi localizado: ' + str(process[i][0]))
                 logging.info('---------------------------')
+
+        logging.info('Atividade de incluir processos em "Aptos para Inclusao em Pauta" foi realizada com sucesso. Data: ' + str(dayProcess))
+        logging.info('---------------------------')
+
+        ##########################################################
+
+    def pecorreProcessoMesa(self, firefox, process, dayProcess, logging, caminhoImages):
+
+        # Localiza os processos do dia e marca
+        ##########################################################
+
+        for i in range(len(process)):
+
+            try:  # Para verificar se o processo existe
+
+                elementInput = WebDriverWait(firefox, 20).until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, 'form#processoEmMesaForm div.propertyView div.value input.suggest')))
+
+                elementInput.send_keys(process[i][0])
+
+                # Aguarda a busca do processo
+                element = WebDriverWait(firefox, 2).until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, 'div.rich-sb-common-container table.rich-sb-int-decor-table tr.richfaces_suggestionEntry')))
+
+                firefox.execute_script("arguments[0].click();", element)
+
+                time.sleep(2)
+
+                # Clical em incluir
+                element = WebDriverWait(firefox, 10).until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR,
+                         'input#processoEmMesaForm\:cadastrar')))
+                # element.click()
+
+                # Confirma o alerto caso exista
+                # Messagem: A classe exige pauta. Deseja continuar?
+                try:
+                    WebDriverWait(firefox, 10).until(EC.alert_is_present())
+
+                    alert = firefox.switch_to.alert
+                    alert.accept()
+                    logging.info('Confirmando o alerta: A classe exige pauta. Deseja continuar?')
+                    logging.info('Processo: ' + str(process[i][0]))
+
+                except:
+                    continue
+
+
+                logging.info('Processo incluido com sucesso: ' + str(process[i][0]))
+
+                # Inclui lista de processos localizados
+                self.listProcessos[0].append(str(process[i][0]))
+
+                # Processo incluido
+                self.listProcessos[1].append(0)
+
+                # Limpa campo
+                elementInput.clear()
+
+                time.sleep(2)
+
+            except:
+
+                elementInput.clear()
+                time.sleep(2)
+
+                # Inclui lista de processos nao localizados
+                self.listProcessos[2].append(process[i][0])
+
+                image = Print(firefox, caminhoImages)
+                logging.info('---------------------------')
+                logging.info('Processo de nao ser localizado na busca "Aptos para Inclusao em Mesa". Data: ' + str(dayProcess))
+                logging.info('Processo nao foi localizado: ' + str(process[i][0]))
+                logging.info('Registrando print')
+                logging.info('---------------------------')
+
+        logging.info('Atividade de incluir processos em "Aptos para Inclusao em Mesa" foi realizada com sucesso. Data: ' + str(dayProcess))
+        logging.info('---------------------------')
 
         ##########################################################
 
@@ -90,13 +171,19 @@ class TaskInclusaoProcessos:
             monthProcess = dayProcess[3:5]
             yearProcess = dayProcess[6:10]
 
+            sessao = ''
+
             processVirtual = []
             processPresencial = []
 
             for x in range(len(process)):
-                if (str(process[x][2]).upper()).strip() == (str('Virtual').upper()).strip():
+
+                source = str(process[x][2])
+                target = normalize('NFKD', source).encode('ASCII', 'ignore').decode('ASCII')
+
+                if (str(target).upper()).strip() == (str('Virtual').upper()).strip():
                     processVirtual.append([process[x][0]])
-                elif (str(process[x][2]).upper()).strip() == (str('Presencial').upper()).strip():
+                elif (str(target).upper()).strip() == (str('Presencial').upper()).strip() or (str(target).upper()).strip() == (str('Videoconferencia').upper()).strip():
                     processPresencial.append([process[x][0]])
                 else:
                     logging.info('---------------------------')
@@ -112,8 +199,12 @@ class TaskInclusaoProcessos:
             logging.info('Buscando o dia da sessao.')
             logging.info('---------------------------')
 
-            element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(
-                dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- EASP')]")
+            try:
+                element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(
+                    dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- EASP')]")
+            except:
+                element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(
+                    dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- A')]")
 
             # Verifica se achou o respectivo dia no calendario
             if element:
@@ -150,7 +241,7 @@ class TaskInclusaoProcessos:
 
                                 sessao = 'Virtual'
 
-                            elif  len(processPresencial) > 0:
+                            elif len(processPresencial) > 0:
                                 firefox.find_element(By.XPATH,
                                                      "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[1]/a").click()
 
@@ -182,7 +273,7 @@ class TaskInclusaoProcessos:
 
                 time.sleep(2)
 
-                logging.info('Localizando a nova janela aberta.')
+                logging.info('Aguardando a nova janela ser aberta.')
                 logging.info('---------------------------')
 
                 # Localiza a nova janela aberta
@@ -203,91 +294,268 @@ class TaskInclusaoProcessos:
                 logging.info('Nova janela encontrada.')
                 logging.info('---------------------------')
 
+                ##########################################################
+                # Aguarda o carregamento da nova janela
+                ##########################################################
+
                 # Seleciona "Aptos para inclusão em pauta"
                 ##########################################################
-                element = WebDriverWait(firefox, 300).until(
+                pauta = WebDriverWait(firefox, 600).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'td#form_lbl')))
-                element.click()
+
                 ##########################################################
 
-                logging.info('Seleciona menu: Aptos para inclusão em pauta.')
-                logging.info('---------------------------')
-
-                # Verificar time para processos longos
-                # time.sleep(3)
-
-                logging.info('Buscando processos para serem incluidos...')
-                logging.info('---------------------------')
-
-                # Localiza processos a serem selecionados e seleciona cada um deles
-                # WebDrive usado somente para o aguardo do carregamento da pagina
+                # Seleciona "Aptos para inclusão em mesa"
                 ##########################################################
-                element = WebDriverWait(firefox, 300).until(
+                mesa = WebDriverWait(firefox, 200).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
-                         'table#pautaJulgamentoList tbody tr')))
+                         'td#processoMesaTab_lbl')))
 
-                # Localiza tabela com listagem dos processos
-                element = firefox.find_elements_by_css_selector("table#pautaJulgamentoList tbody tr.rich-table-row")
                 ##########################################################
 
-                # Para verificar se caso entrou em uma sessao especifica
+                # Verifica se a sessao esta fechada
+                ##########################################################
                 try:
-                    if sessao == 'Presencial':
-                        processList = processPresencial
-                        countDef += 1
-                    elif sessao == 'Virtual':
-                        processList = processVirtual
-                        countDef += 1
+                    element = firefox.find_element_by_xpath(
+                        "//p[@class='text-center' and contains(text(),'está fechada')]")
 
-                    self.pecorreProcesso(firefox, processList, element, logging, caminhoImages)
+                    logging.info('Registrando print.')
+                    image = Print(firefox, caminhoImages)
 
+                    try:
+                        firefox.close()
+                    except:
+                        firefox.quit()
+
+                    # Para sair do objeto popup
+                    firefox.switch_to.window(main_window_handle)
+
+                    logging.info('Sessão deste dia esta fechada. Dia: ' + str(dayProcess))
+                    logging.info('Fechando janela aberta.')
+
+                    return self.listProcessos
                 except:
 
-                    self.pecorreProcesso(firefox, process, element, logging, caminhoImages)
+                    try:
 
-                logging.info('Processos selecionados...')
-                logging.info('---------------------------')
+                        # Identifica o tipo da sessao
+                        element = firefox.find_element(By.XPATH,
+                                                   "//span[contains(text(), 'Sessão Virtual')]")
 
-                # Clica em incluir processos
-                # Finaliza atividade
-                ##########################################################
-                # element = WebDriverWait(firefox, 200).until(
-                #     EC.presence_of_element_located(
-                #         (By.CSS_SELECTOR,
-                #          'form#j_id1620 input')))
-                # element.click()
-                ##########################################################
+                        if len(processPresencial) > 0 and len(processVirtual) == 0 and sessao == '':
+                            logging.info('---------------------------')
+                            logging.info('Houve uma divergencia entre os dados. O(s) processo(s) abaixo nao serao '
+                                         'buscados pois pertencem a tipo Presencial e a sessao aberta e do tipo Virtual.')
 
-                logging.info('Incluindo os processos...')
-                logging.info('---------------------------')
+                            for i in range(len(processPresencial)):
+                                logging.info('Processo: ' + str(processPresencial[i][0]))
+                                # Inclui lista de processos nao localizados
+                                self.listProcessos[2].append(str(processPresencial[i][0]))
+                            logging.info(
+                                'O(s) processo(s) pode(m) esta com a informacao divergente na planilha. Foi tentado realizar a'
+                                ' busca do processo no menu "Aptos para inclusao em pauta", porem na planilha informa '
+                                'como Presencial ou Videoconferencia')
+                            logging.info('---------------------------')
+                            logging.info('Registrando print')
+                            image = Print(firefox, caminhoImages)
 
-                # Verificar quanto tempo demora a inclusao
-                time.sleep(1)
+                            try:
+                                firefox.close()
+                            except:
+                                firefox.quit()
 
-                # Fecha popup
-                try:
-                    firefox.close()
-                except:
-                    firefox.quit()
+                            # Para sair do objeto popup
+                            firefox.switch_to.window(main_window_handle)
 
-                # Para sair do objeto popup
-                firefox.switch_to.window(main_window_handle)  # or driver.switch_to_default_content()
+                            return self.listProcessos
 
-                time.sleep(1)
 
-                if len(processPresencial) > 0 and len(processVirtual) > 0 and countDef == 1:
-                    self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages, countDef)
+                        pauta.click()
 
-                logging.info('Processos incluidos com sucesso.')
-                logging.info('---------------------------')
+                        ##########################################################
+                        # Inicia a busca
 
-                logging.info('Fechando a janela da sessao.')
-                logging.info('---------------------------')
+                        logging.info('Selecionado menu: Aptos para inclusão em pauta.')
+                        logging.info('---------------------------')
 
-                return self.listProcessos
+                        # Verificar time para processos longos
+                        # time.sleep(3)
+
+                        logging.info('Buscando processos para serem incluidos...')
+                        logging.info('---------------------------')
+
+                        # Localiza processos a serem selecionados e seleciona cada um deles
+                        # WebDrive usado somente para o aguardo do carregamento da pagina
+                        ##########################################################
+
+                        try:
+                            element = WebDriverWait(firefox, 30).until(
+                                EC.presence_of_element_located(
+                                    (By.CSS_SELECTOR,
+                                     'table#pautaJulgamentoList tbody tr')))
+                        except:
+
+                            logging.info('Nao existe processos para serem incluidos nessa sessao e nessa data. Data: ' + str(dayProcess))
+                            logging.info('Os processos abaixos nao poderam ser localizados. A lista esta vazia.')
+                            logging.info('Registrando print.')
+                            image = Print(firefox, caminhoImages)
+
+                            for i in range(len(processVirtual)):
+                                logging.info('Processo: ' + str(processVirtual[i][0]))
+                                # Inclui lista de processos nao localizados
+                                self.listProcessos[2].append(str(processVirtual[i][0]))
+
+                            logging.info('Fechando a janela da sessao.')
+                            logging.info('Finalizando a busca na sessao do dia: ' + str(dayProcess))
+                            logging.info('---------------------------')
+
+                            try:
+                                firefox.close()
+                            except:
+                                firefox.quit()
+
+                            # Para sair do objeto popup
+                            firefox.switch_to.window(main_window_handle)
+
+                            return self.listProcessos
+
+                        # Localiza tabela com listagem dos processos
+                        element = firefox.find_elements_by_css_selector(
+                            "table#pautaJulgamentoList tbody tr.rich-table-row")
+                        ##########################################################
+
+                        # Para verificar se caso entrou em uma sessao especifica
+                        # try:
+                        #     if sessao == 'Presencial':
+                        #         processList = processPresencial
+                        #         countDef += 1
+                        #     elif sessao == 'Virtual':
+                        #         processList = processVirtual
+                        #         countDef += 1
+                        #
+                        #     self.pecorreProcessoPauta(firefox, processList, element, logging, caminhoImages)
+                        #
+                        # except:
+
+                        countDef += 1
+                        self.pecorreProcessoPauta(firefox, processVirtual, element, dayProcess, logging, caminhoImages)
+
+                        logging.info('Processos selecionados...')
+                        logging.info('---------------------------')
+
+                        # Clica em incluir processos
+                        # Finaliza atividade
+                        ##########################################################
+                        element = WebDriverWait(firefox, 20).until(
+                            EC.presence_of_element_located(
+                                (By.CSS_SELECTOR,
+                                 'form#j_id1620 input')))
+                        # element.click()
+                        ##########################################################
+
+                        logging.info('Incluindo os processos...')
+                        logging.info('---------------------------')
+
+                        ##########################################################
+                        # Verificar quanto tempo demora a inclusao
+                        ##########################################################
+                        ##########################################################
+                        ##########################################################
+                        time.sleep(3)
+
+                        # Fecha popup
+                        try:
+                            firefox.close()
+                        except:
+                            firefox.quit()
+
+                        # Para sair do objeto popup
+                        firefox.switch_to.window(main_window_handle)  # or driver.switch_to_default_content()
+
+                        time.sleep(1)
+
+                        # Para verificar caso haja mais de uma sessao
+                        if len(processPresencial) > 0 and len(processVirtual) > 0 and countDef == 1:
+                            self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages, countDef)
+
+                        logging.info('Fechando a janela da sessao.')
+                        logging.info('---------------------------')
+
+                        return self.listProcessos
+
+                    except:
+
+                        # Identifica o tipo da sessao
+                        element = firefox.find_element(By.XPATH,
+                                                       "//span[contains(text(), 'Presencial')]")
+
+                        if len(processVirtual) > 0 and len(processPresencial) == 0 and sessao == '':
+                            logging.info('---------------------------')
+                            logging.info('Houve uma divergencia entre os dados. O(s) processo(s) abaixo nao serao '
+                                         'buscados pois pertencem a tipo Virtual e a sessao aberta e do tipo Presencial.')
+
+                            for i in range(len(processVirtual)):
+                                logging.info('Processo: ' + str(processVirtual[i][0]))
+                                # Inclui lista de processos nao localizados
+                                self.listProcessos[2].append(str(processVirtual[i][0]))
+                            logging.info(
+                                'O(s) processo(s) pode(m) esta com a informacao divergente na planilha. Foi tentado realizar a'
+                                ' busca do processo no menu "Aptos para inclusao em mesa", porem na planilha informa '
+                                'como Virtual')
+                            logging.info('---------------------------')
+                            logging.info('Registrando print')
+                            image = Print(firefox, caminhoImages)
+
+                            logging.info('Fechando a janela da sessao.')
+                            logging.info('Finalizando a busca na sessao do dia: ' + str(dayProcess))
+                            logging.info('---------------------------')
+
+                            try:
+                                firefox.close()
+                            except:
+                                firefox.quit()
+
+                            # Para sair do objeto popup
+                            firefox.switch_to.window(main_window_handle)
+
+                            return self.listProcessos
+
+                        mesa.click()
+
+                        ##########################################################
+                        # Para aguardar o carregamento total da pagina
+                        element = WebDriverWait(firefox, 30).until(
+                            EC.presence_of_element_located(
+                                (By.CSS_SELECTOR,
+                                 'form#processoEmMesaForm div.propertyView div.value input.suggest')))
+
+                        countDef += 1
+
+                        self.pecorreProcessoMesa(firefox, processPresencial, dayProcess, logging, caminhoImages)
+
+                        # Fecha popup
+                        try:
+                            firefox.close()
+                        except:
+                            firefox.quit()
+
+                        # Para sair do objeto popup
+                        firefox.switch_to.window(main_window_handle)
+
+                        time.sleep(1)
+
+                        # Para verificar caso haja mais de uma sessao
+                        if len(processPresencial) > 0 and len(processVirtual) > 0 and countDef == 1:
+                            self.processoIncluir(firefox, process, dayProcess, logging, caminhoImages, countDef)
+
+                        logging.info('Fechando a janela da sessao.')
+                        logging.info('---------------------------')
+
+                        return self.listProcessos
+
         except:
 
             image = Print(firefox, caminhoImages)
@@ -295,6 +563,19 @@ class TaskInclusaoProcessos:
             logging.exception('Dia da sessao nao encontrado.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
+
+            # Fecha popup
+            try:
+                firefox.close()
+            except:
+                firefox.quit()
+
+            # Para sair do objeto popup
+            firefox.switch_to.window(main_window_handle)
+
+            time.sleep(1)
+
+            return self.listProcessos
 
     def localizarDataCalendarioIncluir(self, firefox, process, dayProcess, logging, caminhoImages):
 
@@ -314,7 +595,7 @@ class TaskInclusaoProcessos:
                      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
 
             logging.info('---------------------------')
-            logging.info('Iniciando a busca pela sessao dos processos.')
+            logging.info('Iniciando uma nova busca pela sessao dos processos. Data procurada: ' + str(dayProcess))
             logging.info('---------------------------')
 
             if dataAtual[3:5] != monthProcess:
@@ -416,9 +697,10 @@ class TaskInclusaoProcessos:
 
             # Chama metodo que localiza os processos
             for i in listDataProcessos:
-                logging.info('Incluindo processos ne sessao do dia: ' + str(i))
                 logging.info('---------------------------')
-                logging.info('Buscando a sessao...')
+                logging.info('Iniciando uma nova busca...')
+                logging.info('Incluindo processos na sessao do dia: ' + str(i))
+                logging.info('Abrindo a sessao...')
                 logging.info('---------------------------')
                 self.localizarDataCalendarioIncluir(firefox, listDataProcessos[i], str(i), logging, caminhoImages)
 
