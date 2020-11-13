@@ -23,7 +23,6 @@ class TaskInclusaoProcessos:
 
         # Localiza os processos do dia e marca
         ##########################################################
-
         for i in range(len(process)):
             # Usado para verificar se o processo nao foi localizado
             count = 0
@@ -154,7 +153,7 @@ class TaskInclusaoProcessos:
                 logging.info('---------------------------')
                 logging.info('Processo de nao ser localizado na busca "Aptos para Inclusao em Mesa". Data: ' + str(dayProcess))
                 logging.info('Processo nao foi localizado: ' + str(process[i][0]))
-                logging.info('Registrando print')
+                logging.info('Registrando print.')
                 logging.info('---------------------------')
 
         logging.info('Atividade de incluir processos em "Aptos para Inclusao em Mesa" foi realizada com sucesso. Data: ' + str(dayProcess))
@@ -203,8 +202,19 @@ class TaskInclusaoProcessos:
                 element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(
                     dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- EASP')]")
             except:
-                element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(
-                    dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- A')]")
+                logging.info('---------------------------')
+                logging.info('Nao foi possivel abrir a sessao do dia especificado, pois a sessao nao esta como "EASP". Por favor, verificar.')
+                logging.info('Ou pode ter ocorrido desde dia nao haver sessao aberta.')
+                logging.info('Registrando print.')
+                logging.info('---------------------------')
+                image = Print(firefox, caminhoImages)
+
+                try:
+                    firefox.close()
+                except:
+                    firefox.quit()
+
+                return self.listProcessos
 
             # Verifica se achou o respectivo dia no calendario
             if element:
@@ -333,7 +343,7 @@ class TaskInclusaoProcessos:
                     # Para sair do objeto popup
                     firefox.switch_to.window(main_window_handle)
 
-                    logging.info('Sessão deste dia esta fechada. Dia: ' + str(dayProcess))
+                    logging.info('Sessao deste dia esta fechada. Dia: ' + str(dayProcess))
                     logging.info('Fechando janela aberta.')
 
                     return self.listProcessos
@@ -359,7 +369,7 @@ class TaskInclusaoProcessos:
                                 ' busca do processo no menu "Aptos para inclusao em pauta", porem na planilha informa '
                                 'como Presencial ou Videoconferencia')
                             logging.info('---------------------------')
-                            logging.info('Registrando print')
+                            logging.info('Registrando print.')
                             image = Print(firefox, caminhoImages)
 
                             try:
@@ -372,17 +382,13 @@ class TaskInclusaoProcessos:
 
                             return self.listProcessos
 
-
                         pauta.click()
 
                         ##########################################################
                         # Inicia a busca
 
-                        logging.info('Selecionado menu: Aptos para inclusão em pauta.')
+                        logging.info('Selecionado menu: Aptos para inclusao em pauta.')
                         logging.info('---------------------------')
-
-                        # Verificar time para processos longos
-                        # time.sleep(3)
 
                         logging.info('Buscando processos para serem incluidos...')
                         logging.info('---------------------------')
@@ -427,19 +433,6 @@ class TaskInclusaoProcessos:
                             "table#pautaJulgamentoList tbody tr.rich-table-row")
                         ##########################################################
 
-                        # Para verificar se caso entrou em uma sessao especifica
-                        # try:
-                        #     if sessao == 'Presencial':
-                        #         processList = processPresencial
-                        #         countDef += 1
-                        #     elif sessao == 'Virtual':
-                        #         processList = processVirtual
-                        #         countDef += 1
-                        #
-                        #     self.pecorreProcessoPauta(firefox, processList, element, logging, caminhoImages)
-                        #
-                        # except:
-
                         countDef += 1
                         self.pecorreProcessoPauta(firefox, processVirtual, element, dayProcess, logging, caminhoImages)
 
@@ -453,7 +446,7 @@ class TaskInclusaoProcessos:
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
                                  'form#j_id1620 input')))
-                        # element.click()
+                        element.click()
                         ##########################################################
 
                         logging.info('Incluindo os processos...')
@@ -464,7 +457,7 @@ class TaskInclusaoProcessos:
                         ##########################################################
                         ##########################################################
                         ##########################################################
-                        time.sleep(3)
+                        time.sleep(10)
 
                         # Fecha popup
                         try:
@@ -506,7 +499,7 @@ class TaskInclusaoProcessos:
                                 ' busca do processo no menu "Aptos para inclusao em mesa", porem na planilha informa '
                                 'como Virtual')
                             logging.info('---------------------------')
-                            logging.info('Registrando print')
+                            logging.info('Registrando print.')
                             image = Print(firefox, caminhoImages)
 
                             logging.info('Fechando a janela da sessao.')
@@ -603,7 +596,7 @@ class TaskInclusaoProcessos:
                 logging.info('Selecionado o proximo mes para buscar a sessao.')
                 logging.info('---------------------------')
 
-                logging.info('A busca atual não encontrou os processos no mes selecionado no calendario.')
+                logging.info('A busca atual nao encontrou os processos no mes selecionado no calendario.')
                 logging.info('Buscando a sessao no proximo mes: ' + str(Meses[valMes]))
                 logging.info('---------------------------')
 

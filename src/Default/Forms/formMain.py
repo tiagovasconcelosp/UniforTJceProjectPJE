@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter.filedialog import askopenfile
 from tkinter.ttk import Combobox
 from tkinter import messagebox
-from brutils import cpf, cnpj
+# from brutils import cpf, cnpj
 
 from src.Default.Control.StartRobo import StartRobo
 

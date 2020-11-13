@@ -151,6 +151,10 @@
   },
   {
    "optionDest": "hiddenimports",
+   "value": "src.Default.Control.TaskInclusaoProcessos"
+  },
+  {
+   "optionDest": "hiddenimports",
    "value": "selenium.webdriver.common.keys"
   },
   {
@@ -160,10 +164,6 @@
   {
    "optionDest": "hiddenimports",
    "value": "win32api"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "xml.etree.ElementTree"
   },
   {
    "optionDest": "datas",
@@ -188,6 +188,18 @@
   {
    "optionDest": "datas",
    "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/images;images/"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "unicodedata"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "tkinter"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/icon_pje.ico;."
   }
  ],
  "nonPyinstallerOptions": {
