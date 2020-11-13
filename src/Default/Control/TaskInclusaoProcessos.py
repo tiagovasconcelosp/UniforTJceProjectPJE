@@ -112,7 +112,7 @@ class TaskInclusaoProcessos:
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'input#processoEmMesaForm\:cadastrar')))
-                # element.click()
+                element.click()
 
                 # Confirma o alerto caso exista
                 # Messagem: A classe exige pauta. Deseja continuar?
@@ -240,14 +240,29 @@ class TaskInclusaoProcessos:
                                 #     x + 1) + "]/td[contains(text(), 'Presencial')]//ancestor::tr[" + str(
                                 #     x + 1) + "]/td[1]/a").click()
 
-                                firefox.find_element(By.XPATH,
-                                                     "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[1]/a").click()
+                                try:
+                                    e = firefox.find_element(By.XPATH,
+                                                             "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[contains(., 'Presencial')]").text
+                                    if e:
+                                        firefox.find_element(By.XPATH,
+                                                             "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[1]/a").click()
+                                except:
+                                    firefox.find_element(By.XPATH,
+                                                         "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[2]/td[1]/a").click()
 
                                 sessao = 'Presencial'
 
                             elif len(processVirtual) > 0 and countDef == 1:
-                                firefox.find_element(By.XPATH,
-                                                     "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[2]/td[1]/a").click()
+
+                                try:
+                                    e = firefox.find_element(By.XPATH,
+                                                             "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[2]/td[contains(., 'Virtual')]").text
+                                    if e:
+                                        firefox.find_element(By.XPATH,
+                                                         "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[2]/td[1]/a").click()
+                                except:
+                                    firefox.find_element(By.XPATH,
+                                                         "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[1]/a").click()
 
                                 sessao = 'Virtual'
 
@@ -263,16 +278,23 @@ class TaskInclusaoProcessos:
 
                                 sessao = 'Virtual'
 
+
+
                         except:
 
-                            logging.info('Houver uma divergencia nos dados. Por favor verificar a planilha')
+                            logging.info('Houve um problema a selecionar sessao correta. Por favor verificar se os dados da planilha estao corretos.')
                             logging.info('---------------------------')
                             logging.info('Presencial:')
                             logging.info(str(processPresencial))
                             logging.info('Virtual:')
                             logging.info(str(processVirtual))
                             logging.info('---------------------------')
-                            continue
+                            try:
+                                firefox.close()
+                            except:
+                                firefox.quit()
+
+                            return self.listProcessos
 
                     firefox.find_element(By.CSS_SELECTOR, "span#fecharModal").click()
 
@@ -586,6 +608,13 @@ class TaskInclusaoProcessos:
 
             Meses = ('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
                      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
+
+            ##########################################################
+            # Para aguardar o carregamento total da pagina - calendario
+            element = WebDriverWait(firefox, 60).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR,
+                     '.calendario')))
 
             logging.info('---------------------------')
             logging.info('Iniciando uma nova busca pela sessao dos processos. Data procurada: ' + str(dayProcess))
