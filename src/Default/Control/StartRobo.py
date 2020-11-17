@@ -58,9 +58,7 @@ class StartRobo:
         # Abre o arquivo XLS
         xlsData = openXls.OpenFileXls(firefox, log)
 
-        # Captura o IP externo
-        url = request.urlopen('http://ip-api.com/json').read()
-        jsn = json.loads(url.decode('UTF-8'))
+
 
         # Captura informacoes da maquina
         hostname = socket.gethostname()
@@ -74,7 +72,17 @@ class StartRobo:
         log.info('O perfil selecionado foi: ' + dataForm['perfil'])
         log.info('---------------------------')
         log.info('Dados da maquina que executou: ')
-        log.info('IP Internet: ' + str(jsn['query']))
+
+        try:
+            # Captura o IP externo
+            url = request.urlopen('http://ip-api.com/json').read()
+            jsn = json.loads(url.decode('UTF-8'))
+            log.info('IP Internet: 60013884310' + str(jsn['query']))
+        except:
+            log.info('Nao foi possivel identificar o IP. Falha na conexao.')
+            log.info('IP Internet: ')
+
+
         log.info('IP Local: ' + str(IP))
         log.info('Nome da maquina: ' + str(hostname))
         log.info('Endereco MAC da maquina: ' + str(get_mac_address()))

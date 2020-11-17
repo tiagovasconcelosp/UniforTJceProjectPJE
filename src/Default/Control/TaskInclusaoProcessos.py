@@ -92,32 +92,36 @@ class TaskInclusaoProcessos:
 
             try:  # Para verificar se o processo existe
 
-                elementInput = WebDriverWait(firefox, 20).until(
+                elementInput = WebDriverWait(firefox, 5).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, 'form#processoEmMesaForm div.propertyView div.value input.suggest')))
 
                 elementInput.send_keys(process[i][0])
 
-                # Aguarda a busca do processo
-                element = WebDriverWait(firefox, 2).until(
-                    EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, 'div.rich-sb-common-container table.rich-sb-int-decor-table tr.richfaces_suggestionEntry')))
+                time.sleep(2)
 
-                firefox.execute_script("arguments[0].click();", element)
+                try:
+                    # Aguarda a busca do processo
+                    elementIn = WebDriverWait(firefox, 5).until(
+                        EC.presence_of_element_located(
+                            (By.CSS_SELECTOR, 'div.rich-sb-common-container table.rich-sb-int-decor-table tr.richfaces_suggestionEntry')))
+                    firefox.execute_script("arguments[0].click();", elementIn)
+                except:
+                    logging.info('Nao foi possivel clicar na sugestao de processo na busca.')
 
                 time.sleep(2)
 
                 # Clical em incluir
-                element = WebDriverWait(firefox, 10).until(
+                elementInn = WebDriverWait(firefox, 3).until(
                     EC.presence_of_element_located(
-                        (By.CSS_SELECTOR,
-                         'input#processoEmMesaForm\:cadastrar')))
-                element.click()
+                        (By.XPATH,
+                         '//*[@id="processoEmMesaForm:cadastrar"]')))
+                elementInn.click()
 
                 # Confirma o alerto caso exista
                 # Messagem: A classe exige pauta. Deseja continuar?
                 try:
-                    WebDriverWait(firefox, 10).until(EC.alert_is_present())
+                    WebDriverWait(firefox, 2).until(EC.alert_is_present())
 
                     alert = firefox.switch_to.alert
                     alert.accept()
@@ -127,7 +131,6 @@ class TaskInclusaoProcessos:
                 except:
                     continue
 
-
                 logging.info('Processo incluido com sucesso: ' + str(process[i][0]))
 
                 # Inclui lista de processos localizados
@@ -136,6 +139,11 @@ class TaskInclusaoProcessos:
                 # Processo incluido
                 self.listProcessos[1].append(0)
 
+                #Captura novamente o elemento
+                elementInput = WebDriverWait(firefox, 5).until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, 'form#processoEmMesaForm div.propertyView div.value input.suggest')))
+
                 # Limpa campo
                 elementInput.clear()
 
@@ -143,7 +151,13 @@ class TaskInclusaoProcessos:
 
             except:
 
+                # Captura novamente o elemento
+                elementInput = WebDriverWait(firefox, 4).until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, 'form#processoEmMesaForm div.propertyView div.value input.suggest')))
+
                 elementInput.clear()
+
                 time.sleep(2)
 
                 # Inclui lista de processos nao localizados
@@ -277,8 +291,6 @@ class TaskInclusaoProcessos:
                                                      "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[2]/td[1]/a").click()
 
                                 sessao = 'Virtual'
-
-
 
                         except:
 
@@ -475,11 +487,11 @@ class TaskInclusaoProcessos:
                         logging.info('---------------------------')
 
                         ##########################################################
-                        # Verificar quanto tempo demora a inclusao
+                        # Demora 11s a inclusao
                         ##########################################################
                         ##########################################################
                         ##########################################################
-                        time.sleep(10)
+                        time.sleep(20)
 
                         # Fecha popup
                         try:
