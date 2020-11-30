@@ -1,4 +1,16 @@
-import sys
+####################################################
+####################################################
+### Projeto MPCE - Unifor - Universidade de Fortaleza
+### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+### Laboratório M02
+### Cientista-Chefe: Prof. Carlos Caminha
+### Co-coordenador: Daniel Sullivan
+### Bolsista Desenvolvedor do Projeto:
+### Tiago Vasconcelos
+### Email: tiagovasconcelosp@gmail.com
+####################################################
+####################################################
+
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -34,6 +46,7 @@ class TaskAguardandoSessaoJulgamento:
 
             time.sleep(1)
 
+            # Valida se houve mais de um resultado
             # caminho no ambiente da unifor
             # element = firefox.find_element(By.CSS_SELECTOR, 'span[title="Quantidade de processos na tarefa"]').text
             element = firefox.find_element(By.CSS_SELECTOR, 'div#divProcessosTarefa div.painel-listagem div.row span.badge').text
@@ -46,6 +59,7 @@ class TaskAguardandoSessaoJulgamento:
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
 
+            # Clica no primeiro processo retornado
             element = WebDriverWait(firefox, 2).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
@@ -56,6 +70,7 @@ class TaskAguardandoSessaoJulgamento:
 
             time.sleep(4)
 
+            # Clica no botao para encaminhar processo
             element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, '#btnTransicoesTarefa')))

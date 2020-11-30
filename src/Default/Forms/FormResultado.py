@@ -1,3 +1,16 @@
+####################################################
+####################################################
+### Projeto MPCE - Unifor - Universidade de Fortaleza
+### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+### Laboratório M02
+### Cientista-Chefe: Prof. Carlos Caminha
+### Co-coordenador: Daniel Sullivan
+### Bolsista Desenvolvedor do Projeto:
+### Tiago Vasconcelos
+### Email: tiagovasconcelosp@gmail.com
+####################################################
+####################################################
+
 import tkinter as tk
 from tkinter import *
 from tkinter.ttk import Notebook

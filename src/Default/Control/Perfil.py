@@ -1,5 +1,15 @@
-import sys
-import time
+####################################################
+####################################################
+### Projeto MPCE - Unifor - Universidade de Fortaleza
+### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+### Laboratório M02
+### Cientista-Chefe: Prof. Carlos Caminha
+### Co-coordenador: Daniel Sullivan
+### Bolsista Desenvolvedor do Projeto:
+### Tiago Vasconcelos
+### Email: tiagovasconcelosp@gmail.com
+####################################################
+####################################################
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select

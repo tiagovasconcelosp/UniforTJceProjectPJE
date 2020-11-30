@@ -1,3 +1,16 @@
+####################################################
+####################################################
+### Projeto MPCE - Unifor - Universidade de Fortaleza
+### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+### Laboratório M02
+### Cientista-Chefe: Prof. Carlos Caminha
+### Co-coordenador: Daniel Sullivan
+### Bolsista Desenvolvedor do Projeto:
+### Tiago Vasconcelos
+### Email: tiagovasconcelosp@gmail.com
+####################################################
+####################################################
+
 import os
 import tkinter as Tkinter
 from tkinter import *
@@ -87,10 +100,9 @@ class Form(StartRobo):
         selectTask['values'] = (
             "Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão",
             "Inclusão de processos na relação de julgamento",
-            "Certidão de trânsito em julgado/devolver para origem ou para o arquivo (depende da classe)",
+            "Transitar em Julgado",
+            'Assinaturas de Processos para Juiz Titular',
             "Lançamento de movimentação TPU",
-            "Assinatura de decisão sobre recurso",
-            "Assinatura de inteiro teor de acórdãos",
         )
 
         # selectTask.current(0)
@@ -103,10 +115,15 @@ class Form(StartRobo):
         selectPerfil['values'] = (
             "1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
             "2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
+            "4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto",
+            "5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
+            "6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular",
+            "6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular",
             "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
+
         )
 
         # selectPerfil.current(0)
@@ -114,7 +131,6 @@ class Form(StartRobo):
         # #########################################################
 
         # #########################################################
-
         # selectDrive = Combobox(stepFive, width=80, state="readonly")
         #
         #
@@ -145,31 +161,17 @@ class Form(StartRobo):
     def clickOk(self, selectTask, selectPerfil):
 
         dataForm = {'caminhoArquivo' : str(self._inFileTxt.get()),
-                   # 'login' : str(outTblTxt.get()),
-                   # 'senha' : str(outTblTxtS.get()),
                     'atividade' : str(selectTask.get()),
                     'perfil' : str(selectPerfil.get()),
-                    # 'drive' : str(selectDrive.get()),
         }
 
         for i, v in dataForm.items():
             if v == '' or len(v) == 0:
                 if str(i) == 'caminhoArquivo':
-                    Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado", message="Por favor, verifique se preencheu o campo Selecionar Arquivo corretamente.")
-                    return 0
-                # Autenticacao por login
-                # #########################################################
-                # elif str(i) == 'login':
-                #     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
-                #                                    message="Por favor, verifique se preencheu o campo Login corretamente.")
-                #     outTblTxt.focus()
-                #     return 0
-                # elif str(i) == 'senha':
-                #     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
-                #                                    message="Por favor, verifique se preencheu o campo Senha corretamente.")
-                #     outTblTxtS.focus()
-                #     return 0
-                # #########################################################
+                    # Essa atividade nao utiliza planilha
+                    if dataForm['atividade'] != 'Assinaturas de Processos para Juiz Titular':
+                        Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado", message='Por favor, verifique se preencheu o campo "Selecionar Arquivo" corretamente.')
+                        return 0
                 elif str(i) == 'atividade':
                     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
                                                    message="Por favor, verifique se selecionou à Atividade corretamente.")
@@ -180,11 +182,7 @@ class Form(StartRobo):
                                                    message="Por favor, verifique se selecionou o Perfil corretamente.")
                     selectTask.focus()
                     return 0
-                # else:
-                #     Tkinter.messagebox.showwarning(title="Campo Vazio Encontrado",
-                #                                    message="Por favor, verifique se selecionou o Drive corretamente.")
-                #     selectPerfil.focus()
-                #     return 0
+
 
         # Autenticacao por login
         # #########################################################

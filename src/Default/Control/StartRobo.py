@@ -1,3 +1,16 @@
+####################################################
+####################################################
+### Projeto MPCE - Unifor - Universidade de Fortaleza
+### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+### Laboratório M02
+### Cientista-Chefe: Prof. Carlos Caminha
+### Co-coordenador: Daniel Sullivan
+### Bolsista Desenvolvedor do Projeto:
+### Tiago Vasconcelos
+### Email: tiagovasconcelosp@gmail.com
+####################################################
+####################################################
+
 import sys
 import time
 import json
@@ -11,7 +24,9 @@ from src.Default.Control.OpenWebDriver import OpenWebDriver
 from src.Default.Control.OpenXls import OpenXls
 from src.Default.Control.Perfil import Perfil
 from src.Default.Control.TaskAguardandoSessaoJulgamento import TaskAguardandoSessaoJulgamento
+from src.Default.Control.TaskAssinaturaProcessos import TaskAssinaturaProcessos
 from src.Default.Control.TaskInclusaoProcessos import TaskInclusaoProcessos
+from src.Default.Control.TaskTransitarJulgado import TaskTransitarJulgado
 from src.Default.Forms.FormResultado import FormResultado
 
 
@@ -52,13 +67,13 @@ class StartRobo:
         webdriver = OpenWebDriver(self.caminhoWebDrive, self.webDriveName, self.versao, self.url)
 
         # Inicia os Objetos
-        openXls = OpenXls(dataForm['caminhoArquivo']) # Instancia o objeto passando o caminho do arquivo
+
         firefox = webdriver.Open(log)
 
-        # Abre o arquivo XLS
-        xlsData = openXls.OpenFileXls(firefox, log)
-
-
+        if dataForm['atividade'] != 'Assinaturas de Processos para Juiz Titular':
+            openXls = OpenXls(dataForm['caminhoArquivo'])  # Instancia o objeto passando o caminho do arquivo
+            # Abre o arquivo XLS
+            xlsData = openXls.OpenFileXls(firefox, log)
 
         # Captura informacoes da maquina
         hostname = socket.gethostname()
@@ -77,9 +92,9 @@ class StartRobo:
             # Captura o IP externo
             url = request.urlopen('http://ip-api.com/json').read()
             jsn = json.loads(url.decode('UTF-8'))
-            log.info('IP Internet: 60013884310' + str(jsn['query']))
+            log.info('IP Internet: ' + str(jsn['query']))
         except:
-            log.info('Nao foi possivel identificar o IP. Falha na conexao.')
+            log.info('Nao foi possivel identificar endereco de IP. Falha na conexao.')
             log.info('IP Internet: ')
 
 
@@ -97,13 +112,13 @@ class StartRobo:
         auth = Auth(firefox, log, self.caminhoImages)
 
         # Codigo fica especificado de acordo com codigo atribuido no sistema
-        if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral':
+        if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' or dataForm['perfil'] == '4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto':
             codPerfil = 0
-        elif dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral':
+        elif dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' or dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto':
             codPerfil = 1
-        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria':
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria' or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular':
             codPerfil = 2
-        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão':
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão' or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular':
             codPerfil = 3
         elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria':
             codPerfil = 4
@@ -133,7 +148,7 @@ class StartRobo:
 
         elif dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
 
-            # Executa a tarefa Aguardando Sessão Julgamento
+            # Inclusão de processos na relação de julgamento
             executaInclusaoProcessos = TaskInclusaoProcessos(firefox, self.caminhoImages, log,
                                                                                openXls, xlsData,
                                                                                'Inclusão de processos na relação de julgamento',
@@ -141,6 +156,37 @@ class StartRobo:
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
                 form = FormResultado(executaInclusaoProcessos.listProcessos, 1, log)
+            except:
+                log.exception('Falha ao gerar o formulario final.')
+                log.info('Finalizando o robo.')
+                log.shutdown()
+                sys.exit(0)
+
+        elif dataForm['atividade'] == 'Assinaturas de Processos para Juiz Titular':
+
+            # Assinaturas de Processos para Juiz Titular
+            executaAssinaturaProcessos = TaskAssinaturaProcessos(firefox, self.caminhoImages, log,
+                                                                               'Assinaturas de Processos para Juiz Titular',
+                                                                               xml)
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaAssinaturaProcessos.listProcessos, 1, log)
+            except:
+                log.exception('Falha ao gerar o formulario final.')
+                log.info('Finalizando o robo.')
+                log.shutdown()
+                sys.exit(0)
+
+        elif dataForm['atividade'] == 'Transitar em Julgado':
+
+            # Transitar em Julgado
+            executaTransitarJulgado = TaskTransitarJulgado(firefox, self.caminhoImages, log,
+                                                                               openXls, xlsData,
+                                                                               '(TR) Julgados em sessão',
+                                                                               xml)
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaTransitarJulgado.listProcessos, 1, log)
             except:
                 log.exception('Falha ao gerar o formulario final.')
                 log.info('Finalizando o robo.')
