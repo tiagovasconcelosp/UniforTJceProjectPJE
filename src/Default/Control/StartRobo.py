@@ -186,7 +186,7 @@ class StartRobo:
                                                                                xml)
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaTransitarJulgado.listProcessos, 1, log)
+                form = FormResultado(executaTransitarJulgado.listProcessos, 0, log)
             except:
                 log.exception('Falha ao gerar o formulario final.')
                 log.info('Finalizando o robo.')
