@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <title>Executor de Atividades PJCE - 3.0</title>
+    <title>Executor de Atividades PJCE - 4.0</title>
     <url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>
     <directoryLog>Logs</directoryLog>
     <directoryImages>Images</directoryImages>

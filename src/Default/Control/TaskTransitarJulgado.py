@@ -119,7 +119,7 @@ class TaskTransitarJulgado:
 
                 except:
                     logging.info('---------------------------')
-                    logging.info('Houve um problema na etapa de incluir peticoes. Por de ocorrido algum problema de conexao.')
+                    logging.info('Houve um problema na etapa de incluir peticoes. Por ter ocorrido algum problema de conexao.')
                     logging.info('Evidenciando com o print da tela.')
                     image = Print(firefox, caminhoImages)
 
@@ -179,10 +179,10 @@ class TaskTransitarJulgado:
                     element = WebDriverWait(firefox, 20).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR, 'input#btn-assinador')))
-                    # firefox.execute_script("arguments[0].click();", element)
+                    firefox.execute_script("arguments[0].click();", element)
 
                     # Aguarda a Assinatura, demora em torno de 8s. Pois uso a leitura do certificado
-                    # time.sleep(10)
+                    time.sleep(8)
                 except:
                     logging.info('---------------------------')
                     logging.info('Houve um problema realizar a assinatura.')
@@ -212,7 +212,7 @@ class TaskTransitarJulgado:
                             (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para Cumprir acórdão"i]')))
                     firefox.execute_script("arguments[0].click();", element)
 
-                    time.sleep(6)
+                    time.sleep(3)
 
                     # Clica no botao Encaminhar para
                     element = WebDriverWait(firefox, 20).until(
@@ -226,7 +226,7 @@ class TaskTransitarJulgado:
                             (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para 02 - Devolver para instância de origem"i]')))
                     firefox.execute_script("arguments[0].click();", element)
 
-                    time.sleep(5)
+                    time.sleep(4)
 
                 except:
                     logging.info('Houve um problema na etapa devolver para instancia de origem.')
@@ -234,13 +234,19 @@ class TaskTransitarJulgado:
                     image = Print(firefox, caminhoImages)
 
                 try:
+                    # Localiza frame
+                    iframe = WebDriverWait(firefox, 10).until(
+                        EC.presence_of_element_located((By.ID, 'frame-tarefa')))
+
+                    firefox.switch_to.frame(iframe)
+
                     # Aguarda elemento carregar em tela
                     element = WebDriverWait(firefox, 20).until(
                         EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, 'div.col-sm-4 select[name="taskInstanceForm:Intercomunicacao_retornoProcesso-19713434:comboClasseMotivoRemessaDecoration:comboClasseMotivoRemessa"i]')))
+                            (By.CSS_SELECTOR, 'div.propertyView div.value select')))
 
                     # Seleciona o Motivo da Remessa
-                    select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-4 select[name="taskInstanceForm:Intercomunicacao_retornoProcesso-19713434:comboClasseMotivoRemessaDecoration:comboClasseMotivoRemessa"i]'))
+                    select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.propertyView div.value select'))
                     select.select_by_visible_text('outros motivos')
                 except:
                     logging.info('Houve um problema na etapa de selecionar o motivo da remessa.')
@@ -252,13 +258,22 @@ class TaskTransitarJulgado:
                     element = WebDriverWait(firefox, 20).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR,
-                             'div.container-fluid input[value="Retornar para instância de origem"i]')))
+                             'input.btn-primary[value="Retornar para instância de origem"i]')))
                     firefox.execute_script("arguments[0].click();", element)
 
                     time.sleep(20)
 
                     self.listProcessos[1].append(0)
                     self.countEncaminhados += 1
+
+                    # Sai do frame
+                    firefox.switch_to.default_content()
+
+                    # Localiza frame
+                    iframe = WebDriverWait(firefox, 10).until(
+                        EC.presence_of_element_located((By.ID, 'ngFrame')))
+
+                    firefox.switch_to.frame(iframe)
 
                     firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
 
@@ -272,7 +287,7 @@ class TaskTransitarJulgado:
 
                     firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
             except:
-                logging.info('Houve algum problema na execucao ao localizar e carregar a nova janela.')
+                logging.info('Houve algum problema na execucao.')
                 logging.info('Evidenciando com o print da tela.')
                 image = Print(firefox, caminhoImages)
                 try:
