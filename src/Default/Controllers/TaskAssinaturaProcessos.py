@@ -16,7 +16,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from src.Default.Control.Print import Print
+from src.Default.Controllers.Print import Print
 
 
 class TaskAssinaturaProcessos:
@@ -99,7 +99,7 @@ class TaskAssinaturaProcessos:
             logging.info('---------------------------')
             self.assinaAtividadeInteiroTeor(firefox, self.listAtividades[1], logging, caminhoImages)
 
-        time.sleep(222222)
+        time.sleep(2)
 
         logging.info('Iniciando a busca pelo os processos...')
 
@@ -167,6 +167,10 @@ class TaskAssinaturaProcessos:
         #     firefox.close()
         # except:
         #     firefox.quit()
+
+        # logging.info('Lista completa para formulario:')
+        # logging.info(str(self.listProcessos))
+        # logging.info('---------------------------')
         #
         # return self.listProcessos
 

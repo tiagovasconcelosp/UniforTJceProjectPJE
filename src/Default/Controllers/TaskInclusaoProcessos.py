@@ -19,7 +19,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from src.Default.Control.Print import Print
+from src.Default.Controllers.Print import Print
 
 
 class TaskInclusaoProcessos:
@@ -812,6 +812,10 @@ class TaskInclusaoProcessos:
                 firefox.close()
             except:
                 firefox.quit()
+
+            logging.info('Lista completa para formulario:')
+            logging.info(str(self.listProcessos))
+            logging.info('---------------------------')
 
             return self.listProcessos
 

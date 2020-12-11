@@ -16,7 +16,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from src.Default.Control.Print import Print
+from src.Default.Controllers.Print import Print
 
 
 class TaskAguardandoSessaoJulgamento:
@@ -68,6 +68,9 @@ class TaskAguardandoSessaoJulgamento:
             logging.info('Processo ' + str(numProcesso) + ' foi localizado.')
             self.listProcessos[0].append(str(numProcesso))
 
+            # Adicao previa de nao concluido
+            self.listProcessos[1].append(1)
+
             time.sleep(4)
 
             # Clica no botao para encaminhar processo
@@ -96,6 +99,9 @@ class TaskAguardandoSessaoJulgamento:
                 # Mensagem demora 6s para sumir
                 if element.is_displayed():
                     time.sleep(6)
+                    # Deleta o ultimo registro
+                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                    # Inclui novo registro
                     self.listProcessos[1].append(0)
                     self.countEncaminhados += 1
 
@@ -110,6 +116,7 @@ class TaskAguardandoSessaoJulgamento:
 
                 if self.countEnviaProcesso == 0:
                     self.countEnviaProcesso += 1
+                    # Deleta registro de verificacao de encaminhado para executar novamente
                     del(self.listProcessos[0][(len(self.listProcessos[0]) - 1)])
                     logging.info('---------------------------')
                     logging.info('Houve falha ao encaminhar o processo. Tentando localizar e encaminhar o processo mais uma vez.')
@@ -117,6 +124,9 @@ class TaskAguardandoSessaoJulgamento:
                     self.localizarProcessoEmcaminhar(firefox, numProcesso, logging, caminhoImages)
 
                 else:
+                    # Deleta o ultimo registro
+                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                    # Inclui novo registro
                     # Caso nao tenha o botao emcaminhar
                     # coluna encaminhado com valor 1 para não encaminhado
                     self.listProcessos[1].append(1)
@@ -242,6 +252,10 @@ class TaskAguardandoSessaoJulgamento:
                 firefox.close()
             except:
                 firefox.quit()
+
+            logging.info('Lista completa para formulario:')
+            logging.info(str(self.listProcessos))
+            logging.info('---------------------------')
 
             return self.listProcessos
 

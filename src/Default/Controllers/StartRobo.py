@@ -19,15 +19,15 @@ import socket
 from getmac import get_mac_address
 import win32api
 
-from src.Default.Control.Auth import Auth
-from src.Default.Control.OpenWebDriver import OpenWebDriver
-from src.Default.Control.OpenXls import OpenXls
-from src.Default.Control.Perfil import Perfil
-from src.Default.Control.TaskAguardandoSessaoJulgamento import TaskAguardandoSessaoJulgamento
-from src.Default.Control.TaskAssinaturaProcessos import TaskAssinaturaProcessos
-from src.Default.Control.TaskInclusaoProcessos import TaskInclusaoProcessos
-from src.Default.Control.TaskTransitarJulgado import TaskTransitarJulgado
-from src.Default.Forms.FormResultado import FormResultado
+from src.Default.Controllers.Auth import Auth
+from src.Default.Controllers.OpenWebDriver import OpenWebDriver
+from src.Default.Models.OpenXls import OpenXls
+from src.Default.Controllers.Perfil import Perfil
+from src.Default.Controllers.TaskAguardandoSessaoJulgamento import TaskAguardandoSessaoJulgamento
+from src.Default.Controllers.TaskAssinaturaProcessos import TaskAssinaturaProcessos
+from src.Default.Controllers.TaskInclusaoProcessos import TaskInclusaoProcessos
+from src.Default.Controllers.TaskTransitarJulgado import TaskTransitarJulgado
+from src.Default.Views.FormResultado import FormResultado
 
 
 class StartRobo:

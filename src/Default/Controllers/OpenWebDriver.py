@@ -50,8 +50,8 @@ class OpenWebDriver():
 
         firefoxProfile = webdriver.FirefoxProfile()
 
-        firefoxProfile.set_preference("http.response.timeout", 20)
-        firefoxProfile.set_preference("dom.max_script_run_time", 10)
+        firefoxProfile.set_preference("http.response.timeout", 60)
+        firefoxProfile.set_preference("dom.max_script_run_time", 30)
         firefoxProfile.set_preference("browser.cache.disk.enable", False)
         firefoxProfile.set_preference("browser.cache.memory.enable", False)
         firefoxProfile.set_preference("browser.cache.offline.enable", False)

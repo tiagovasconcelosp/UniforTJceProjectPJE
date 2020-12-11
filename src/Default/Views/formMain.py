@@ -19,7 +19,7 @@ from tkinter.ttk import Combobox
 from tkinter import messagebox
 # from brutils import cpf, cnpj
 
-from src.Default.Control.StartRobo import StartRobo
+from src.Default.Controllers.StartRobo import StartRobo
 
 
 class Form(StartRobo):
