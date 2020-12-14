@@ -16,7 +16,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 from src.Default.Controllers.Logging import Logging
-from src.Default.Views.formMain import Form
+from src.Default.Views.FormMain import Form
 
 def resource_path(relative_path):
     """ Obtenha o caminho absoluto para o recurso, funciona para dev e para PyInstaller """

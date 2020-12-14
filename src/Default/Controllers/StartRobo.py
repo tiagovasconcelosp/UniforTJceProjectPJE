@@ -105,10 +105,6 @@ class StartRobo:
         log.info('---------------------------')
 
         # Inicia Autenticacao
-        # Autenticacao por login
-        # #########################################################
-        #auth = Auth(firefox, log, self.caminhoImages, dataForm['login'], dataForm['senha'])
-        # #########################################################
         auth = Auth(firefox, log, self.caminhoImages)
 
         # Codigo fica especificado de acordo com codigo atribuido no sistema

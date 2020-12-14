@@ -51,5 +51,3 @@ class Perfil:
                 firefox.close()
             except:
                 firefox.quit()
-
-            # sys.exit(0)

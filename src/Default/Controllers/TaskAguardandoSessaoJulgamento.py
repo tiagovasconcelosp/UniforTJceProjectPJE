@@ -29,6 +29,8 @@ class TaskAguardandoSessaoJulgamento:
     def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
         # Feito para zerar lista de processos
         self.listProcessos = [[],[],[],]
+        self.countEncaminhados = 0
+        self.countEnviaProcesso = 0
         self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
     def localizarProcessoEmcaminhar(self, firefox, numProcesso, logging, caminhoImages):
@@ -95,18 +97,23 @@ class TaskAguardandoSessaoJulgamento:
                         (By.CSS_SELECTOR,
                          'div.simple-notification-wrapper div.ng-star-inserted div.sn-content')))
 
-                # Caso seja concluido com sucesso
-                # Mensagem demora 6s para sumir
-                if element.is_displayed():
-                    time.sleep(6)
-                    # Deleta o ultimo registro
-                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                    # Inclui novo registro
-                    self.listProcessos[1].append(0)
-                    self.countEncaminhados += 1
+                # Deleta o ultimo registro
+                del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+
+                # Inclui novo registro
+                self.listProcessos[1].append(0)
+                self.countEncaminhados += 1
+
 
                 # Contagem de reenvio do processo
                 self.countEnviaProcesso = 0
+
+                time.sleep(6)
+
+                # Caso seja concluido com sucesso
+                # Mensagem demora 6s para sumir
+                # if element.is_displayed():
+                #     time.sleep(6)
 
             # Caso haja falha tentar mais uma vez o processo de envio
             except:

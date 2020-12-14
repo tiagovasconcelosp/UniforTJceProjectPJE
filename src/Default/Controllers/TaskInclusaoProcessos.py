@@ -30,6 +30,8 @@ class TaskInclusaoProcessos:
     def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
+        self.countEncaminhados = 0
+        self.countEnviaProcesso = 0
         self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
     def pecorreProcessoPauta(self, firefox, process, element, dayProcess, logging, caminhoImages):

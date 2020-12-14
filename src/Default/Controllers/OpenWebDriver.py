@@ -15,7 +15,6 @@ import sys
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -116,7 +115,6 @@ class OpenWebDriver():
                 firefox.get(self._pathUrl)
 
             except:
-                # firefox.find_element(By.ID, "btnEntrar").send_keys(Keys.CONTROL + 'Escape')
 
                 # Interrompe o carregamento da página após error de time out, se passar de 5s
                 waitButtonLogin.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#btnEntrar')))

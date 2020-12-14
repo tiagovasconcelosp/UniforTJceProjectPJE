@@ -28,7 +28,9 @@ class TaskTransitarJulgado:
 
     def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
         # Feito para zerar lista de processos
-        self.listProcessos = [[],[],[],]
+        self.listProcessos = [[], [], [], ]
+        self.countEncaminhados = 0
+        self.countEnviaProcesso = 0
         self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
 
     def localizarProcesso(self, firefox, numProcesso, dateProcesso, logging, caminhoImages):
