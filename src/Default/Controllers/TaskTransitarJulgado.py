@@ -554,7 +554,7 @@ class TaskTransitarJulgado:
 
                     firefox.switch_to.frame(iframe)
 
-                    raise e from None
+                    # raise e from None
 
             firefox.switch_to.default_content()
 

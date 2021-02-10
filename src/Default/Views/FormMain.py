@@ -90,11 +90,12 @@ class Form(StartRobo):
             "5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
+            "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral",
             "6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular",
             "6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular",
             "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
-
+            "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral",
         )
 
         # selectPerfil.current(0)

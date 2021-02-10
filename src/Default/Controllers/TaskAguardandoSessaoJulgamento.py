@@ -62,7 +62,7 @@ class TaskAguardandoSessaoJulgamento:
                 image = Print(firefox, caminhoImages)
 
             # Clica no primeiro processo retornado
-            element = WebDriverWait(firefox, 2).until(
+            element = WebDriverWait(firefox, 10).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
             firefox.execute_script("arguments[0].click();", element)

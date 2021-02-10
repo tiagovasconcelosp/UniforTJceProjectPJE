@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <title>Executor de Atividades PJCE - 5.0</title>
-    <!--<url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>-->
-    <url>https://pje.tjce.jus.br/pje2grau/login.seam</url>
+    <title>Executor de Atividades PJCE - 6.0</title>
+    <url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>
+    <!--<url>https://pje.tjce.jus.br/pje2grau/login.seam</url>-->
     <directoryLog>Logs</directoryLog>
     <directoryImages>Images</directoryImages>
     <directoryDriver>Driver</directoryDriver>
