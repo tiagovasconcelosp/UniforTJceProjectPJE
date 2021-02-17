@@ -134,10 +134,17 @@ class FormResultado:
                                     Texto = 'Enviado com sucesso'
                                 elif valorDescricao == 1:
                                     Texto = 'Incluído com sucesso'
+                                elif valorDescricao == 2:
+                                    Texto = 'Assinado com sucesso'
 
                             else:
                                 Cor = 'red'
-                                Texto = 'Houve falha ao enviar'
+
+                                if valorDescricao == 0 or valorDescricao == 1:
+                                    Texto = 'Houve falha ao conluir'
+                                elif valorDescricao == 2:
+                                    Texto = 'Houve falha ao assinar'
+
 
                             label = Label(self.tab1, text=Texto, bg=Cor, relief=RIDGE, fg="white", padx=3, pady=3)
                             label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
