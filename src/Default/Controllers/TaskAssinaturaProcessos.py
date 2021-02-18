@@ -217,12 +217,17 @@ class TaskAssinaturaProcessos:
 
                 try:
                     # Verifique se botao "Libera para demais gabinetes" esta disponivel
-                    ass = firefox.find_element(By.CSS_SELECTOR,
-                                                         'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
+                    # ass = firefox.find_element(By.CSS_SELECTOR,
+                    #                                      'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
 
-                    # firefox.execute_script("arguments[0].click();", ass)
+                    ass = WebDriverWait(firefox, 20).until(
+                        EC.presence_of_element_located(
+                            (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')))
 
-                    time.sleep(4)
+                    firefox.execute_script("arguments[0].click();", ass)
+
+                    time.sleep(5)
+
                     logging.info('Processo assinado.')
                     logging.info('---------------------------')
 
@@ -322,12 +327,18 @@ class TaskAssinaturaProcessos:
 
                     try:
                         # Verifique se botao "Libera para demais gabinetes" esta disponivel
-                        ass = firefox.find_element(By.CSS_SELECTOR,
-                                                   'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
+                        # ass = firefox.find_element(By.CSS_SELECTOR,
+                        #                                      'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
 
-                        # firefox.execute_script("arguments[0].click();", ass)
+                        ass = WebDriverWait(firefox, 20).until(
+                            EC.presence_of_element_located(
+                                (By.CSS_SELECTOR,
+                                 'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')))
 
-                        time.sleep(4)
+                        firefox.execute_script("arguments[0].click();", ass)
+
+                        time.sleep(5)
+
                         logging.info('Processo assinado.')
                         logging.info('---------------------------')
 
@@ -518,12 +529,18 @@ class TaskAssinaturaProcessos:
                 try:
                     # Clica no botao para assinar
                     # Assinar digitalmente e finalizar
-                    ass = firefox.find_element(By.CSS_SELECTOR,
-                                               'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')
+                    # ass = firefox.find_element(By.CSS_SELECTOR,
+                    #                            'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')
 
-                    # firefox.execute_script("arguments[0].click();", ass)
+                    ass = WebDriverWait(firefox, 20).until(
+                        EC.presence_of_element_located(
+                            (By.CSS_SELECTOR,
+                             'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')))
 
-                    time.sleep(4)
+                    firefox.execute_script("arguments[0].click();", ass)
+
+                    time.sleep(5)
+
                     logging.info('Processo assinado.')
                     logging.info('---------------------------')
 
@@ -619,10 +636,15 @@ class TaskAssinaturaProcessos:
                     try:
                         # Clica no botao para assinar
                         # Assinar digitalmente e finalizar
-                        ass = firefox.find_element(By.CSS_SELECTOR,
-                                                   'form#taskInstanceForm div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')
+                        # ass = firefox.find_element(By.CSS_SELECTOR,
+                        #                            'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')
 
-                        # firefox.execute_script("arguments[0].click();", ass)
+                        ass = WebDriverWait(firefox, 20).until(
+                            EC.presence_of_element_located(
+                                (By.CSS_SELECTOR,
+                                 'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')))
+
+                        firefox.execute_script("arguments[0].click();", ass)
 
                         time.sleep(4)
                         logging.info('Processo assinado.')

@@ -113,6 +113,8 @@ class FormResultado:
                                 descricao = 'Encaminhado'
                             elif valorDescricao == 1:
                                 descricao = 'Incluído'
+                            elif valorDescricao == 2:
+                                descricao = 'Assinado'
 
                             label = Label(self.tab1, text=descricao, bg="#f0f0f0", fg="black", relief=RAISED,
                                               padx=3, pady=3)
