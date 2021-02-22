@@ -42,6 +42,8 @@ class TaskInclusaoProcessos:
             # Usado para verificar se o processo nao foi localizado
             count = 0
 
+            logging.info('Procurando processo: ' + str(process[i][0]))
+
             for x in range(len(element)):
 
                 try:  # Para verificar se o processo existe na listagem
@@ -68,6 +70,32 @@ class TaskInclusaoProcessos:
                         # Aguarda loading do click
                         # Verifica time de click
                         time.sleep(4)
+
+                        ######################################################################################
+                        # Alteracao Solicitada Karyna
+                        ######################################################################################
+
+                        # Clica em incluir processos
+                        # Finaliza atividade
+                        ##########################################################
+                        # element2 = WebDriverWait(firefox, 20).until(
+                        #     EC.presence_of_element_located(
+                        #         (By.CSS_SELECTOR,
+                        #          'form#j_id1620 input')))
+                        # element2.click()
+                        ##########################################################
+
+                        # logging.info('Processo incluido: ' + str(process[i][0]))
+                        # logging.info('---------------------------')
+
+                        ##########################################################
+                        # Demora 11s a inclusao
+                        ##########################################################
+                        ##########################################################
+                        ##########################################################
+                        # time.sleep(8)
+
+                        ######################################################################################
 
                     except:
 
@@ -441,6 +469,8 @@ class TaskInclusaoProcessos:
 
                         logging.info('Buscando processos para serem incluidos...')
                         logging.info('---------------------------')
+                        logging.info(processVirtual)
+                        logging.info('---------------------------')
 
                         # Localiza processos a serem selecionados e seleciona cada um deles
                         # WebDrive usado somente para o aguardo do carregamento da pagina
@@ -485,6 +515,9 @@ class TaskInclusaoProcessos:
                         countDef += 1
                         self.pecorreProcessoPauta(firefox, processVirtual, element, dayProcess, logging, caminhoImages)
 
+                        ######################################################################################
+                        # Alteracao Solicitada Karyna
+                        #####################################################################################
                         logging.info('Processos selecionados...')
                         logging.info('---------------------------')
 

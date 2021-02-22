@@ -108,17 +108,23 @@ class StartRobo:
         auth = Auth(firefox, log, self.caminhoImages)
 
         # Codigo fica especificado de acordo com codigo atribuido no sistema
-        if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' or dataForm['perfil'] == '4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto':
+        if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' \
+                or dataForm['perfil'] == '4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto':
             codPerfil = 0
-        elif dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' or dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto':
+        elif dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' \
+                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto':
             codPerfil = 1
-        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria' or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular':
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria' \
+                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular':
             codPerfil = 2
-        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão' or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular':
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão' \
+                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular'\
+                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral':
             codPerfil = 3
         elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria':
             codPerfil = 4
-        elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão':
+        elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão'\
+                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral':
             codPerfil = 5
 
         # Seleciona o perfil

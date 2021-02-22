@@ -646,7 +646,8 @@ class TaskAssinaturaProcessos:
 
                         firefox.execute_script("arguments[0].click();", ass)
 
-                        time.sleep(4)
+                        time.sleep(5)
+
                         logging.info('Processo assinado.')
                         logging.info('---------------------------')
 
