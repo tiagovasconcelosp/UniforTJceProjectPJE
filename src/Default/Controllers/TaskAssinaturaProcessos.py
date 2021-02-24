@@ -59,7 +59,7 @@ class TaskAssinaturaProcessos:
                        "/html/body/app-root/selector/div/div/div/right-panel/div/div/div/tarefas/div/div/div/div/a[@title='" + self.listAtividades[i] + "']/div/span[2]").text
 
                 logging.info('---------------------------')
-                logging.info('Verificando se as atividades estao abertas e com processos...')
+                logging.info('Verificando lista de atividades...')
                 logging.info('---------------------------')
 
                 # Verifica se foi encontrado e se ha processos dentro do mesmo
@@ -161,14 +161,13 @@ class TaskAssinaturaProcessos:
         logging.info('---------------------------')
         logging.info('Filtrando os processos pela etiqueta: ' + str(self.etiqueta))
 
-
         firefox.find_element(By.ID, "porEtiqueta").send_keys(self.etiqueta)
 
         # Clica em pesquisar processos
         element = firefox.find_element(By.CSS_SELECTOR, '.col-sm-12 button.btn-pesquisar-filtro')
         firefox.execute_script("arguments[0].click();", element)
 
-        time.sleep(2) # Verificar time em lista grande de processos
+        time.sleep(1) # Verificar time em lista grande de processos
 
         # Fecha filtro da pesquisa
         element = firefox.find_element(By.CSS_SELECTOR, 'button#dropdown-filtro-tarefas')
@@ -176,10 +175,10 @@ class TaskAssinaturaProcessos:
 
         #############################################################################################################
 
-        time.sleep(2)
+        time.sleep(1)
 
         # Aguarda carregamento dos processos
-        element = WebDriverWait(firefox, 3).until(
+        element = WebDriverWait(firefox, 20).until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
 
@@ -189,244 +188,313 @@ class TaskAssinaturaProcessos:
 
         logging.info('Total de processos encontrados: ' + str(listCountProcess))
 
-        # Localiza tabela com listagem dos processos
-        element = firefox.find_elements_by_css_selector(
-            "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
-        ##########################################################
+        ##########################################
+        ##########################################
 
-        # É exibido no máximo 30 por página
-        if int(listCountProcess) <= 30:
+        # Realiza a assnatura de cada um deles
+        for x in range(int(listCountProcess)):
 
-            logging.info('Total de pagina(s): 1')
-            ##########################################
-            ##########################################
-            # Registra todos os processos encontrados
-            logging.info('Pagina: 1')
-            logging.info('Lista de processos que foram encontrados:')
+            e = firefox.find_element(By.CSS_SELECTOR,
+                                     'div.ui-datalist-content ul.ui-datalist-data li:nth-child(1) div.datalist-content span.tarefa-numero-processo').text
 
-            for x in range(len(element)):
+            e = e.split()
 
-                e = firefox.find_element(By.CSS_SELECTOR,
-                                               'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                     x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+            self.listProcessos[0].append(str(e[1]))
+            # Adicao previa de nao concluido
+            self.listProcessos[1].append(1)
 
-                e = e.split()
+            # Clica no processo
+            element = WebDriverWait(firefox, 10).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR,
+                     'div.ui-datalist-content ul.ui-datalist-data li:nth-child(1) a.selecionarProcesso')))
+            firefox.execute_script("arguments[0].click();", element)
 
-                # Listagem de processos encontrados
-                logging.info(e[1])
             logging.info('---------------------------')
-            ##########################################
-            ##########################################
+            logging.info('Abrindo o processo: ' + e[1])
 
-            # Realiza a assnatura de cada um deles
-            for x in range(len(element)):
+            time.sleep(4)
 
-                e = firefox.find_element(By.CSS_SELECTOR,
-                                         'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                             x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+            # Usado para garantir carregamento completo do processo
+            element = WebDriverWait(firefox, 20).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
 
-                e = e.split()
-
-                self.listProcessos[0].append(str(e[1]))
-                # Adicao previa de nao concluido
-                self.listProcessos[1].append(1)
-
-                # Clica no processo
-                el = WebDriverWait(firefox, 10).until(
+            try:
+                # Verifique se botao "Libera para demais gabinetes" esta disponivel
+                ass = WebDriverWait(firefox, 20).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
-                         'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                     x + 1) + ') a.selecionarProcesso')))
-                firefox.execute_script("arguments[0].click();", el)
+                         'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')))
+
+                firefox.execute_script("arguments[0].click();", ass)
+
+                logging.info('Processo assinado.')
+                logging.info('---------------------------')
+
+                # Deleta o ultimo registro
+                del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                # Inclui novo registro
+                self.listProcessos[1].append(0)
+
+            except:
 
                 logging.info('---------------------------')
-                logging.info('Abrindo o processo: ' + e[1])
+                logging.info('Nao foi possivel assinar o processo.')
+                logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
+                logging.info('Evidenciando com o print da tela.')
+                image = Print(firefox, caminhoImages)
 
-                time.sleep(4)
+            time.sleep(8)
 
-                # Usado para garantir carregamento completo do processo
-                # Abre o menu com as opcoes
-                element2 = WebDriverWait(firefox, 20).until(
-                    EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
-                firefox.execute_script("arguments[0].click();", element2)
+        # Registra todos os processos encontrados
+        logging.info('Lista de processos que foram encontrados e liberados:')
 
-                try:
-                    # Verifique se botao "Libera para demais gabinetes" esta disponivel
-                    # ass = firefox.find_element(By.CSS_SELECTOR,
-                    #                                      'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
+        for x in range(len(self.listProcessos[0])):
+            # Listagem de processos encontrados
+            logging.info(self.listProcessos[0][x])
+        logging.info('---------------------------')
 
-                    ass = WebDriverWait(firefox, 20).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')))
+        ##########################################################
 
-                    firefox.execute_script("arguments[0].click();", ass)
-
-                    time.sleep(5)
-
-                    logging.info('Processo assinado.')
-                    logging.info('---------------------------')
-
-                    # Deleta o ultimo registro
-                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                    # Inclui novo registro
-                    self.listProcessos[1].append(0)
-
-                except:
-
-                    logging.info('---------------------------')
-                    logging.info('Nao foi possivel assinar o processo.')
-                    logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
-                    logging.info('Evidenciando com o print da tela.')
-                    image = Print(firefox, caminhoImages)
-
-            logging.info('Pagina 1 finalizada.')
-
-        else:
-
-            ##########################################
-            # Calcula quantas pagina foram geradas de acordo com a quantidade de processos
-            if int(listCountProcess) % 30 == 0:
-                totalPagina = int(int(listCountProcess) / 30)
-            else:
-                totalPagina = int(int(listCountProcess) / 30) + 1
-            ##########################################
-
-            logging.info('Total de paginas: ' + str(totalPagina))
-
-            for y in range(totalPagina):
-
-                # Localiza tabela com listagem dos processos
-                element = firefox.find_elements_by_css_selector(
-                    "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
-                ##########################################################
-
-                ##########################################
-                ##########################################
-                # Registra todos os processos encontrados
-                logging.info('Pagina: ' + str(y + 1))
-                logging.info('Lista de processos que foram encontrados:')
-
-                for x in range(len(element)):
-                    e = firefox.find_element(By.CSS_SELECTOR,
-                                             'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                                 x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
-
-                    e = e.split()
-
-                    # Listagem de processos encontrados
-                    logging.info(e[1])
-                logging.info('---------------------------')
-                ##########################################
-                ##########################################
-
-                # Realiza a assnatura de cada um deles
-                for x in range(len(element)):
-
-                    e = firefox.find_element(By.CSS_SELECTOR,
-                                             'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                                 x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
-
-                    e = e.split()
-
-                    self.listProcessos[0].append(str(e[1]))
-                    # Adicao previa de nao concluido
-                    self.listProcessos[1].append(1)
-
-                    # Clica no processo
-                    el = WebDriverWait(firefox, 10).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR,
-                             'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                 x + 1) + ') a.selecionarProcesso')))
-                    ##########################################
-                    # Seleciona o processo - teste
-                    # el = WebDriverWait(firefox, 10).until(
-                    #     EC.presence_of_element_located(
-                    #         (By.CSS_SELECTOR,
-                    #          'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                    #              x + 1) + ') button.botao-selecionar')))
-                    ##########################################
-                    firefox.execute_script("arguments[0].click();", el)
-
-                    logging.info('---------------------------')
-                    logging.info('Abrindo o processo: ' + e[1])
-
-                    time.sleep(4)
-
-                    # Usado para garantir carregamento completo do processo
-                    # Abre o menu com as opcoes
-                    element2 = WebDriverWait(firefox, 20).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
-                    firefox.execute_script("arguments[0].click();", element2)
-
-                    try:
-                        # Verifique se botao "Libera para demais gabinetes" esta disponivel
-                        # ass = firefox.find_element(By.CSS_SELECTOR,
-                        #                                      'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
-
-                        ass = WebDriverWait(firefox, 20).until(
-                            EC.presence_of_element_located(
-                                (By.CSS_SELECTOR,
-                                 'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')))
-
-                        firefox.execute_script("arguments[0].click();", ass)
-
-                        time.sleep(5)
-
-                        logging.info('Processo assinado.')
-                        logging.info('---------------------------')
-
-                        # Deleta o ultimo registro
-                        del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                        # Inclui novo registro
-                        self.listProcessos[1].append(0)
-
-                    except:
-
-                        logging.info('---------------------------')
-                        logging.info('Nao foi possivel assinar o processo.')
-                        logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
-                        logging.info('Evidenciando com o print da tela.')
-                        image = Print(firefox, caminhoImages)
-
-                if (y + 1) != totalPagina:
-                    if (totalPagina <= 4):
-                        element3 = WebDriverWait(firefox, 20).until(
-                            EC.presence_of_element_located(
-                                (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 2) + ')')))
-                        firefox.execute_script("arguments[0].click();", element3)
-
-                    else:
-
-                        if ((y + 1) <= 4):
-                            element3 = WebDriverWait(firefox, 20).until(
-                                EC.presence_of_element_located(
-                                    (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 1) + ')')))
-                            firefox.execute_script("arguments[0].click();", element3)
-
-                        else:
-
-                            # Depois so basta clicar sempre no quarto elemento para ir para proxima pagina
-
-                            if (y + 1) < totalPagina:
-                                element3 = WebDriverWait(firefox, 20).until(
-                                    EC.presence_of_element_located(
-                                        (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(4)')))
-                                firefox.execute_script("arguments[0].click();", element3)
-                            else:
-                                element3 = WebDriverWait(firefox, 20).until(
-                                    EC.presence_of_element_located(
-                                        (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(5)')))
-                                firefox.execute_script("arguments[0].click();", element3)
-
-                logging.info('Pagina ' + str(y + 1) + ' finalizada.')
-                time.sleep(3)
+        # # Localiza tabela com listagem dos processos
+        # element = firefox.find_elements_by_css_selector(
+        #     "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
+        #
+        # # É exibido no máximo 30 por página
+        # if int(listCountProcess) <= 30:
+        #
+        #     logging.info('Total de pagina(s): 1')
+        #     ##########################################
+        #     ##########################################
+        #     # Registra todos os processos encontrados
+        #     logging.info('Pagina: 1')
+        #     logging.info('Lista de processos que foram encontrados:')
+        #
+        #     for x in range(len(element)):
+        #
+        #         e = firefox.find_element(By.CSS_SELECTOR,
+        #                                        'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #              x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #         e = e.split()
+        #
+        #         # Listagem de processos encontrados
+        #         logging.info(e[1])
+        #     logging.info('---------------------------')
+        #     ##########################################
+        #     ##########################################
+        #
+        #     # Realiza a assnatura de cada um deles
+        #     for x in range(len(element)):
+        #
+        #         e = firefox.find_element(By.CSS_SELECTOR,
+        #                                  'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                                      x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #         e = e.split()
+        #
+        #         self.listProcessos[0].append(str(e[1]))
+        #         # Adicao previa de nao concluido
+        #         self.listProcessos[1].append(1)
+        #
+        #         # Clica no processo
+        #         el = WebDriverWait(firefox, 10).until(
+        #             EC.presence_of_element_located(
+        #                 (By.CSS_SELECTOR,
+        #                  'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #              x + 1) + ') a.selecionarProcesso')))
+        #         firefox.execute_script("arguments[0].click();", el)
+        #
+        #         logging.info('---------------------------')
+        #         logging.info('Abrindo o processo: ' + e[1])
+        #
+        #         time.sleep(4)
+        #
+        #         # Usado para garantir carregamento completo do processo
+        #         # Abre o menu com as opcoes
+        #         element2 = WebDriverWait(firefox, 20).until(
+        #             EC.presence_of_element_located(
+        #                 (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
+        #         firefox.execute_script("arguments[0].click();", element2)
+        #
+        #         try:
+        #             # Verifique se botao "Libera para demais gabinetes" esta disponivel
+        #             # ass = firefox.find_element(By.CSS_SELECTOR,
+        #             #                                      'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
+        #
+        #             ass = WebDriverWait(firefox, 20).until(
+        #                 EC.presence_of_element_located(
+        #                     (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')))
+        #
+        #             firefox.execute_script("arguments[0].click();", ass)
+        #
+        #             time.sleep(5)
+        #
+        #             logging.info('Processo assinado.')
+        #             logging.info('---------------------------')
+        #
+        #             # Deleta o ultimo registro
+        #             del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+        #             # Inclui novo registro
+        #             self.listProcessos[1].append(0)
+        #
+        #         except:
+        #
+        #             logging.info('---------------------------')
+        #             logging.info('Nao foi possivel assinar o processo.')
+        #             logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
+        #             logging.info('Evidenciando com o print da tela.')
+        #             image = Print(firefox, caminhoImages)
+        #
+        #     logging.info('Pagina 1 finalizada.')
+        #
+        # else:
+        #
+        #     ##########################################
+        #     # Calcula quantas pagina foram geradas de acordo com a quantidade de processos
+        #     if int(listCountProcess) % 30 == 0:
+        #         totalPagina = int(int(listCountProcess) / 30)
+        #     else:
+        #         totalPagina = int(int(listCountProcess) / 30) + 1
+        #     ##########################################
+        #
+        #     logging.info('Total de paginas: ' + str(totalPagina))
+        #
+        #     for y in range(totalPagina):
+        #
+        #         # Localiza tabela com listagem dos processos
+        #         element = firefox.find_elements_by_css_selector(
+        #             "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
+        #         ##########################################################
+        #
+        #         ##########################################
+        #         ##########################################
+        #         # Registra todos os processos encontrados
+        #         logging.info('Pagina: ' + str(y + 1))
+        #         logging.info('Lista de processos que foram encontrados:')
+        #
+        #         for x in range(len(element)):
+        #             e = firefox.find_element(By.CSS_SELECTOR,
+        #                                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                                          x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #             e = e.split()
+        #
+        #             # Listagem de processos encontrados
+        #             logging.info(e[1])
+        #         logging.info('---------------------------')
+        #         ##########################################
+        #         ##########################################
+        #
+        #         # Realiza a assnatura de cada um deles
+        #         for x in range(len(element)):
+        #
+        #             e = firefox.find_element(By.CSS_SELECTOR,
+        #                                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                                          x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #             e = e.split()
+        #
+        #             self.listProcessos[0].append(str(e[1]))
+        #             # Adicao previa de nao concluido
+        #             self.listProcessos[1].append(1)
+        #
+        #             # Clica no processo
+        #             el = WebDriverWait(firefox, 10).until(
+        #                 EC.presence_of_element_located(
+        #                     (By.CSS_SELECTOR,
+        #                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                          x + 1) + ') a.selecionarProcesso')))
+        #             ##########################################
+        #             # Seleciona o processo - teste
+        #             # el = WebDriverWait(firefox, 10).until(
+        #             #     EC.presence_of_element_located(
+        #             #         (By.CSS_SELECTOR,
+        #             #          'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #             #              x + 1) + ') button.botao-selecionar')))
+        #             ##########################################
+        #             firefox.execute_script("arguments[0].click();", el)
+        #
+        #             logging.info('---------------------------')
+        #             logging.info('Abrindo o processo: ' + e[1])
+        #
+        #             time.sleep(4)
+        #
+        #             # Usado para garantir carregamento completo do processo
+        #             # Abre o menu com as opcoes
+        #             element2 = WebDriverWait(firefox, 20).until(
+        #                 EC.presence_of_element_located(
+        #                     (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
+        #             firefox.execute_script("arguments[0].click();", element2)
+        #
+        #             try:
+        #                 # Verifique se botao "Libera para demais gabinetes" esta disponivel
+        #                 # ass = firefox.find_element(By.CSS_SELECTOR,
+        #                 #                                      'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')
+        #
+        #                 ass = WebDriverWait(firefox, 20).until(
+        #                     EC.presence_of_element_located(
+        #                         (By.CSS_SELECTOR,
+        #                          'ul.dropdown-transicoes li a[title="Encaminhar para Liberar para demais gabinetes"i]')))
+        #
+        #                 firefox.execute_script("arguments[0].click();", ass)
+        #
+        #                 time.sleep(5)
+        #
+        #                 logging.info('Processo assinado.')
+        #                 logging.info('---------------------------')
+        #
+        #                 # Deleta o ultimo registro
+        #                 del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+        #                 # Inclui novo registro
+        #                 self.listProcessos[1].append(0)
+        #
+        #             except:
+        #
+        #                 logging.info('---------------------------')
+        #                 logging.info('Nao foi possivel assinar o processo.')
+        #                 logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
+        #                 logging.info('Evidenciando com o print da tela.')
+        #                 image = Print(firefox, caminhoImages)
+        #
+        #         if (y + 1) != totalPagina:
+        #             if (totalPagina <= 4):
+        #                 element3 = WebDriverWait(firefox, 20).until(
+        #                     EC.presence_of_element_located(
+        #                         (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 2) + ')')))
+        #                 firefox.execute_script("arguments[0].click();", element3)
+        #
+        #             else:
+        #
+        #                 if ((y + 1) <= 4):
+        #                     element3 = WebDriverWait(firefox, 20).until(
+        #                         EC.presence_of_element_located(
+        #                             (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 1) + ')')))
+        #                     firefox.execute_script("arguments[0].click();", element3)
+        #
+        #                 else:
+        #
+        #                     # Depois so basta clicar sempre no quarto elemento para ir para proxima pagina
+        #
+        #                     if (y + 1) < totalPagina:
+        #                         element3 = WebDriverWait(firefox, 20).until(
+        #                             EC.presence_of_element_located(
+        #                                 (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(4)')))
+        #                         firefox.execute_script("arguments[0].click();", element3)
+        #                     else:
+        #                         element3 = WebDriverWait(firefox, 20).until(
+        #                             EC.presence_of_element_located(
+        #                                 (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(5)')))
+        #                         firefox.execute_script("arguments[0].click();", element3)
+        #
+        #         logging.info('Pagina ' + str(y + 1) + ' finalizada.')
+        #         time.sleep(3)
 
         # Remover filtro no final da assinatura
+
         logging.info('---------------------------')
-        logging.info('Limpando filtro')
+        logging.info('Limpando filtro da etiqueta')
 
         #############################################################################################################
 
@@ -488,7 +556,7 @@ class TaskAssinaturaProcessos:
         #############################################################################################################
 
         # Aguarda carregamento dos processos
-        element = WebDriverWait(firefox, 3).until(
+        element = WebDriverWait(firefox, 20).until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
 
@@ -498,277 +566,364 @@ class TaskAssinaturaProcessos:
 
         logging.info('Total de processos encontrados: ' + str(listCountProcess))
 
-        # Localiza tabela com listagem dos processos
-        element = firefox.find_elements_by_css_selector(
-            "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
-        ##########################################################
+        ##########################################
+        ##########################################
 
-        # É exibido no máximo 30 por página
-        if int(listCountProcess) <= 30:
+        # Realiza a assnatura de cada um deles
+        for x in range(int(listCountProcess)):
 
-            logging.info('Total de pagina(s): 1')
-            ##########################################
-            ##########################################
-            # Registra todos os processos encontrados
-            logging.info('Pagina: 1')
-            logging.info('Lista de processos que foram encontrados:')
+            e = firefox.find_element(By.CSS_SELECTOR,
+                                     'div.ui-datalist-content ul.ui-datalist-data li:nth-child(1) div.datalist-content span.tarefa-numero-processo').text
 
-            for x in range(len(element)):
-                e = firefox.find_element(By.CSS_SELECTOR,
-                                         'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                             x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+            e = e.split()
 
-                e = e.split()
+            self.listProcessos[0].append(str(e[1]))
+            # Adicao previa de nao concluido
+            self.listProcessos[1].append(1)
 
-                # Listagem de processos encontrados
-                logging.info(e[1])
+            # Clica no processo
+            element = WebDriverWait(firefox, 10).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR,
+                     'div.ui-datalist-content ul.ui-datalist-data li:nth-child(1) a.selecionarProcesso')))
+            firefox.execute_script("arguments[0].click();", element)
+
             logging.info('---------------------------')
-            ##########################################
-            ##########################################
+            logging.info('Abrindo o processo: ' + e[1])
 
-            # Realiza a assnatura de cada um deles
-            for x in range(len(element)):
+            time.sleep(4)
 
-                e = firefox.find_element(By.CSS_SELECTOR,
-                                         'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                             x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+            # Usado para garantir carregamento completo do processo
+            element = WebDriverWait(firefox, 20).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
 
-                e = e.split()
+            # Localiza frame
+            iframe2 = WebDriverWait(firefox, 10).until(
+                EC.presence_of_element_located((By.ID, 'frame-tarefa')))
+            firefox.switch_to.frame(iframe2)
 
-                self.listProcessos[0].append(str(e[1]))
-                # Adicao previa de nao concluido
-                self.listProcessos[1].append(1)
+            # Usado para garantir carregamento completo do processo
+            element = WebDriverWait(firefox, 10).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, 'div.col-sm-12 input')))
 
-                # Clica no processo
-                el = WebDriverWait(firefox, 10).until(
+            try:
+                # Clica no botao para assinar
+                # Assinar digitalmente e finalizar
+                ass = WebDriverWait(firefox, 2).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
-                         'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                             x + 1) + ') a.selecionarProcesso')))
-                firefox.execute_script("arguments[0].click();", el)
+                         'form div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')))
+
+                firefox.execute_script("arguments[0].click();", ass)
+
+                logging.info('Processo assinado.')
+                logging.info('---------------------------')
+
+                # Deleta o ultimo registro
+                del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                # Inclui novo registro
+                self.listProcessos[1].append(0)
+
+            except:
 
                 logging.info('---------------------------')
-                logging.info('Abrindo o processo: ' + e[1])
+                logging.info('Nao foi possivel assinar o processo.')
+                logging.info('Evidenciando com o print da tela.')
+                image = Print(firefox, caminhoImages)
 
-                time.sleep(4)
+            # Seleciona Frame
+            ##########################
+            firefox.switch_to.default_content()
+            iframe = WebDriverWait(firefox, 20).until(
+                EC.presence_of_element_located((By.ID, 'ngFrame')))
+            firefox.switch_to.frame(iframe)
+            ##########################
 
-                # Usado para garantir carregamento completo do processo
-                element2 = WebDriverWait(firefox, 20).until(
-                    EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
+            time.sleep(10)
 
-                # Localiza frame
-                iframe2 = WebDriverWait(firefox, 10).until(
-                    EC.presence_of_element_located((By.ID, 'frame-tarefa')))
+        # Registra todos os processos encontrados
+        logging.info('Lista de processos que foram encontrados em todas as atividades:')
 
-                firefox.switch_to.frame(iframe2)
+        for x in range(len(self.listProcessos[0])):
+            # Listagem de processos encontrados
+            logging.info(self.listProcessos[0][x])
+        logging.info('---------------------------')
 
-                element2 = WebDriverWait(firefox, 10).until(
-                    EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, 'div.col-sm-12 input')))
+        ##########################################################
 
-                try:
-                    # Clica no botao para assinar
-                    # Assinar digitalmente e finalizar
-
-                    ass = WebDriverWait(firefox, 2).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR,
-                             'form div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')))
-
-                    firefox.execute_script("arguments[0].click();", ass)
-
-                    time.sleep(10)
-
-                    logging.info('Processo assinado.')
-                    logging.info('---------------------------')
-
-                    # Deleta o ultimo registro
-                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                    # Inclui novo registro
-                    self.listProcessos[1].append(0)
-
-                except:
-
-                    logging.info('---------------------------')
-                    logging.info('Nao foi possivel assinar o processo.')
-                    logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
-                    logging.info('Evidenciando com o print da tela.')
-                    image = Print(firefox, caminhoImages)
-
-                # Seleciona Frame
-                ##########################
-                firefox.switch_to.default_content()
-
-                iframe = WebDriverWait(firefox, 1).until(
-                    EC.presence_of_element_located((By.ID, 'ngFrame')))
-
-                firefox.switch_to.frame(iframe)
-                ##########################
-
-            logging.info('Pagina 1 finalizada.')
-
-        else:
-
-            ##########################################
-            # Calcula quantas pagina foram geradas de acordo com a quantidade de processos
-            if int(listCountProcess) % 30 == 0:
-                totalPagina = int(int(listCountProcess) / 30)
-            else:
-                totalPagina = int(int(listCountProcess) / 30) + 1
-            ##########################################
-
-            logging.info('Total de paginas: ' + str(totalPagina))
-
-            for y in range(totalPagina):
-
-                # Localiza tabela com listagem dos processos
-                element = firefox.find_elements_by_css_selector(
-                    "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
-                ##########################################################
-
-                ##########################################
-                ##########################################
-                # Registra todos os processos encontrados
-                logging.info('Pagina: ' + str(y + 1))
-                logging.info('Lista de processos que foram encontrados:')
-
-                for x in range(len(element)):
-                    e = firefox.find_element(By.CSS_SELECTOR,
-                                             'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                                 x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
-
-                    e = e.split()
-
-                    # Listagem de processos encontrados
-                    logging.info(e[1])
-                logging.info('---------------------------')
-                ##########################################
-                ##########################################
-
-                # Realiza a assnatura de cada um deles
-                for x in range(len(element)):
-
-                    e = firefox.find_element(By.CSS_SELECTOR,
-                                             'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                                 x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
-
-                    e = e.split()
-
-                    self.listProcessos[0].append(str(e[1]))
-                    # Adicao previa de nao concluido
-                    self.listProcessos[1].append(1)
-
-                    # Clica no processo
-                    el = WebDriverWait(firefox, 10).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR,
-                             'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
-                                 x + 1) + ') a.selecionarProcesso')))
-                    firefox.execute_script("arguments[0].click();", el)
-
-                    logging.info('---------------------------')
-                    logging.info('Abrindo o processo: ' + e[1])
-
-                    time.sleep(4)
-
-                    # Usado para garantir carregamento completo do processo
-                    # Abre o menu com as opcoes
-                    element2 = WebDriverWait(firefox, 20).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
-
-                    # Localiza frame
-                    iframe2 = WebDriverWait(firefox, 10).until(
-                        EC.presence_of_element_located((By.ID, 'frame-tarefa')))
-
-                    firefox.switch_to.frame(iframe2)
-
-                    element2 = WebDriverWait(firefox, 10).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, 'div.col-sm-12 input')))
-
-                    try:
-                        # Clica no botao para assinar
-                        # Assinar digitalmente e finalizar
-                        ass = WebDriverWait(firefox, 2).until(
-                            EC.presence_of_element_located(
-                                (By.CSS_SELECTOR,
-                                 'div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')))
-
-                        firefox.execute_script("arguments[0].click();", ass)
-
-                        time.sleep(10)
-
-                        logging.info('Processo assinado.')
-                        logging.info('---------------------------')
-
-                        # Deleta o ultimo registro
-                        del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                        # Inclui novo registro
-                        self.listProcessos[1].append(0)
-
-                        firefox.switch_to.default_content()
-
-                        iframe = WebDriverWait(firefox, 10).until(
-                            EC.presence_of_element_located((By.ID, 'ngFrame')))
-
-                        firefox.switch_to.frame(iframe)
-
-                    except:
-
-                        logging.info('---------------------------')
-                        logging.info('Nao foi possivel assinar o processo.')
-                        logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
-                        logging.info('Evidenciando com o print da tela.')
-                        image = Print(firefox, caminhoImages)
-
-                    # Seleciona Frame
-                    ##########################
-                    firefox.switch_to.default_content()
-
-                    iframe = WebDriverWait(firefox, 1).until(
-                        EC.presence_of_element_located((By.ID, 'ngFrame')))
-
-                    firefox.switch_to.frame(iframe)
-                    ##########################
-
-                if (y + 1) != totalPagina:
-                    if (totalPagina <= 4):
-                        element3 = WebDriverWait(firefox, 20).until(
-                            EC.presence_of_element_located(
-                                (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 2) + ')')))
-                        firefox.execute_script("arguments[0].click();", element3)
-
-                    else:
-
-                        if ((y + 1) <= 4):
-                            element3 = WebDriverWait(firefox, 20).until(
-                                EC.presence_of_element_located(
-                                    (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 1) + ')')))
-                            firefox.execute_script("arguments[0].click();", element3)
-
-                        else:
-
-                            # Depois so basta clicar sempre no quarto elemento para ir para proxima pagina
-
-                            if (y + 1) < totalPagina:
-                                element3 = WebDriverWait(firefox, 20).until(
-                                    EC.presence_of_element_located(
-                                        (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(4)')))
-                                firefox.execute_script("arguments[0].click();", element3)
-                            else:
-                                element3 = WebDriverWait(firefox, 20).until(
-                                    EC.presence_of_element_located(
-                                        (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(5)')))
-                                firefox.execute_script("arguments[0].click();", element3)
-
-                logging.info('Pagina ' + str(y + 1) + ' finalizada.')
-                time.sleep(3)
+        # Localiza tabela com listagem dos processos
+        # element = firefox.find_elements_by_css_selector(
+        #     "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
+        #
+        # É exibido no máximo 30 por página
+        # if int(listCountProcess) <= 30:
+        #
+        #     logging.info('Total de pagina(s): 1')
+        #     ##########################################
+        #     ##########################################
+        #     # Registra todos os processos encontrados
+        #     logging.info('Pagina: 1')
+        #     logging.info('Lista de processos que foram encontrados:')
+        #
+        #     for x in range(len(element)):
+        #         e = firefox.find_element(By.CSS_SELECTOR,
+        #                                  'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                                      x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #         e = e.split()
+        #
+        #         # Listagem de processos encontrados
+        #         logging.info(e[1])
+        #     logging.info('---------------------------')
+        #     ##########################################
+        #     ##########################################
+        #
+        #     # Realiza a assnatura de cada um deles
+        #     for x in range(len(element)):
+        #
+        #         e = firefox.find_element(By.CSS_SELECTOR,
+        #                                  'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                                      x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #         e = e.split()
+        #
+        #         self.listProcessos[0].append(str(e[1]))
+        #         # Adicao previa de nao concluido
+        #         self.listProcessos[1].append(1)
+        #
+        #         # Clica no processo
+        #         el = WebDriverWait(firefox, 10).until(
+        #             EC.presence_of_element_located(
+        #                 (By.CSS_SELECTOR,
+        #                  'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                      x + 1) + ') a.selecionarProcesso')))
+        #         firefox.execute_script("arguments[0].click();", el)
+        #
+        #         logging.info('---------------------------')
+        #         logging.info('Abrindo o processo: ' + e[1])
+        #
+        #         time.sleep(4)
+        #
+        #         # Usado para garantir carregamento completo do processo
+        #         element2 = WebDriverWait(firefox, 20).until(
+        #             EC.presence_of_element_located(
+        #                 (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
+        #
+        #         # Localiza frame
+        #         iframe2 = WebDriverWait(firefox, 10).until(
+        #             EC.presence_of_element_located((By.ID, 'frame-tarefa')))
+        #
+        #         firefox.switch_to.frame(iframe2)
+        #
+        #         element2 = WebDriverWait(firefox, 10).until(
+        #             EC.presence_of_element_located(
+        #                 (By.CSS_SELECTOR, 'div.col-sm-12 input')))
+        #
+        #         try:
+        #             # Clica no botao para assinar
+        #             # Assinar digitalmente e finalizar
+        #
+        #             ass = WebDriverWait(firefox, 2).until(
+        #                 EC.presence_of_element_located(
+        #                     (By.CSS_SELECTOR,
+        #                      'form div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')))
+        #
+        #             firefox.execute_script("arguments[0].click();", ass)
+        #
+        #             time.sleep(10)
+        #
+        #             logging.info('Processo assinado.')
+        #             logging.info('---------------------------')
+        #
+        #             # Deleta o ultimo registro
+        #             del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+        #             # Inclui novo registro
+        #             self.listProcessos[1].append(0)
+        #
+        #         except:
+        #
+        #             logging.info('---------------------------')
+        #             logging.info('Nao foi possivel assinar o processo.')
+        #             logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
+        #             logging.info('Evidenciando com o print da tela.')
+        #             image = Print(firefox, caminhoImages)
+        #
+        #         # Seleciona Frame
+        #         ##########################
+        #         firefox.switch_to.default_content()
+        #
+        #         iframe = WebDriverWait(firefox, 1).until(
+        #             EC.presence_of_element_located((By.ID, 'ngFrame')))
+        #
+        #         firefox.switch_to.frame(iframe)
+        #         ##########################
+        #
+        #     logging.info('Pagina 1 finalizada.')
+        #
+        # else:
+        #
+        #     ##########################################
+        #     # Calcula quantas pagina foram geradas de acordo com a quantidade de processos
+        #     if int(listCountProcess) % 30 == 0:
+        #         totalPagina = int(int(listCountProcess) / 30)
+        #     else:
+        #         totalPagina = int(int(listCountProcess) / 30) + 1
+        #     ##########################################
+        #
+        #     logging.info('Total de paginas: ' + str(totalPagina))
+        #
+        #     for y in range(totalPagina):
+        #
+        #         # Localiza tabela com listagem dos processos
+        #         element = firefox.find_elements_by_css_selector(
+        #             "div.ui-datalist-content ul.ui-datalist-data li div.datalist-content")
+        #         ##########################################################
+        #
+        #         ##########################################
+        #         ##########################################
+        #         # Registra todos os processos encontrados
+        #         logging.info('Pagina: ' + str(y + 1))
+        #         logging.info('Lista de processos que foram encontrados:')
+        #
+        #         for x in range(len(element)):
+        #             e = firefox.find_element(By.CSS_SELECTOR,
+        #                                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                                          x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #             e = e.split()
+        #
+        #             # Listagem de processos encontrados
+        #             logging.info(e[1])
+        #         logging.info('---------------------------')
+        #         ##########################################
+        #         ##########################################
+        #
+        #         # Realiza a assnatura de cada um deles
+        #         for x in range(len(element)):
+        #
+        #             e = firefox.find_element(By.CSS_SELECTOR,
+        #                                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                                          x + 1) + ') div.datalist-content span.tarefa-numero-processo').text
+        #
+        #             e = e.split()
+        #
+        #             self.listProcessos[0].append(str(e[1]))
+        #             # Adicao previa de nao concluido
+        #             self.listProcessos[1].append(1)
+        #
+        #             # Clica no processo
+        #             el = WebDriverWait(firefox, 10).until(
+        #                 EC.presence_of_element_located(
+        #                     (By.CSS_SELECTOR,
+        #                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(' + str(
+        #                          x + 1) + ') a.selecionarProcesso')))
+        #             firefox.execute_script("arguments[0].click();", el)
+        #
+        #             logging.info('---------------------------')
+        #             logging.info('Abrindo o processo: ' + e[1])
+        #
+        #             time.sleep(4)
+        #
+        #             # Usado para garantir carregamento completo do processo
+        #             # Abre o menu com as opcoes
+        #             element2 = WebDriverWait(firefox, 20).until(
+        #                 EC.presence_of_element_located(
+        #                     (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
+        #
+        #             # Localiza frame
+        #             iframe2 = WebDriverWait(firefox, 10).until(
+        #                 EC.presence_of_element_located((By.ID, 'frame-tarefa')))
+        #
+        #             firefox.switch_to.frame(iframe2)
+        #
+        #             element2 = WebDriverWait(firefox, 10).until(
+        #                 EC.presence_of_element_located(
+        #                     (By.CSS_SELECTOR, 'div.col-sm-12 input')))
+        #
+        #             try:
+        #                 # Clica no botao para assinar
+        #                 # Assinar digitalmente e finalizar
+        #                 ass = WebDriverWait(firefox, 2).until(
+        #                     EC.presence_of_element_located(
+        #                         (By.CSS_SELECTOR,
+        #                          'div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')))
+        #
+        #                 firefox.execute_script("arguments[0].click();", ass)
+        #
+        #                 time.sleep(10)
+        #
+        #                 logging.info('Processo assinado.')
+        #                 logging.info('---------------------------')
+        #
+        #                 # Deleta o ultimo registro
+        #                 del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+        #                 # Inclui novo registro
+        #                 self.listProcessos[1].append(0)
+        #
+        #                 firefox.switch_to.default_content()
+        #
+        #                 iframe = WebDriverWait(firefox, 10).until(
+        #                     EC.presence_of_element_located((By.ID, 'ngFrame')))
+        #
+        #                 firefox.switch_to.frame(iframe)
+        #
+        #             except:
+        #
+        #                 logging.info('---------------------------')
+        #                 logging.info('Nao foi possivel assinar o processo.')
+        #                 logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
+        #                 logging.info('Evidenciando com o print da tela.')
+        #                 image = Print(firefox, caminhoImages)
+        #
+        #             # Seleciona Frame
+        #             ##########################
+        #             firefox.switch_to.default_content()
+        #
+        #             iframe = WebDriverWait(firefox, 1).until(
+        #                 EC.presence_of_element_located((By.ID, 'ngFrame')))
+        #
+        #             firefox.switch_to.frame(iframe)
+        #             ##########################
+        #
+        #         if (y + 1) != totalPagina:
+        #             if (totalPagina <= 4):
+        #                 element3 = WebDriverWait(firefox, 20).until(
+        #                     EC.presence_of_element_located(
+        #                         (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 2) + ')')))
+        #                 firefox.execute_script("arguments[0].click();", element3)
+        #
+        #             else:
+        #
+        #                 if ((y + 1) <= 4):
+        #                     element3 = WebDriverWait(firefox, 20).until(
+        #                         EC.presence_of_element_located(
+        #                             (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(' + str(y + 1) + ')')))
+        #                     firefox.execute_script("arguments[0].click();", element3)
+        #
+        #                 else:
+        #
+        #                     # Depois so basta clicar sempre no quarto elemento para ir para proxima pagina
+        #
+        #                     if (y + 1) < totalPagina:
+        #                         element3 = WebDriverWait(firefox, 20).until(
+        #                             EC.presence_of_element_located(
+        #                                 (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(4)')))
+        #                         firefox.execute_script("arguments[0].click();", element3)
+        #                     else:
+        #                         element3 = WebDriverWait(firefox, 20).until(
+        #                             EC.presence_of_element_located(
+        #                                 (By.CSS_SELECTOR, 'span.ui-paginator-pages a:nth-child(5)')))
+        #                         firefox.execute_script("arguments[0].click();", element3)
+        #
+        #         logging.info('Pagina ' + str(y + 1) + ' finalizada.')
+        #         time.sleep(3)
 
         # time.sleep(2)
 
         # Volta para a lista de tarefas
+
         element = firefox.find_element(By.CSS_SELECTOR, 'ul#menu li#liHome a')
         firefox.execute_script("arguments[0].click();", element)
 
