@@ -59,15 +59,19 @@ class TaskAssinaturaProcessos:
                        "/html/body/app-root/selector/div/div/div/right-panel/div/div/div/tarefas/div/div/div/div/a[@title='" + self.listAtividades[i] + "']/div/span[2]").text
 
                 logging.info('---------------------------')
-                logging.info('Tarefa localizada: ' + self.listAtividades[i])
-                logging.info('Total de pendencias: ' + str(element))
+                logging.info('Verificando se as atividades estao abertas e com processos...')
                 logging.info('---------------------------')
 
                 # Verifica se foi encontrado e se ha processos dentro do mesmo
                 if int(element) > 0:
 
                     # (TR) Elaborar relatório - voto - ementa
-                    if (int(i) == 0 and self.countTask == 0):
+                    if (self.listAtividades[i] == '(TR) Confirmar relatório - voto - ementa' and self.countTask == 0):
+
+                        logging.info('---------------------------')
+                        logging.info('Tarefa localizada: ' + self.listAtividades[i])
+                        logging.info('Total de processos encontrados na atividade: ' + str(element))
+                        logging.info('---------------------------')
 
                         # Carrega atividade
                         element = WebDriverWait(firefox, 120).until(
@@ -82,7 +86,12 @@ class TaskAssinaturaProcessos:
                         return True
 
                     # (TR) Assinar inteiro teor
-                    elif (i == 1 and self.countTask == 1): # Remover count
+                    elif (self.listAtividades[i] == '(TR) Assinar inteiro teor' and self.countTask == 1): # Remover count
+
+                        logging.info('---------------------------')
+                        logging.info('Tarefa localizada: ' + self.listAtividades[i])
+                        logging.info('Total de processos encontrados na atividade: ' + str(element))
+                        logging.info('---------------------------')
 
                         # Carrega atividade
                         element = WebDriverWait(firefox, 120).until(
@@ -100,7 +109,34 @@ class TaskAssinaturaProcessos:
             except:
                 logging.info('---------------------------')
                 logging.info('Nao foi encontrado pendencias na atividade: ' + str(self.listAtividades[i]))
-                logging.info('---------------------------')
+
+                try:
+
+                    veryficProcess = firefox.find_element(By.CSS_SELECTOR,
+                                                          'div#divProcessosTarefa div.ui-widget-content div.ui-datalist-emptymessage').text
+
+                    logging.info('Nenhum processo foi encontrado.')
+                    logging.info('---------------------------')
+
+                    if str(veryficProcess) == 'Nenhum processo encontrado':
+                        # Volta para a lista de tarefas
+                        element = firefox.find_element(By.CSS_SELECTOR, 'ul#menu li#liHome a')
+                        firefox.execute_script("arguments[0].click();", element)
+
+                        time.sleep(3)
+
+                        # Para nao entrar mais nessa atividade
+                        self.countTask += 1
+
+                        # Realizando a aguardar o loading
+                        element = WebDriverWait(firefox, 120).until(
+                            EC.presence_of_element_located((By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a span')))
+
+                        # Repete o processo de busca por processos - Não faz sentido implementar a mesma tarefa
+                        self.checkQtdProcessosAtividade(firefox, logging, caminhoImages)
+                except:
+                    logging.info('Houve um erro ao retornar a atividade.')
+                    logging.info('---------------------------')
 
         return False
 
@@ -143,7 +179,7 @@ class TaskAssinaturaProcessos:
         time.sleep(2)
 
         # Aguarda carregamento dos processos
-        element = WebDriverWait(firefox, 20).until(
+        element = WebDriverWait(firefox, 3).until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
 
@@ -388,7 +424,6 @@ class TaskAssinaturaProcessos:
                 logging.info('Pagina ' + str(y + 1) + ' finalizada.')
                 time.sleep(3)
 
-
         # Remover filtro no final da assinatura
         logging.info('---------------------------')
         logging.info('Limpando filtro')
@@ -453,7 +488,7 @@ class TaskAssinaturaProcessos:
         #############################################################################################################
 
         # Aguarda carregamento dos processos
-        element = WebDriverWait(firefox, 20).until(
+        element = WebDriverWait(firefox, 3).until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
 
@@ -522,6 +557,12 @@ class TaskAssinaturaProcessos:
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
 
+                # Localiza frame
+                iframe2 = WebDriverWait(firefox, 10).until(
+                    EC.presence_of_element_located((By.ID, 'frame-tarefa')))
+
+                firefox.switch_to.frame(iframe2)
+
                 element2 = WebDriverWait(firefox, 10).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, 'div.col-sm-12 input')))
@@ -529,17 +570,15 @@ class TaskAssinaturaProcessos:
                 try:
                     # Clica no botao para assinar
                     # Assinar digitalmente e finalizar
-                    # ass = firefox.find_element(By.CSS_SELECTOR,
-                    #                            'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')
 
-                    ass = WebDriverWait(firefox, 20).until(
+                    ass = WebDriverWait(firefox, 2).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR,
-                             'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')))
+                             'form div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')))
 
                     firefox.execute_script("arguments[0].click();", ass)
 
-                    time.sleep(5)
+                    time.sleep(10)
 
                     logging.info('Processo assinado.')
                     logging.info('---------------------------')
@@ -556,6 +595,16 @@ class TaskAssinaturaProcessos:
                     logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
                     logging.info('Evidenciando com o print da tela.')
                     image = Print(firefox, caminhoImages)
+
+                # Seleciona Frame
+                ##########################
+                firefox.switch_to.default_content()
+
+                iframe = WebDriverWait(firefox, 1).until(
+                    EC.presence_of_element_located((By.ID, 'ngFrame')))
+
+                firefox.switch_to.frame(iframe)
+                ##########################
 
             logging.info('Pagina 1 finalizada.')
 
@@ -629,24 +678,27 @@ class TaskAssinaturaProcessos:
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
 
-                    element2 = WebDriverWait(firefox, 30).until(
+                    # Localiza frame
+                    iframe2 = WebDriverWait(firefox, 10).until(
+                        EC.presence_of_element_located((By.ID, 'frame-tarefa')))
+
+                    firefox.switch_to.frame(iframe2)
+
+                    element2 = WebDriverWait(firefox, 10).until(
                         EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, 'form#taskInstanceForm div.col-sm-12 input')))
+                            (By.CSS_SELECTOR, 'div.col-sm-12 input')))
 
                     try:
                         # Clica no botao para assinar
                         # Assinar digitalmente e finalizar
-                        # ass = firefox.find_element(By.CSS_SELECTOR,
-                        #                            'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')
-
-                        ass = WebDriverWait(firefox, 20).until(
+                        ass = WebDriverWait(firefox, 2).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
-                                 'div.col-sm-12 button[value="Assinar digitalmente e finalizar"i]')))
+                                 'div.col-sm-12 input[value="Assinar digitalmente e finalizar"i]')))
 
                         firefox.execute_script("arguments[0].click();", ass)
 
-                        time.sleep(5)
+                        time.sleep(10)
 
                         logging.info('Processo assinado.')
                         logging.info('---------------------------')
@@ -656,6 +708,13 @@ class TaskAssinaturaProcessos:
                         # Inclui novo registro
                         self.listProcessos[1].append(0)
 
+                        firefox.switch_to.default_content()
+
+                        iframe = WebDriverWait(firefox, 10).until(
+                            EC.presence_of_element_located((By.ID, 'ngFrame')))
+
+                        firefox.switch_to.frame(iframe)
+
                     except:
 
                         logging.info('---------------------------')
@@ -663,6 +722,16 @@ class TaskAssinaturaProcessos:
                         logging.info('Nao foi localizado o botao: Libera para demais gabinetes')
                         logging.info('Evidenciando com o print da tela.')
                         image = Print(firefox, caminhoImages)
+
+                    # Seleciona Frame
+                    ##########################
+                    firefox.switch_to.default_content()
+
+                    iframe = WebDriverWait(firefox, 1).until(
+                        EC.presence_of_element_located((By.ID, 'ngFrame')))
+
+                    firefox.switch_to.frame(iframe)
+                    ##########################
 
                 if (y + 1) != totalPagina:
                     if (totalPagina <= 4):
@@ -697,13 +766,13 @@ class TaskAssinaturaProcessos:
                 logging.info('Pagina ' + str(y + 1) + ' finalizada.')
                 time.sleep(3)
 
-        time.sleep(2)
+        # time.sleep(2)
 
         # Volta para a lista de tarefas
         element = firefox.find_element(By.CSS_SELECTOR, 'ul#menu li#liHome a')
         firefox.execute_script("arguments[0].click();", element)
 
-        time.sleep(3)
+        # time.sleep(3)
 
         # Para nao entrar mais nessa atividade
         self.countTask += 1
@@ -793,8 +862,6 @@ class TaskAssinaturaProcessos:
                 for i in range(len(self.listProcessos[2])):
                     logging.info('Processo: ' + str(self.listProcessos[2][i]))
                 logging.info("Total de processos que nao foram assinados: " + str(len(self.listProcessos[2])))
-            else:
-                logging.info('Todos os processos foram assinados corretamente.')
 
             self.listProcessos.append(len(self.listProcessos[2]))
 

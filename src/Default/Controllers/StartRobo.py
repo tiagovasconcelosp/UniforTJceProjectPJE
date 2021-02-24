@@ -130,7 +130,8 @@ class StartRobo:
         # Seleciona o perfil
         selecionarPerfil = Perfil(firefox, log, codPerfil, dataForm['perfil'])
 
-        time.sleep(3)
+        # ###
+        time.sleep(1)
 
         if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
 
