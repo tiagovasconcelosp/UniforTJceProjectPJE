@@ -364,7 +364,7 @@ class TaskTransitarJulgado:
 
                 try:
                     # Clica no botao Encaminhar para (ABRE AS OPCOES NOVAMENTE)
-                    element = WebDriverWait(firefox, 20).until(
+                    element = WebDriverWait(firefox, 30).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR, 'button#btnTransicoesTarefa')))
                     firefox.execute_script("arguments[0].click();", element)
@@ -380,12 +380,12 @@ class TaskTransitarJulgado:
             ##################################################################################
             try:
                 # Clica no botao Encaminhar para 02 - Devolver para instância de origem
-                element = WebDriverWait(firefox, 20).until(
+                element = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, 'ul li a[title="Encaminhar para 02 - Devolver para instância de origem"i]')))
                 firefox.execute_script("arguments[0].click();", element)
 
-                time.sleep(6)
+                time.sleep(20)
 
             except:
 
@@ -395,13 +395,13 @@ class TaskTransitarJulgado:
 
                 try:
                     # Clica no botao Encaminhar para 02 - Devolver para instância de origem
-                    element = WebDriverWait(firefox, 20).until(
+                    element = WebDriverWait(firefox, 30).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR,
                              'ul li a[title="Encaminhar para 02 - Devolver para instância de origem"i]')))
                     firefox.execute_script("arguments[0].click();", element)
-
-                    time.sleep(10)
+                    #############
+                    time.sleep(20)
 
                 except:
                     logging.info('Houve um problema na etapa devolver para instancia de origem.')
@@ -410,13 +410,13 @@ class TaskTransitarJulgado:
             ##################################################################################
             try:
                 # Localiza frame
-                iframe = WebDriverWait(firefox, 10).until(
+                iframe = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located((By.ID, 'frame-tarefa')))
 
                 firefox.switch_to.frame(iframe)
 
                 # Aguarda elemento carregar em tela
-                element = WebDriverWait(firefox, 20).until(
+                element = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, 'div.propertyView div.value select')))
 
@@ -428,12 +428,12 @@ class TaskTransitarJulgado:
             except:
 
                 logging.info('Tentando novamente selecionar "Motivo Remessa" . . .')
-
-                time.sleep(10)
+                #############
+                time.sleep(20)
 
                 try:
                     # Localiza frame
-                    iframe = WebDriverWait(firefox, 10).until(
+                    iframe = WebDriverWait(firefox, 30).until(
                         EC.presence_of_element_located((By.ID, 'frame-tarefa')))
 
                     firefox.switch_to.frame(iframe)
@@ -459,7 +459,7 @@ class TaskTransitarJulgado:
             ##################################################################################
             try:
                 # Clica no botao Retornar para Instancia de Origem
-                element = WebDriverWait(firefox, 20).until(
+                element = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'input.btn-primary[value="Retornar para instância de origem"i]')))
@@ -549,7 +549,7 @@ class TaskTransitarJulgado:
                     self.listProcessos[1].append(1)
 
                     # Localiza frame alerta de documento nao assinados
-                    iframe = WebDriverWait(firefox, 10).until(
+                    iframe = WebDriverWait(firefox, 30).until(
                         EC.presence_of_element_located((By.ID, 'ngFrame')))
 
                     firefox.switch_to.frame(iframe)
