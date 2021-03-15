@@ -74,7 +74,6 @@ class TaskTransitarJulgado:
             firefox.execute_script("arguments[0].click();", element)
 
             logging.info('Processo ' + str(numProcesso) + ' foi localizado.')
-            logging.info('---------------------------')
             self.listProcessos[0].append(str(numProcesso))
 
             # Adicao previa de nao concluido
@@ -100,7 +99,6 @@ class TaskTransitarJulgado:
         time.sleep(3)
 
         logging.info('Aguardando a nova janela ser aberta.')
-        logging.info('---------------------------')
 
         try:
             # Localiza a nova janela aberta
@@ -122,8 +120,8 @@ class TaskTransitarJulgado:
             logging.info('---------------------------')
 
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema ao encontrar a nova tela.')
+            logging.info('---------------------------')
 
             countErro += 1
 
@@ -142,9 +140,9 @@ class TaskTransitarJulgado:
                     (By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]')))
 
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema na etapa de incluir peticoes. Por ter ocorrido algum problema de conexao.')
             logging.info('Evidenciando com o print da tela.')
+            logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
 
@@ -155,9 +153,9 @@ class TaskTransitarJulgado:
 
             time.sleep(2)
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema na etapa de selecionar o Tipo Documento')
             logging.info('Evidenciando com o print da tela.')
+            logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
 
@@ -177,9 +175,9 @@ class TaskTransitarJulgado:
 
                 time.sleep(2)
             except:
-                logging.info('---------------------------')
                 logging.info('Houve um problema na etapa de selecionar o Modelo')
                 logging.info('Evidenciando com o print da tela.')
+                logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
                 countErro += 1
 
@@ -190,9 +188,9 @@ class TaskTransitarJulgado:
 
             time.sleep(2)
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema na etapa de selecionar o Tipo de Documento')
             logging.info('Evidenciando com o print da tela.')
+            logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
 
@@ -205,9 +203,9 @@ class TaskTransitarJulgado:
 
             time.sleep(3)
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema na etapa de selecionar o botao Preencher Documentos')
             logging.info('Evidenciando com o print da tela.')
+            logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
 
@@ -224,9 +222,9 @@ class TaskTransitarJulgado:
 
             time.sleep(3)
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema na etapa de informar a data')
             logging.info('Evidenciando com o print da tela.')
+            logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
 
@@ -239,9 +237,9 @@ class TaskTransitarJulgado:
 
             time.sleep(3)
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema ao salvar o processo.')
             logging.info('Evidenciando com o print da tela.')
+            logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
 
@@ -256,9 +254,9 @@ class TaskTransitarJulgado:
             time.sleep(8)
 
         except:
-            logging.info('---------------------------')
             logging.info('Houve um problema realizar a assinatura.')
             logging.info('Evidenciando com o print da tela.')
+            logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
 
         try:
@@ -465,35 +463,50 @@ class TaskTransitarJulgado:
                          'input.btn-primary[value="Retornar para instância de origem"i]')))
                 firefox.execute_script("arguments[0].click();", element)
 
-                time.sleep(6)
+                time.sleep(2)
+
+                # Deleta o ultimo registro
+                del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                # Inclui novo registro
+                self.listProcessos[1].append(0)
+                self.countEncaminhados += 1
 
                 ##################################################################################
                 try:
                     # Clica no botao Confirmar
-                    element = WebDriverWait(firefox, 20).until(
+                    element = WebDriverWait(firefox, 10).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR,
                              'input.btn-primary[value="Confirmar"i]')))
-                    firefox.execute_script("arguments[0].click();", element)
 
-                    logging.info('Alerta de documentos não assinados.')
-                    logging.info('Clicando em confirmar.')
+                    ###############
+                    # Altercao Karyna - Nao clica no confirmar
+                    # firefox.execute_script("arguments[0].click();", element)
+                    ###############
+
+                    logging.info('Esse processo não será assinado. Mensagem apareceu.')
+                    logging.info('Evidenciando com o print da tela.')
+                    image = Print(firefox, caminhoImages)
+                    logging.info('---------------------------')
+
+                    # Deleta o ultimo registro
+                    del(self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                    # Inclui novo registro como nao assinado
+                    self.listProcessos[1].append(1)
+                    self.countEncaminhados += 1
+
+                    # logging.info('Clicando em confirmar.')
 
                 except:
                     logging.info('Nao houver alerta de documentos nao assinados nesse processo. Continuando . . .')
                 ##################################################################################
 
-                # Deleta o ultimo registro
-                del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                # Inclui novo registro
-
-                self.listProcessos[1].append(0)
-                self.countEncaminhados += 1
-
-                time.sleep(20)
+                time.sleep(2)
 
             # Caso haja falha tentar mais uma vez o processo de envio
             except:
+
+                logging.info('Houver falha, tentando novamente . . .')
 
                 logging.info('Tentando novamente "Retornar para instância de origem" . . .')
 
@@ -502,7 +515,7 @@ class TaskTransitarJulgado:
                 try:
 
                     # Clica no botao Retornar para Instancia de Origem
-                    element = WebDriverWait(firefox, 20).until(
+                    element = WebDriverWait(firefox, 30).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR,
                              'input.btn-primary[value="Retornar para instância de origem"i]')))
@@ -510,31 +523,43 @@ class TaskTransitarJulgado:
 
                     time.sleep(2)
 
+                    # Deleta o ultimo registro
+                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                    # Inclui novo registro
+                    self.listProcessos[1].append(0)
+                    self.countEncaminhados += 1
+
                     ##################################################################################
                     try:
-
                         # Clica no botao Confirmar
-                        element = WebDriverWait(firefox, 20).until(
+                        element = WebDriverWait(firefox, 10).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
                                  'input.btn-primary[value="Confirmar"i]')))
-                        firefox.execute_script("arguments[0].click();", element)
 
-                        logging.info('Alerta de documentos não assinados.')
-                        logging.info('Clicando em confirmar.')
+                        ###############
+                        # Altercao Karyna - Nao clica no confirmar
+                        # firefox.execute_script("arguments[0].click();", element)
+                        ###############
+
+                        logging.info('Esse processo não será assinado. Mensagem apareceu.')
+                        logging.info('Evidenciando com o print da tela.')
+                        image = Print(firefox, caminhoImages)
+                        logging.info('---------------------------')
+
+                        # Deleta o ultimo registro
+                        del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                        # Inclui novo registro como nao assinado
+                        self.listProcessos[1].append(1)
+                        self.countEncaminhados += 1
+
+                        # logging.info('Clicando em confirmar.')
 
                     except:
                         logging.info('Nao houver alerta de documentos nao assinados nesse processo. Continuando . . .')
                     ##################################################################################
 
-                    # Deleta o ultimo registro
-                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                    # Inclui novo registro
-
-                    self.listProcessos[1].append(0)
-                    self.countEncaminhados += 1
-
-                    time.sleep(20)
+                    time.sleep(2)
 
                 except Exception as e:
 
@@ -571,9 +596,9 @@ class TaskTransitarJulgado:
 
             return self.listProcessos
 
-
-
     def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
+
+        self.countEncaminhados = 0
 
         try:
 

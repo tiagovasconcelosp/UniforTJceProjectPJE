@@ -24,6 +24,7 @@ class TaskAssinaturaProcessos:
     # [processoLocalizado][encaminhados][processoNaoLocalizado] ~+ [totalEncontrado][totalEncaminhado][timeExecucao][totalProcessosNaoLocalizado]
     listProcessos = [[], [], [], ]
     countTask = 0
+    countEncaminhados = 0
 
     listAtividades = [
         '(TR) Confirmar relatório - voto - ementa',
@@ -47,12 +48,13 @@ class TaskAssinaturaProcessos:
             try:
 
                 # Realizando a busca pela a atividade
-                element = WebDriverWait(firefox, 120).until(
+                element = WebDriverWait(firefox, 60).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a span')))
 
                 # Usado so para aguardar o loading
-                element = WebDriverWait(firefox, 120).until(
-                    EC.presence_of_element_located((By.XPATH, "/html/body/app-root/selector/div/div/div/right-panel/div/div/div/tarefas/div/div/div/div/a[@title='" + self.listAtividades[i] + "']/div/span[2]")))
+                # element = WebDriverWait(firefox, 10).until(
+                    # EC.presence_of_element_located((By.XPATH, "/html/body/app-root/selector/div/div/div/right-panel/div/div/div/tarefas/div/div/div/div/a[@title='" + self.listAtividades[i] + "']/div/span[2]")))
+
 
                 # element = firefox.find_element(By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + self.listAtividades[i] + '"i] span.quantidadeTarefa').text
                 element = firefox.find_element(By.XPATH,
@@ -86,7 +88,7 @@ class TaskAssinaturaProcessos:
                         return True
 
                     # (TR) Assinar inteiro teor
-                    elif (self.listAtividades[i] == '(TR) Assinar inteiro teor' and self.countTask == 1): # Remover count
+                    elif (self.listAtividades[i] == '(TR) Assinar inteiro teor'): # Remover count
 
                         logging.info('---------------------------')
                         logging.info('Tarefa localizada: ' + self.listAtividades[i])
@@ -940,6 +942,8 @@ class TaskAssinaturaProcessos:
         self.checkQtdProcessosAtividade(firefox, logging, caminhoImages)
 
     def Execute(self, firefox, caminhoImages, logging, atividade):
+
+        self.countEncaminhados = 0
 
         try:
 

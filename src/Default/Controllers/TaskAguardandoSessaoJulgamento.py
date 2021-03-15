@@ -151,6 +151,8 @@ class TaskAguardandoSessaoJulgamento:
 
     def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
 
+        self.countEncaminhados = 0
+
         try:
 
             time.sleep(3)
