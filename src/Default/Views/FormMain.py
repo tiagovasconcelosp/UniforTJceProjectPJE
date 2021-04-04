@@ -84,21 +84,22 @@ class Form(StartRobo):
         selectPerfil = Combobox(stepFour, width=80, state="readonly")
 
         selectPerfil['values'] = (
-            "1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
-            "2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
-            "4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto",
-            "5ª Turma Recursal Provisória / Gab. 2 - 5ª Turma Recursal Provisória / Juiz Titular"
-            "5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto",
-            "5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Subitituto",
+            # "1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
+            # "2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
+            # "4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto",
+            # "5ª Turma Recursal Provisória / Gab. 2 - 5ª Turma Recursal Provisória / Juiz Titular"
+            # "5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto",
+            # "5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Subitituto",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral",
-            "05ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
+            # "05ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
+            "5ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
             "5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Titular",
             "6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular",
             "6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Titular",
             "6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular",
-            "6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Subitituto",
+            # "6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Subitituto",
             "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
             "6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral",

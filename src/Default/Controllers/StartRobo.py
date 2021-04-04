@@ -27,6 +27,7 @@ from src.Default.Controllers.TaskAguardandoSessaoJulgamento import TaskAguardand
 from src.Default.Controllers.TaskAssinaturaProcessos import TaskAssinaturaProcessos
 from src.Default.Controllers.TaskInclusaoProcessos import TaskInclusaoProcessos
 from src.Default.Controllers.TaskTransitarJulgado import TaskTransitarJulgado
+from src.Default.Controllers.TaskLancamento import TaskLancamento
 from src.Default.Views.FormResultado import FormResultado
 
 
@@ -108,20 +109,13 @@ class StartRobo:
         auth = Auth(firefox, log, self.caminhoImages)
 
         # Codigo fica especificado de acordo com codigo atribuido no sistema
-        if dataForm['perfil'] == '1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' \
-                or dataForm['perfil'] == '4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto'\
-                or dataForm['perfil'] == '05ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito'\
-                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Subitituto'\
-                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 2 - 5ª Turma Recursal Provisória / Juiz Titular':
+        if dataForm['perfil'] == '5ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito':
             codPerfil = 0
-        elif dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral' \
-                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto'\
-                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Titular'\
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Titular'\
                 or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Titular':
             codPerfil = 1
         elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria' \
-                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular'\
-                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Subitituto':
+                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular':
             codPerfil = 2
         elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão' \
                 or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular'\
@@ -202,8 +196,21 @@ class StartRobo:
                 sys.exit(0)
 
 
-        # elif dataForm['atividade'] == '(TR) Concluso para decisã':
-        #     codPerfil = 2
+        elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
+
+            # Lançamento de movimentação TPU
+            executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
+                                                           openXls, xlsData,
+                                                           '(TR) Julgados em sessão',
+                                                           xml)
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaLancamento.listProcessos, 0, log)
+            except:
+                log.exception('Falha ao gerar o formulario final.')
+                log.info('Finalizando o robo.')
+                log.shutdown()
+                sys.exit(0)
 
     def get_installed_version(self):
         try:
