@@ -70,7 +70,6 @@ class OpenWebDriver():
             firefoxProfile.set_preference("plugin.state.java", 0)
         # elif self._versao >= 79.0:
 
-
         options = FirefoxOptions()
         options.add_argument("--headless")
 

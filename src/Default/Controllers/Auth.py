@@ -31,8 +31,8 @@ class Auth:
 
             firefox.set_page_load_timeout(120)
 
-            # firefox.find_element(By.ID, "username").send_keys('61446130304')
-            # firefox.find_element(By.ID, "password").send_keys('12345')
+            firefox.find_element(By.ID, "username").send_keys('60013884310')
+            firefox.find_element(By.ID, "password").send_keys('12345')
 
             logging.info("Realizando autenticacao.")
         except:

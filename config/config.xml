@@ -1,21 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <title>Robô de Automações de Atividades PJE - 7.0</title>
-    <!--<url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>-->
-    <url>https://pje.tjce.jus.br/pje2grau/login.seam</url>
+    <url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>
+    <!--<url>https://pje.tjce.jus.br/pje2grau/login.seam</url>-->
     <directoryLog>Logs</directoryLog>
     <directoryImages>Images</directoryImages>
     <directoryDriver>Driver</directoryDriver>
-    <driverNameList>
+    <!--<driverNameList>
         <value>Driver 0.18.0 para Mozilla Superior ou Igual a Versão 27</value>
         <value>Driver 0.19.0 para Mozilla Superior ou Igual a Versão 55</value>
         <value>Driver 0.21.0 para Mozilla Superior ou Igual a Versão 57</value>
         <value>Driver 0.26.0 para Mozilla Superior ou Igual a Versão 60</value>
         <value>Driver 0.27.0 para Mozilla Superior ou Igual a Versão 79</value>
-    </driverNameList>
+    </driverNameList>-->
     <filterXLS>X</filterXLS>
     <columnRobo>0</columnRobo>
     <columnProcess>1</columnProcess>
     <columnData>2</columnData>
     <columnSession>3</columnSession>
+    <columnResult>2</columnResult>
+    <dataRecorren>
+        <recorrentes>
+            <codDesc>Embargos de Declaração Acolhido</codDesc>
+            <cod>198</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Embargos de Declaração não Acolhido</codDesc>
+            <cod>200</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Prejudicado o Recurso</codDesc>
+            <cod>230</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Não conhecido o Recurso</codDesc>
+            <cod>235</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Conhecido o Recurso e Provido</codDesc>
+            <cod>237</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Conhecido o Recurso e Parcialmente Provido</codDesc>
+            <cod>238</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Conhecido o Recurso e Não-provido</codDesc>
+            <cod>239</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Concedida a Segurança</codDesc>
+            <cod>442</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Denegada a Segurança</codDesc>
+            <cod>446</cod>
+        </recorrentes>
+    </dataRecorren>
 </config>

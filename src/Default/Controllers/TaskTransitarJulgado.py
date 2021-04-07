@@ -463,7 +463,7 @@ class TaskTransitarJulgado:
                          'input.btn-primary[value="Retornar para instância de origem"i]')))
                 firefox.execute_script("arguments[0].click();", element)
 
-                time.sleep(2)
+                time.sleep(25)
 
                 # Deleta o ultimo registro
                 del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
@@ -474,10 +474,14 @@ class TaskTransitarJulgado:
                 ##################################################################################
                 try:
                     # Clica no botao Confirmar
-                    element = WebDriverWait(firefox, 10).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR,
-                             'input.btn-primary[value="Confirmar"i]')))
+                    # element = WebDriverWait(firefox, 10).until(
+                    #     EC.presence_of_element_located(
+                    #         (By.CSS_SELECTOR,
+                    #          'input.btn-primary[value="Confirmar"i]')))
+
+                    element = firefox.find_element(By.CSS_SELECTOR, 'input.btn-primary[value="Confirmar"i]')
+
+                    time.sleep(15)
 
                     ###############
                     # Altercao Karyna - Nao clica no confirmar
@@ -510,7 +514,7 @@ class TaskTransitarJulgado:
 
                 logging.info('Tentando novamente "Retornar para instância de origem" . . .')
 
-                time.sleep(20)
+                time.sleep(10)
 
                 try:
 
@@ -521,7 +525,7 @@ class TaskTransitarJulgado:
                              'input.btn-primary[value="Retornar para instância de origem"i]')))
                     firefox.execute_script("arguments[0].click();", element)
 
-                    time.sleep(2)
+                    time.sleep(25)
 
                     # Deleta o ultimo registro
                     del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
@@ -532,10 +536,14 @@ class TaskTransitarJulgado:
                     ##################################################################################
                     try:
                         # Clica no botao Confirmar
-                        element = WebDriverWait(firefox, 10).until(
-                            EC.presence_of_element_located(
-                                (By.CSS_SELECTOR,
-                                 'input.btn-primary[value="Confirmar"i]')))
+                        # element = WebDriverWait(firefox, 10).until(
+                        #     EC.presence_of_element_located(
+                        #         (By.CSS_SELECTOR,
+                        #          'input.btn-primary[value="Confirmar"i]')))
+
+                        element = firefox.find_element(By.CSS_SELECTOR, 'input.btn-primary[value="Confirmar"i]')
+
+                        time.sleep(15)
 
                         ###############
                         # Altercao Karyna - Nao clica no confirmar

@@ -64,7 +64,6 @@ class StartRobo:
             self.webDriveName = 'Driver 0.27.0 para Mozilla Superior ou Igual a Versão 79'
 
         # Abrir WebDriver
-        # webdriver = OpenWebDriver(self.caminhoWebDrive, dataForm['drive'], self.versao, self.url)
         webdriver = OpenWebDriver(self.caminhoWebDrive, self.webDriveName, self.versao, self.url)
 
         # Inicia os Objetos
@@ -130,7 +129,6 @@ class StartRobo:
         # Seleciona o perfil
         selecionarPerfil = Perfil(firefox, log, codPerfil, dataForm['perfil'])
 
-        # ###
         time.sleep(1)
 
         if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
@@ -195,22 +193,21 @@ class StartRobo:
                 log.shutdown()
                 sys.exit(0)
 
-
         elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
 
             # Lançamento de movimentação TPU
             executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
                                                            openXls, xlsData,
-                                                           '(TR) Julgados em sessão',
+                                                           '(TR) Lançar movimentações de julgamento',
                                                            xml)
-            try:
-                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaLancamento.listProcessos, 0, log)
-            except:
-                log.exception('Falha ao gerar o formulario final.')
-                log.info('Finalizando o robo.')
-                log.shutdown()
-                sys.exit(0)
+            # try:
+            # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+            form = FormResultado(executaLancamento.listProcessos, 0, log)
+            # except:
+            #     log.exception('Falha ao gerar o formulario final.')
+            #     log.info('Finalizando o robo.')
+            #     log.shutdown()
+            #     sys.exit(0)
 
     def get_installed_version(self):
         try:
