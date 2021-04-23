@@ -381,10 +381,8 @@ class OpenXls:
 
                         logging.info('Elaboracao dos dados realizada com sucesso.')
 
-                        print(listAllProcess)
-
                         # [['3000323-07.2017.8.06.0004', '387'], ['3000746-69.2019.8.06.0012', '446']]
-                        return listDataProcessos
+                        return listAllProcess
 
                     else:
                         logging.info('Planilha esta com coluna Resultado faltando dados. Finalizando o robo.')

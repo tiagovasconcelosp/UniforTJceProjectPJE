@@ -21,39 +21,39 @@
     <columnResult>2</columnResult>
     <dataRecorren>
         <recorrentes>
-            <codDesc>Embargos de Declaração Acolhido</codDesc>
-            <cod>198</cod>
-        </recorrentes>
-        <recorrentes>
-            <codDesc>Embargos de Declaração não Acolhido</codDesc>
-            <cod>200</cod>
-        </recorrentes>
-        <recorrentes>
-            <codDesc>Prejudicado o Recurso</codDesc>
+            <codDesc>Prejudicado</codDesc>
             <cod>230</cod>
         </recorrentes>
         <recorrentes>
-            <codDesc>Não conhecido o Recurso</codDesc>
+            <codDesc>Não Conhecido</codDesc>
             <cod>235</cod>
         </recorrentes>
         <recorrentes>
-            <codDesc>Conhecido o Recurso e Provido</codDesc>
+            <codDesc>Provido</codDesc>
             <cod>237</cod>
         </recorrentes>
         <recorrentes>
-            <codDesc>Conhecido o Recurso e Parcialmente Provido</codDesc>
+            <codDesc>Parcialmente Provido</codDesc>
             <cod>238</cod>
         </recorrentes>
         <recorrentes>
-            <codDesc>Conhecido o Recurso e Não-provido</codDesc>
+            <codDesc>Improvido</codDesc>
             <cod>239</cod>
         </recorrentes>
         <recorrentes>
-            <codDesc>Concedida a Segurança</codDesc>
+            <codDesc>Embargo Acolhido</codDesc>
+            <cod>198</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Embargo não Acolhido</codDesc>
+            <cod>200</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Concedida Segurança</codDesc>
             <cod>442</cod>
         </recorrentes>
         <recorrentes>
-            <codDesc>Denegada a Segurança</codDesc>
+            <codDesc>Denegada Segurança</codDesc>
             <cod>446</cod>
         </recorrentes>
     </dataRecorren>
