@@ -146,6 +146,8 @@ class FormResultado:
                                     Texto = 'Houve falha ao conluir'
                                 elif valorDescricao == 2:
                                     Texto = 'Houve falha ao assinar'
+                                elif valorDescricao == 3:
+                                    Texto = 'Multi Recorrido/Recorrente'
 
 
                             label = Label(self.tab1, text=Texto, bg=Cor, relief=RIDGE, fg="white", padx=3, pady=3)
