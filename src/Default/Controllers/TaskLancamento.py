@@ -4,7 +4,6 @@
 ### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
 ### Laboratório M02
 ### Cientista-Chefe: Prof. Carlos Caminha
-### Co-coordenador: Daniel Sullivan
 ### Bolsista Desenvolvedor do Projeto:
 ### Tiago Vasconcelos
 ### Email: tiagovasconcelosp@gmail.com
@@ -350,6 +349,40 @@ class TaskLancamento:
                 logging.info('Finalizando atividade com o processo: ' + str(numProcesso))
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
+
+            time.sleep(2)
+
+            # Clica no botao salvar
+            element = WebDriverWait(firefox, 20).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR,
+                     'input#taskInstanceForm:update')))
+            firefox.execute_script("arguments[0].click();", element)
+
+            time.sleep(3)
+
+            # Aguarda o carregamento novamente do botao
+            element = WebDriverWait(firefox, 20).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR,
+                     'input#taskInstanceForm:update')))
+
+            # Clica no botao para encaminhar processo
+            element = WebDriverWait(firefox, 20).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
+            firefox.execute_script("arguments[0].click();", element)
+
+            time.sleep(1)
+
+            # Clica em Encaminhar para Finalizar e sair da tarefa
+            element = WebDriverWait(firefox, 5).until(  # 5s
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR,
+                     'ul.dropdown-transicoes li a[title="Encaminhar para Finalizar e sair da tarefa"i]')))
+            firefox.execute_script("arguments[0].click();", element)
+
+            time.sleep(5)
 
             firefox.switch_to.default_content()
 

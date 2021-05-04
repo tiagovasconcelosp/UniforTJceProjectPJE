@@ -208,6 +208,14 @@
   {
    "optionDest": "hiddenimports",
    "value": "src.Default.Views.formMain"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.action_chains"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/database;database/"
   }
  ],
  "nonPyinstallerOptions": {
