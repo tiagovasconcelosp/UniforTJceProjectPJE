@@ -1,14 +1,14 @@
-####################################################
-####################################################
-### Projeto MPCE - Unifor - Universidade de Fortaleza
-### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-### Laboratório M02
-### Cientista-Chefe: Prof. Carlos Caminha
-### Bolsista Desenvolvedor do Projeto:
-### Tiago Vasconcelos
-### Email: tiagovasconcelosp@gmail.com
-####################################################
-####################################################
+# ###################################################
+# ###################################################
+# ## Projeto MPCE - Unifor - Universidade de Fortaleza
+# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+# ## Laboratório M02
+# ## Cientista-Chefe: Prof. Carlos Caminha
+# ## Bolsista Desenvolvedor do Projeto:
+# ## Tiago Vasconcelos
+# ## Email: tiagovasconcelosp@gmail.com
+# ###################################################
+# ###################################################
 
 import sys
 
@@ -17,7 +17,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
 
 class OpenWebDriver():
 

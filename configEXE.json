@@ -216,6 +216,10 @@
   {
    "optionDest": "datas",
    "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/database;database/"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Models.DataCsv"
   }
  ],
  "nonPyinstallerOptions": {

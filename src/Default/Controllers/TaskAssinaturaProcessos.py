@@ -1,14 +1,14 @@
-####################################################
-####################################################
-### Projeto MPCE - Unifor - Universidade de Fortaleza
-### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-### Laboratório M02
-### Cientista-Chefe: Prof. Carlos Caminha
-### Bolsista Desenvolvedor do Projeto:
-### Tiago Vasconcelos
-### Email: tiagovasconcelosp@gmail.com
-####################################################
-####################################################
+# ###################################################
+# ###################################################
+# ## Projeto MPCE - Unifor - Universidade de Fortaleza
+# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+# ## Laboratório M02
+# ## Cientista-Chefe: Prof. Carlos Caminha
+# ## Bolsista Desenvolvedor do Projeto:
+# ## Tiago Vasconcelos
+# ## Email: tiagovasconcelosp@gmail.com
+# ###################################################
+# ###################################################
 
 import time
 from selenium.webdriver.common.by import By
@@ -33,12 +33,12 @@ class TaskAssinaturaProcessos:
     # Etiqueta a ser buscada
     etiqueta = "ASSINAR"
 
-    def __init__(self, firefox, caminhoImages, logging, atividade):
+    def __init__(self, firefox, caminhoImages, logging, atividade, csv, dataBase, inicioTime):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, atividade)
+        self.Execute(firefox, caminhoImages, logging, atividade, csv, dataBase, inicioTime)
 
     def checkQtdProcessosAtividade(self, firefox, logging, caminhoImages):
 
@@ -75,7 +75,7 @@ class TaskAssinaturaProcessos:
                         logging.info('---------------------------')
 
                         # Carrega atividade
-                        element = WebDriverWait(firefox, 120).until(
+                        element = WebDriverWait(firefox, 40).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + self.listAtividades[i] + '"i]')))
                         firefox.execute_script("arguments[0].click();", element)
@@ -95,7 +95,7 @@ class TaskAssinaturaProcessos:
                         logging.info('---------------------------')
 
                         # Carrega atividade
-                        element = WebDriverWait(firefox, 120).until(
+                        element = WebDriverWait(firefox, 40).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
                                  '#divTarefasPendentes .menuItem a[title="' + self.listAtividades[i] + '"i]')))
@@ -426,7 +426,7 @@ class TaskAssinaturaProcessos:
         # Repete o processo de busca por processos
         self.checkQtdProcessosAtividade(firefox, logging, caminhoImages)
 
-    def Execute(self, firefox, caminhoImages, logging, atividade):
+    def Execute(self, firefox, caminhoImages, logging, atividade, csv, dataBase, inicioTime):
 
         self.countEncaminhados = 0
 
@@ -454,7 +454,7 @@ class TaskAssinaturaProcessos:
             firefox.switch_to.frame(iframe)
 
             # Registra horario que iniciou a tarefa
-            inicio = time.time()
+            # inicio = time.time()
 
             self.checkQtdProcessosAtividade(firefox, logging, caminhoImages)
 
@@ -484,7 +484,7 @@ class TaskAssinaturaProcessos:
             # Registra horario que finalizou a tarefa
             fim = time.time()
 
-            timeTotal = fim - inicio
+            timeTotal = fim - inicioTime
 
             timeTotal = float('{:.2f}'.format(timeTotal))
 

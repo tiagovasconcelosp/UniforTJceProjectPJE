@@ -1,14 +1,14 @@
-####################################################
-####################################################
-### Projeto MPCE - Unifor - Universidade de Fortaleza
-### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-### Laboratório M02
-### Cientista-Chefe: Prof. Carlos Caminha
-### Bolsista Desenvolvedor do Projeto:
-### Tiago Vasconcelos
-### Email: tiagovasconcelosp@gmail.com
-####################################################
-####################################################
+# ###################################################
+# ###################################################
+# ## Projeto MPCE - Unifor - Universidade de Fortaleza
+# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+# ## Laboratório M02
+# ## Cientista-Chefe: Prof. Carlos Caminha
+# ## Bolsista Desenvolvedor do Projeto:
+# ## Tiago Vasconcelos
+# ## Email: tiagovasconcelosp@gmail.com
+# ###################################################
+# ###################################################
 
 import time
 from selenium.webdriver.common.by import By
@@ -19,18 +19,23 @@ from src.Default.Controllers.Print import Print
 
 
 class TaskAguardandoSessaoJulgamento:
-
     # [processoLocalizado][encaminhados][processoNaoLocalizado] ~+ [totalEncontrado][totalEncaminhado][timeExecucao][totalProcessosNaoLocalizado]
-    listProcessos = [[],[],[],]
+    listProcessos = [[], [], [], ]
     countEncaminhados = 0
     countEnviaProcesso = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
+    # Geração de dados
+    qtd_clicks_all = 0
+    qtd_erros_tentativa_processo_all = 0
+
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime, arrayVarRefDados):
         # Feito para zerar lista de processos
-        self.listProcessos = [[],[],[],]
+        self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
+        self.qtd_clicks_all = 0
+        self.qtd_erros_tentativa_processo_all = 0
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime, arrayVarRefDados)
 
     def localizarProcessoEmcaminhar(self, firefox, numProcesso, logging, caminhoImages):
 
@@ -40,17 +45,24 @@ class TaskAguardandoSessaoJulgamento:
                     (By.ID, 'inputPesquisaTarefas')))
             element.clear()
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             firefox.find_element(By.ID, "inputPesquisaTarefas").send_keys(numProcesso)
 
             element = firefox.find_element(By.CSS_SELECTOR, '#divActions button[title="Pesquisar"]')
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(1)
 
             # Valida se houve mais de um resultado
             # caminho no ambiente da unifor
             # element = firefox.find_element(By.CSS_SELECTOR, 'span[title="Quantidade de processos na tarefa"]').text
-            element = firefox.find_element(By.CSS_SELECTOR, 'div#divProcessosTarefa div.painel-listagem div.row span.badge').text
+            element = firefox.find_element(By.CSS_SELECTOR,
+                                           'div#divProcessosTarefa div.painel-listagem div.row span.badge').text
 
             # Verifica se retornou mais de um processo
             if int(element) > 1:
@@ -63,8 +75,12 @@ class TaskAguardandoSessaoJulgamento:
             # Clica no primeiro processo retornado
             element = WebDriverWait(firefox, 10).until(
                 EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
+                    (By.CSS_SELECTOR,
+                     'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             logging.info('Processo ' + str(numProcesso) + ' foi localizado.')
             self.listProcessos[0].append(str(numProcesso))
@@ -80,15 +96,22 @@ class TaskAguardandoSessaoJulgamento:
                     (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             time.sleep(1)
 
             try:
 
                 # Clica em encaminhar tarefa
-                element = WebDriverWait(firefox, 5).until( # 5s
+                element = WebDriverWait(firefox, 5).until(  # 5s
                     EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para Encaminhar manualmente para assinatura do inteiro teor"i]')))
+                        (By.CSS_SELECTOR,
+                         'ul.dropdown-transicoes li a[title="Encaminhar para Encaminhar manualmente para assinatura do inteiro teor"i]')))
                 firefox.execute_script("arguments[0].click();", element)
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
 
                 # elemento aparece e some
                 element = WebDriverWait(firefox, 20).until(
@@ -102,7 +125,6 @@ class TaskAguardandoSessaoJulgamento:
                 # Inclui novo registro
                 self.listProcessos[1].append(0)
                 self.countEncaminhados += 1
-
 
                 # Contagem de reenvio do processo
                 self.countEnviaProcesso = 0
@@ -122,10 +144,12 @@ class TaskAguardandoSessaoJulgamento:
 
                 if self.countEnviaProcesso == 0:
                     self.countEnviaProcesso += 1
+                    self.qtd_erros_tentativa_processo_all += 1
                     # Deleta registro de verificacao de encaminhado para executar novamente
-                    del(self.listProcessos[0][(len(self.listProcessos[0]) - 1)])
+                    del (self.listProcessos[0][(len(self.listProcessos[0]) - 1)])
                     logging.info('---------------------------')
-                    logging.info('Houve falha ao encaminhar o processo. Tentando localizar e encaminhar o processo mais uma vez.')
+                    logging.info(
+                        'Houve falha ao encaminhar o processo. Tentando localizar e encaminhar o processo mais uma vez.')
                     logging.info('---------------------------')
                     self.localizarProcessoEmcaminhar(firefox, numProcesso, logging, caminhoImages)
 
@@ -139,6 +163,9 @@ class TaskAguardandoSessaoJulgamento:
 
                 firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
         except:
             logging.info('Processo nao localizado.')
             logging.info('Evidenciando com o print da tela.')
@@ -146,9 +173,10 @@ class TaskAguardandoSessaoJulgamento:
             self.listProcessos[2].append(str(numProcesso))
             firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
 
+
         return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, csv, dataBase, inicioTime, arrayVarRefDados):
 
         self.countEncaminhados = 0
 
@@ -162,26 +190,39 @@ class TaskAguardandoSessaoJulgamento:
                      'a[title="Abrir menu"i]')))
             element.click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
-            
+
             firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
+
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
 
             iframe = WebDriverWait(firefox, 60).until(
                 EC.presence_of_element_located((By.ID, 'ngFrame')))
 
             firefox.switch_to.frame(iframe)
 
-            element = WebDriverWait(firefox, 120).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
+            element = WebDriverWait(firefox, 40).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
 
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             # Registra horario que iniciou a tarefa
-            inicio = time.time()
+            # inicio = time.time()
 
             logging.info('---------------------------')
             logging.info('Tarefa localizada: ' + str(atividade))
@@ -225,7 +266,7 @@ class TaskAguardandoSessaoJulgamento:
             # Registra horario que finalizou a tarefa
             fim = time.time()
 
-            timeTotal = fim - inicio
+            timeTotal = fim - inicioTime
 
             timeTotal = float('{:.2f}'.format(timeTotal))
 
@@ -256,6 +297,13 @@ class TaskAguardandoSessaoJulgamento:
 
             firefox.switch_to.default_content()
 
+            # Registra base
+            dataBase['qtd_processos'] = (str(len(self.listProcessos[0])))
+            dataBase['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
+            dataBase['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
+            dataBase['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
+            dataBase['tempo_execucao_min'] = str(timeTotal // 60)
+
             try:
                 firefox.close()
             except:
@@ -265,9 +313,10 @@ class TaskAguardandoSessaoJulgamento:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
-            return self.listProcessos
 
         except:
+
+            arrayVarRefDados['qtd_erros_robo'] += 1
 
             image = Print(firefox, caminhoImages)
             logging.exception('Falha ao concluir a tarefa especificada. - ' + str(atividade))
@@ -275,4 +324,7 @@ class TaskAguardandoSessaoJulgamento:
             logging.shutdown()
 
             # Retorna valor caso haja algum erro durante a execucao
-            return self.listProcessos
+
+
+
+        return self.listProcessos

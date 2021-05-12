@@ -13,7 +13,6 @@
 import sys
 
 from selenium.webdriver.common.by import By
-
 from src.Default.Controllers.Print import Print
 
 

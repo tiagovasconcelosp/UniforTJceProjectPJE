@@ -1,14 +1,14 @@
-####################################################
-####################################################
-### Projeto MPCE - Unifor - Universidade de Fortaleza
-### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-### Laboratório M02
-### Cientista-Chefe: Prof. Carlos Caminha
-### Bolsista Desenvolvedor do Projeto:
-### Tiago Vasconcelos
-### Email: tiagovasconcelosp@gmail.com
-####################################################
-####################################################
+# ###################################################
+# ###################################################
+# ## Projeto MPCE - Unifor - Universidade de Fortaleza
+# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+# ## Laboratório M02
+# ## Cientista-Chefe: Prof. Carlos Caminha
+# ## Bolsista Desenvolvedor do Projeto:
+# ## Tiago Vasconcelos
+# ## Email: tiagovasconcelosp@gmail.com
+# ###################################################
+# ###################################################
 
 import time
 from unicodedata import normalize
@@ -26,11 +26,11 @@ class TaskInclusaoProcessos:
     countIncluidos = 0
     countEnviaProcesso = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime)
 
     def pecorreProcessoPauta(self, firefox, process, element, dayProcess, logging, caminhoImages):
 
@@ -694,7 +694,7 @@ class TaskInclusaoProcessos:
                         element = firefox.find_element(By.XPATH,
                                                        "//div[@class='rich-calendar-tool-btn' and contains(text(), '" + str(
                                                            Meses[valMes]) + "')]")
-                        count + 1
+                        count += 1
 
                         logging.info('Encontrado o mes correto para o processo.')
                         logging.info('---------------------------')
@@ -730,7 +730,7 @@ class TaskInclusaoProcessos:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, csv, dataBase, inicioTime):
 
         try:
 
@@ -763,7 +763,7 @@ class TaskInclusaoProcessos:
             time.sleep(1)
 
             # Registra horario que iniciou a tarefa
-            inicio = time.time()
+            # inicio = time.time()
 
             # {'29-10-2020': [['3000746-69.2019.8.06.0012', '29-10-2020', 'Presencial'],
             #                 ['3000074-61.2017.8.06.9964', '29-10-2020', 'Presencial'],
@@ -812,7 +812,7 @@ class TaskInclusaoProcessos:
             # Registra horario que finalizou a tarefa
             fim = time.time()
 
-            timeTotal = fim - inicio
+            timeTotal = fim - inicioTime
 
             timeTotal = float('{:.2f}'.format(timeTotal))
 

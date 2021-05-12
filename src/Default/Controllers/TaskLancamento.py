@@ -1,14 +1,14 @@
-﻿####################################################
-####################################################
-### Projeto MPCE - Unifor - Universidade de Fortaleza
-### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-### Laboratório M02
-### Cientista-Chefe: Prof. Carlos Caminha
-### Bolsista Desenvolvedor do Projeto:
-### Tiago Vasconcelos
-### Email: tiagovasconcelosp@gmail.com
-####################################################
-####################################################
+﻿# ###################################################
+# ###################################################
+# ## Projeto MPCE - Unifor - Universidade de Fortaleza
+# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+# ## Laboratório M02
+# ## Cientista-Chefe: Prof. Carlos Caminha
+# ## Bolsista Desenvolvedor do Projeto:
+# ## Tiago Vasconcelos
+# ## Email: tiagovasconcelosp@gmail.com
+# ###################################################
+# ###################################################
 
 import time
 from selenium.webdriver.common.by import By
@@ -25,12 +25,12 @@ class TaskLancamento:
     listProcessos = [[], [], [], ]
     countEncaminhados = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml):
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml)
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime)
 
     def localizarProcesso(self, firefox, numProcesso, codRecorrente, logging, caminhoImages):
 
@@ -350,13 +350,13 @@ class TaskLancamento:
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
 
-            time.sleep(2)
+            time.sleep(3)
 
             # Clica no botao salvar
-            element = WebDriverWait(firefox, 20).until(
+            element = WebDriverWait(firefox, 5).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
-                     'input#taskInstanceForm:update')))
+                        'div.actionButtons input[value="Salvar"i]')))
             firefox.execute_script("arguments[0].click();", element)
 
             time.sleep(3)
@@ -365,7 +365,15 @@ class TaskLancamento:
             element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
-                     'input#taskInstanceForm:update')))
+                     'form#taskInstanceForm input[value="Salvar"i]')))
+
+            firefox.switch_to.default_content()
+
+            # Localiza frame para o proximo processo
+            iframe = WebDriverWait(firefox, 20).until(
+                EC.presence_of_element_located((By.ID, 'ngFrame')))
+
+            firefox.switch_to.frame(iframe)
 
             # Clica no botao para encaminhar processo
             element = WebDriverWait(firefox, 20).until(
@@ -376,25 +384,25 @@ class TaskLancamento:
             time.sleep(1)
 
             # Clica em Encaminhar para Finalizar e sair da tarefa
-            element = WebDriverWait(firefox, 5).until(  # 5s
+            element = WebDriverWait(firefox, 10).until(  # 5s
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'ul.dropdown-transicoes li a[title="Encaminhar para Finalizar e sair da tarefa"i]')))
             firefox.execute_script("arguments[0].click();", element)
 
-            time.sleep(5)
+            time.sleep(3)
 
             firefox.switch_to.default_content()
 
             # Localiza frame para o proximo processo
-            iframe = WebDriverWait(firefox, 30).until(
+            iframe = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located((By.ID, 'ngFrame')))
 
             firefox.switch_to.frame(iframe)
 
             time.sleep(1)
 
-            element = WebDriverWait(firefox, 5).until(
+            element = WebDriverWait(firefox, 10).until(
                 EC.presence_of_element_located(
                     (By.ID, 'inputPesquisaTarefas')))
             element.clear()
@@ -438,8 +446,7 @@ class TaskLancamento:
 
             return self.listProcessos
 
-
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, csv, dataBase, inicioTime):
 
         self.countEncaminhados = 0
 
@@ -466,13 +473,13 @@ class TaskLancamento:
 
             firefox.switch_to.frame(iframe)
 
-            element = WebDriverWait(firefox, 120).until(
+            element = WebDriverWait(firefox, 40).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
             firefox.execute_script("arguments[0].click();", element)
 
             # Registra horario que iniciou a tarefa
-            inicio = time.time()
+            # inicio = time.time()
 
             logging.info('---------------------------')
             logging.info('Tarefa localizada: ' + str(atividade))
@@ -517,7 +524,7 @@ class TaskLancamento:
             # Registra horario que finalizou a tarefa
             fim = time.time()
 
-            timeTotal = fim - inicio
+            timeTotal = fim - inicioTime
 
             timeTotal = float('{:.2f}'.format(timeTotal))
 

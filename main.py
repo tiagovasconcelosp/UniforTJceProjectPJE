@@ -15,6 +15,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 from src.Default.Controllers.Logging import Logging
+from src.Default.Models.DataCsv import DataCsv
 from src.Default.Views.FormMain import Form
 
 def resource_path(relative_path):
@@ -35,10 +36,14 @@ if __name__ == "__main__":
 
     caminhoLogExecucao = [i.text for i in root.iter('directoryLog')][0] + "\\"
 
+    caminhoDatabase = [i.text for i in root.iter('directoryData')][0] + "\\"
+
     # Iniciando Logs
     logging = Logging(caminhoLogExecucao)
     log = logging.createLogExecucao()
 
     log.info("Iniciando o robo.")
 
-    form = Form(log, root)
+    csv = DataCsv(caminhoDatabase)
+
+    form = Form(log, root, csv)

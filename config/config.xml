@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <title>Robô de Automações de Atividades PJE - 7.0</title>
-    <url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>
-    <!--<url>https://pje.tjce.jus.br/pje2grau/login.seam</url>-->
+    <!--<url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>-->
+    <url>https://pje.tjce.jus.br/pje2grau/login.seam</url>
     <directoryLog>Logs</directoryLog>
     <directoryImages>Images</directoryImages>
     <directoryDriver>Driver</directoryDriver>
+    <directoryData>Database</directoryData>
     <filterXLS>X</filterXLS>
     <columnRobo>0</columnRobo>
     <columnProcess>1</columnProcess>
@@ -48,6 +49,10 @@
         <recorrentes>
             <codDesc>Denegada Segurança</codDesc>
             <cod>446</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Embargo Parcialmente Acolhido</codDesc>
+            <cod>871</cod>
         </recorrentes>
     </dataRecorren>
 </config>

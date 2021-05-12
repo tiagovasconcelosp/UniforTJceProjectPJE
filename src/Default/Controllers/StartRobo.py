@@ -1,32 +1,33 @@
-####################################################
-####################################################
-### Projeto MPCE - Unifor - Universidade de Fortaleza
-### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-### Laboratório M02
-### Cientista-Chefe: Prof. Carlos Caminha
-### Bolsista Desenvolvedor do Projeto:
-### Tiago Vasconcelos
-### Email: tiagovasconcelosp@gmail.com
-####################################################
-####################################################
+# ###################################################
+# ###################################################
+# ## Projeto MPCE - Unifor - Universidade de Fortaleza
+# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+# ## Laboratório M02
+# ## Cientista-Chefe: Prof. Carlos Caminha
+# ## Bolsista Desenvolvedor do Projeto:
+# ## Tiago Vasconcelos
+# ## Email: tiagovasconcelosp@gmail.com
+# ###################################################
+# ###################################################
 
+import json
+import socket
 import sys
 import time
-import json
 from urllib import request
-import socket
-from getmac import get_mac_address
+
 import win32api
+from getmac import get_mac_address
 
 from src.Default.Controllers.Auth import Auth
 from src.Default.Controllers.OpenWebDriver import OpenWebDriver
-from src.Default.Models.OpenXls import OpenXls
 from src.Default.Controllers.Perfil import Perfil
 from src.Default.Controllers.TaskAguardandoSessaoJulgamento import TaskAguardandoSessaoJulgamento
 from src.Default.Controllers.TaskAssinaturaProcessos import TaskAssinaturaProcessos
 from src.Default.Controllers.TaskInclusaoProcessos import TaskInclusaoProcessos
-from src.Default.Controllers.TaskTransitarJulgado import TaskTransitarJulgado
 from src.Default.Controllers.TaskLancamento import TaskLancamento
+from src.Default.Controllers.TaskTransitarJulgado import TaskTransitarJulgado
+from src.Default.Models.OpenXls import OpenXls
 from src.Default.Views.FormResultado import FormResultado
 
 
@@ -38,7 +39,17 @@ class StartRobo:
     versao = 0.0
     webDriveName = ""
 
-    def startRobo(self, log, xml, dataForm):
+    # var
+    arrayVarRefDados = {
+        'qtd_clicks' : 0,
+        'qtd_trafeco_baixado_kb' : 0,
+        'qtd_erros_robo' : 0,
+    }
+
+    def startRobo(self, log, xml, dataForm, csv, dataBase):
+
+        # Contabiliza dados
+        self.qtd_clicks = 0
 
         # Especifica diretorio dos prints
         self.caminhoImages = [i.text for i in xml.iter('directoryImages')][0] + "\\"
@@ -66,9 +77,9 @@ class StartRobo:
         webdriver = OpenWebDriver(self.caminhoWebDrive, self.webDriveName, self.versao, self.url)
 
         # Inicia os Objetos
-
         firefox = webdriver.Open(log)
 
+        # Atividade de assinatura nao usa planilha
         if dataForm['atividade'] != 'Assinaturas de Processos para Juiz Titular':
             openXls = OpenXls(dataForm['caminhoArquivo'])  # Instancia o objeto passando o caminho do arquivo
             # Abre o arquivo XLS
@@ -84,6 +95,7 @@ class StartRobo:
         #log.info('O usuario utilizado foi: ' + dataForm['login'])
         log.info('A atividade selecionada foi: ' + dataForm['atividade'])
         log.info('O perfil selecionado foi: ' + dataForm['perfil'])
+        log.info('Driver: ' + str(self.webDriveName))
         log.info('---------------------------')
         log.info('Dados da maquina que executou: ')
 
@@ -94,7 +106,6 @@ class StartRobo:
             log.info('IP Internet: ' + str(jsn['query']))
         except:
             log.info('Nao foi possivel identificar endereco de IP. Falha na conexao.')
-            log.info('IP Internet: ')
 
 
         log.info('IP Local: ' + str(IP))
@@ -102,6 +113,9 @@ class StartRobo:
         log.info('Endereco MAC da maquina: ' + str(get_mac_address()))
         log.info('Versao do Navegador: ' + str(self.versao))
         log.info('---------------------------')
+
+        # Registra base
+        dataBase['endereco_mac'].append(str(get_mac_address()))
 
         # Inicia Autenticacao
         auth = Auth(firefox, log, self.caminhoImages)
@@ -128,17 +142,27 @@ class StartRobo:
                 or dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral':
             codPerfil = 5
 
+        # Registra horario que iniciou a tarefa
+        inicioTime = time.time()
+
         # Seleciona o perfil
         selecionarPerfil = Perfil(firefox, log, codPerfil, dataForm['perfil'])
+
+        # Contabiliza dados
+        # Começa com dois, pois para selecionar o perfil sao 2 clicks
+        self.arrayVarRefDados['qtd_clicks'] = 2
 
         time.sleep(1)
 
         if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
 
+            # Registra Base
+            dataBase['cod_atividade'].append('1')
+
             # Executa a tarefa Aguardando Sessão Julgamento
             executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
                                                                                openXls, xlsData,
-                                                                               '(TR) Aguardando sessão de julgamento', xml)
+                                                                               '(TR) Aguardando sessão de julgamento', xml, csv, dataBase, inicioTime, self.arrayVarRefDados)
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -151,11 +175,14 @@ class StartRobo:
 
         elif dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
 
+            # Registra Base
+            dataBase['cod_atividade'].append('2')
+
             # Inclusão de processos na relação de julgamento
             executaInclusaoProcessos = TaskInclusaoProcessos(firefox, self.caminhoImages, log,
                                                                                openXls, xlsData,
                                                                                'Inclusão de processos na relação de julgamento',
-                                                                               xml)
+                                                                               xml, csv, dataBase, inicioTime)
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
                 form = FormResultado(executaInclusaoProcessos.listProcessos, 1, log)
@@ -167,9 +194,12 @@ class StartRobo:
 
         elif dataForm['atividade'] == 'Assinaturas de Processos para Juiz Titular':
 
+            # Registra Base
+            dataBase['cod_atividade'].append('3')
+
             # Assinaturas de Processos para Juiz Titular
             executaAssinaturaProcessos = TaskAssinaturaProcessos(firefox, self.caminhoImages, log,
-                                                                               'Assinaturas de Processos para Juiz Titular')
+                                                                               'Assinaturas de Processos para Juiz Titular', csv, dataBase, inicioTime)
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
                 form = FormResultado(executaAssinaturaProcessos.listProcessos, 2, log)
@@ -181,11 +211,14 @@ class StartRobo:
 
         elif dataForm['atividade'] == 'Transitar em Julgado':
 
+            # Registra Base
+            dataBase['cod_atividade'].append('4')
+
             # Transitar em Julgado
             executaTransitarJulgado = TaskTransitarJulgado(firefox, self.caminhoImages, log,
                                                                                openXls, xlsData,
                                                                                '(TR) Julgados em sessão',
-                                                                               xml)
+                                                                               xml, csv, dataBase, inicioTime)
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
                 form = FormResultado(executaTransitarJulgado.listProcessos, 0, log)
@@ -197,14 +230,18 @@ class StartRobo:
 
         elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
 
+            # Registra Base
+            dataBase['cod_atividade'].append('5')
+
             # Caso haja dados incorretos na planilha, já será verificado e validado
+            # Chamada feita somente para validacao e nao perder tempo na execucao
             listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, log, xml)
 
             # Lançamento de movimentação TPU
             executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
                                                            openXls, xlsData,
                                                            '(TR) Lançar movimentações de julgamento',
-                                                           xml)
+                                                           xml, csv, dataBase, inicioTime)
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
                 form = FormResultado(executaLancamento.listProcessos, 0, log)

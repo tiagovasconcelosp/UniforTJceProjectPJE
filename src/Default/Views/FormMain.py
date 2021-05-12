@@ -1,14 +1,14 @@
-####################################################
-####################################################
-### Projeto MPCE - Unifor - Universidade de Fortaleza
-### Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-### Laboratório M02
-### Cientista-Chefe: Prof. Carlos Caminha
-### Bolsista Desenvolvedor do Projeto:
-### Tiago Vasconcelos
-### Email: tiagovasconcelosp@gmail.com
-####################################################
-####################################################
+# ###################################################
+# ###################################################
+# ## Projeto MPCE - Unifor - Universidade de Fortaleza
+# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
+# ## Laboratório M02
+# ## Cientista-Chefe: Prof. Carlos Caminha
+# ## Bolsista Desenvolvedor do Projeto:
+# ## Tiago Vasconcelos
+# ## Email: tiagovasconcelosp@gmail.com
+# ###################################################
+# ###################################################
 
 import os
 import tkinter as Tkinter
@@ -16,6 +16,7 @@ from tkinter import *
 from tkinter.filedialog import askopenfile
 from tkinter.ttk import Combobox
 from tkinter import messagebox
+import time
 
 from src.Default.Controllers.StartRobo import StartRobo
 
@@ -24,15 +25,51 @@ class Form(StartRobo):
 
     log = ""
     xml = ""
+    csv = ""
+    time_string = ""
     inFileTxt = ""
 
-    def __init__(self, log, xml):
+    dataBase = {}
+    inicioAppTime = 0
+
+    def __init__(self, log, xml, csv):
         self._log = log
         self._xml = xml
+        self._csv = csv
         self.criaForm()
+
+        # Tempo da aplicacao iniciada
+        named_tuple = time.localtime()
+        self.time_string = time.strftime("%d-%m-%Y %H:%M:%S", named_tuple)
+
+        # Registra horario que iniciou a tarefa
+        self.inicioAppTime = time.time()
+
+    def on_exit(signal_type):
+        print('caught signal:', str(signal_type))
+
+    def setDatabase(self):
+        self.dataBase = {
+                    'data_aplicacao' : [self.time_string],
+                    'qtd_processos' : [],
+                    'qtd_processos_nao_localizados' : [],
+                    'tempo_execucao_min' : [],
+                    'qtd_clicks' : [],
+                    'qtd_erros_tentativa_processo' : [],
+                    'endereco_mac' : [],
+                    'qtd_erros_robo' : [],
+                    'cod_atividade' : [],
+                    'tempo_uso_aplicacao_min' : [],
+                    'qtd_trafeco_baixado_kb' : [],
+        'cod_processo' : [],
+        'tempo_execucao_individual_min' : [],
+        'processo_localizado' : [], }
 
     def criaForm(self):
         form = Tkinter.Tk()
+
+        # Detecta se clicou no X
+        form.protocol("WM_DELETE_WINDOW", self.clickClose)
 
         getFld = Tkinter.IntVar()
 
@@ -71,7 +108,7 @@ class Form(StartRobo):
             "Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão",
             "Inclusão de processos na relação de julgamento",
             "Transitar em Julgado",
-            'Assinaturas de Processos para Juiz Titular',
+            "Assinaturas de Processos para Juiz Titular",
             "Lançamento de movimentação TPU",
         )
 
@@ -118,9 +155,22 @@ class Form(StartRobo):
         form.mainloop()
 
     def clickClose(self):
+
+        # Registra horario que finalizou a tarefa
+        fim = time.time()
+
+        timeTotal = fim - self.inicioAppTime
+
+        timeTotal = float('{:.2f}'.format(timeTotal))
+
+        # Registra base
+        self.dataBase['tempo_uso_aplicacao_min'] = str(timeTotal // 60)
+
         sys.exit(0)
 
     def clickOk(self, selectTask, selectPerfil):
+
+        self.setDatabase()
 
         dataForm = {'caminhoArquivo' : str(self._inFileTxt.get()),
                     'atividade' : str(selectTask.get()),
@@ -145,7 +195,7 @@ class Form(StartRobo):
                     selectTask.focus()
                     return 0
 
-        robo = self.startRobo(self._log, self._xml, dataForm)
+        robo = self.startRobo(self._log, self._xml, dataForm, self._csv, self.dataBase)
 
     def open_file(self):
 
