@@ -19,6 +19,7 @@ from src.Default.Controllers.Logging import Logging
 from src.Default.Models.Dataset import Dataset
 from src.Default.Views.FormMain import Form
 
+
 def resource_path(relative_path):
     """ Obtenha o caminho absoluto para o recurso, funciona para dev e para PyInstaller """
     try:
@@ -29,8 +30,8 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     xmlFile = resource_path("config\\config.xml")
     xmlFile = ET.parse(xmlFile)
     root = xmlFile.getroot()  # recupera a tag principal
