@@ -12,6 +12,7 @@
 
 import os
 import tkinter as Tkinter
+from random import randint
 from tkinter import *
 from tkinter.filedialog import askopenfile
 from tkinter.ttk import Combobox
@@ -28,6 +29,7 @@ class Form(StartRobo):
     xml = ""
     csv = ""
     time_string = ""
+    time_string2 = ""
     inFileTxt = ""
     form = ""
     fileName = ""
@@ -46,6 +48,8 @@ class Form(StartRobo):
 
         self.time_string = time.strftime("%d-%m-%Y %H:%M:%S", named_tuple)
 
+        self.time_string2 = time.strftime("%d%m%Y%H%M", named_tuple)
+
         # Registra horario que iniciou a tarefa
         self.inicioAppTime = time.time()
 
@@ -53,22 +57,24 @@ class Form(StartRobo):
 
     def setDatabase(self):
         self.dataBaseModel = {
+                    'id' : self.time_string2 + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)),
                     'data_aplicacao' : self.time_string,
                     'qtd_processos' : 0,
                     'qtd_processos_nao_localizados' : 0,
-                    'tempo_execucao_min' : 0,
+                    'tempo_execucao_sec' : 0,
                     'qtd_clicks' : 0,
                     'qtd_erros_tentativa_processo' : 0,
                     'endereco_mac' : 0,
                     'qtd_erros_robo' : 0,
                     'cod_atividade' : 0,
-                    'tempo_uso_aplicacao_min' : 0,
+                    'tempo_uso_aplicacao_sec' : 0,
                     'qtd_trafeco_baixado_kb' : 0,
                     'qtd_requisicao' : 0,
         'individual' : {
                 'cod_processo': [],
-                'tempo_execucao_individual_min': [],
                 'processo_localizado': [],
+                'processo_concluido': [],
+                'tempo_execucao_individual_sec': [],
             },
         }
 
@@ -171,7 +177,7 @@ class Form(StartRobo):
         timeTotal = float('{:.2f}'.format(timeTotal))
 
         # Registra base
-        self.dataBaseModel['tempo_uso_aplicacao_min'] = str(timeTotal // 60)
+        self.dataBaseModel['tempo_uso_aplicacao_sec'] = str(timeTotal)
 
         self.form.destroy()
 

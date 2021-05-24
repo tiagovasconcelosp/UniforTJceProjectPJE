@@ -314,7 +314,7 @@ class TaskAguardandoSessaoJulgamento:
             dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
             dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
             dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
-            dataBaseModel['tempo_execucao_min'] = str(timeTotal)
+            dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
 
             try:
                 firefox.close()

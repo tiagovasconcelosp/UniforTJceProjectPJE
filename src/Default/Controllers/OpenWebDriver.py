@@ -119,7 +119,7 @@ class OpenWebDriver():
 
             waitButtonLogin = WebDriverWait(firefox, 5)
 
-            self.proxy.new_har("Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(1000, 10000)), options={'captureHeaders': True, 'captureContent': True})
+            self.proxy.new_har("Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)), options={'captureHeaders': True, 'captureContent': True})
 
             logging.info("Navegador iniciado com sucesso.")
 
@@ -127,7 +127,7 @@ class OpenWebDriver():
             logging.exception('Falha ao iniciar o  navegador.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
-            # self.server.stop()
+            self.server.stop()
             os._exit(0)
             sys.exit(0)
 

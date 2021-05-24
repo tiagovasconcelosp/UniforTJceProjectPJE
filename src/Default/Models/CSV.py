@@ -19,15 +19,17 @@ class CSV:
     pathDatabaseGeral = "database-geral.csv"
     pathDatabaseIndividual = "database-individual.csv"
 
-    columnsGeral = ['data_aplicacao', 'qtd_processos', 'qtd_processos_nao_localizados', 'tempo_execucao_min',
+    columnsGeral = ['id', 'data_aplicacao', 'qtd_processos', 'qtd_processos_nao_localizados', 'tempo_execucao_sec',
                     'qtd_clicks',
                     'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
-                    'tempo_uso_aplicacao_min', 'qtd_trafeco_baixado_kb', 'qtd_requisicao']
+                    'tempo_uso_aplicacao_sec', 'qtd_trafeco_baixado_kb', 'qtd_requisicao']
 
-    columnsIndividual = ['data_aplicacao', 'cod_processo', 'processo_localizado', 'tempo_execucao_individual_min',
+    columnsIndividual = ['id', 'data_aplicacao', 'cod_processo', 'processo_localizado', 'tempo_execucao_sec',
                          'qtd_clicks',
                          'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
-                         'tempo_uso_aplicacao_min', 'qtd_trafeco_baixado_kb', 'data_execucao_individual', ]
+                         'tempo_uso_aplicacao_sec', 'qtd_trafeco_baixado_kb', 'qtd_requisicao',
+                         # Dados Individual
+                         'cod_processo', 'processo_localizado', 'processo_concluido', 'tempo_execucao_individual_sec',]
 
     def __init__(self, pathCsvExecucao):
         self._pathCsvExecucao = pathCsvExecucao
