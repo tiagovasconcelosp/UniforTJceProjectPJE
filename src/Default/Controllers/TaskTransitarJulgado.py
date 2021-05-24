@@ -25,16 +25,20 @@ class TaskTransitarJulgado:
     listProcessos = [[],[],[],]
     countEncaminhados = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime):
+    # Geração de dados
+    qtd_clicks_all = 0
+    qtd_erros_tentativa_processo_all = 0
+
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime)
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados)
 
     def localizarProcesso(self, firefox, numProcesso, dateProcesso, logging, caminhoImages):
 
-        registroProcessoEncontrado = 0
+        # registroProcessoEncontrado = 0
         registroErroPortal = 0
         countErro = 0
 
@@ -43,10 +47,19 @@ class TaskTransitarJulgado:
                 (By.ID, 'inputPesquisaTarefas')))
         element.clear()
 
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
+
         firefox.find_element(By.ID, "inputPesquisaTarefas").send_keys(numProcesso)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         element = firefox.find_element(By.CSS_SELECTOR, '#divActions button[title="Pesquisar"]')
         firefox.execute_script("arguments[0].click();", element)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         time.sleep(1)
 
@@ -57,6 +70,10 @@ class TaskTransitarJulgado:
 
         # Verifica se retornou mais de um processo
         if int(element) > 1:
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
             logging.info('---------------------------')
             logging.info('Foi encontrado mais de um resultado. Total: ' + str(element))
             logging.info('Evidenciando com o print da tela.')
@@ -72,6 +89,9 @@ class TaskTransitarJulgado:
                     (By.CSS_SELECTOR, 'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             logging.info('Processo ' + str(numProcesso) + ' foi localizado.')
             self.listProcessos[0].append(str(numProcesso))
 
@@ -85,6 +105,9 @@ class TaskTransitarJulgado:
             logging.info('Processo ' + str(numProcesso) + ' nao foi localizado.')
             # registroProcessoEncontrado += 1
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
             return self.listProcessos
 
         # if registroProcessoEncontrado == 0:
@@ -94,6 +117,9 @@ class TaskTransitarJulgado:
             EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div.header-wrapper div.toolbar-processo button[tooltip="Autos"i]')))
         firefox.execute_script("arguments[0].click();", element)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         time.sleep(3)
 
@@ -122,6 +148,9 @@ class TaskTransitarJulgado:
             logging.info('Houve um problema ao encontrar a nova tela.')
             logging.info('---------------------------')
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
             countErro += 1
 
         try:
@@ -130,6 +159,9 @@ class TaskTransitarJulgado:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'ul.menu-icones-topo a[name="navbar:linkAbaIncluirPeticoes1"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(2)
 
@@ -145,10 +177,16 @@ class TaskTransitarJulgado:
             image = Print(firefox, caminhoImages)
             countErro += 1
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
         try:
             # Seleciona o Tipo de Documento
             select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]'))
             select.select_by_visible_text('Certidão')
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(2)
         except:
@@ -158,10 +196,16 @@ class TaskTransitarJulgado:
             image = Print(firefox, caminhoImages)
             countErro += 1
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
         try:
             # Seleciona o Modelo
             select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
             select.select_by_visible_text('Certidão de Trânsito')
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(2)
         except:
@@ -172,6 +216,9 @@ class TaskTransitarJulgado:
                     firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
                 select.select_by_visible_text('Certidão de Trânsito*')
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 time.sleep(2)
             except:
                 logging.info('Houve um problema na etapa de selecionar o Modelo')
@@ -180,10 +227,16 @@ class TaskTransitarJulgado:
                 image = Print(firefox, caminhoImages)
                 countErro += 1
 
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
+
         try:
             # Seleciona o Tipo de Documento
             select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]'))
             select.select_by_visible_text('Certidão trânsito em julgado')
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(2)
         except:
@@ -193,12 +246,18 @@ class TaskTransitarJulgado:
             image = Print(firefox, caminhoImages)
             countErro += 1
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
         try:
             # Clica no botao Preencher Documentos
             element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'table#selectedEventsTable td a[name="selectedEventsTable:0:linkComplementos"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(3)
         except:
@@ -208,16 +267,25 @@ class TaskTransitarJulgado:
             image = Print(firefox, caminhoImages)
             countErro += 1
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
         try:
             # Inclui a Data
             firefox.find_element(By.CSS_SELECTOR, "div.clearfix div.col-sm-4 div.col-sm-12 input").send_keys(dateProcesso)
             time.sleep(1)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             # Clica no botao Ok
             element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div#complementosInner input#botaoGravarMovimento')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(3)
         except:
@@ -227,12 +295,18 @@ class TaskTransitarJulgado:
             image = Print(firefox, caminhoImages)
             countErro += 1
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
         try:
             # Clica no botao Salvar
             element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'input[value="Salvar"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(3)
         except:
@@ -242,12 +316,18 @@ class TaskTransitarJulgado:
             image = Print(firefox, caminhoImages)
             countErro += 1
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
         try:
             # Clica no botao Assinar Documento
             element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'input#btn-assinador')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             # Aguarda a Assinatura, demora em torno de 8s. Pois uso a leitura do certificado
             time.sleep(8)
@@ -257,6 +337,9 @@ class TaskTransitarJulgado:
             logging.info('Evidenciando com o print da tela.')
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
 
         try:
             firefox.close()
@@ -284,6 +367,9 @@ class TaskTransitarJulgado:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div.dropdown button#btnTransicoesTarefa')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
         except:
 
             time.sleep(10)
@@ -295,7 +381,13 @@ class TaskTransitarJulgado:
                         (By.CSS_SELECTOR, 'div.dropdown button#btnTransicoesTarefa')))
                 firefox.execute_script("arguments[0].click();", element)
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
             except:
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 logging.info('Houve um problema na etapa encaminhar para...')
                 logging.info('Evidenciando com o print da tela.')
@@ -313,9 +405,16 @@ class TaskTransitarJulgado:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para Cumprir acórdão"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
         except:
 
             logging.info('Tentando novamente "Encaminhar para Cumprir acórdão" . . .')
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
 
             time.sleep(10)
 
@@ -326,10 +425,17 @@ class TaskTransitarJulgado:
                         (By.CSS_SELECTOR,
                          'ul.dropdown-transicoes li a[title="Encaminhar para Cumprir acórdão"i]')))
                 firefox.execute_script("arguments[0].click();", element)
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
             except:
                 logging.info('Houve um problema na etapa Encaminhar para Cumprir acórdão...')
                 logging.info('Evidenciando com o print da tela.')
                 image = Print(firefox, caminhoImages)
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 registroErroPortal += 1
                 countErro += 1
@@ -355,9 +461,16 @@ class TaskTransitarJulgado:
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, 'button#btnTransicoesTarefa')))
                 firefox.execute_script("arguments[0].click();", element)
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
             except:
 
                 time.sleep(10)
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 try:
                     # Clica no botao Encaminhar para (ABRE AS OPCOES NOVAMENTE)
@@ -366,7 +479,14 @@ class TaskTransitarJulgado:
                             (By.CSS_SELECTOR, 'button#btnTransicoesTarefa')))
                     firefox.execute_script("arguments[0].click();", element)
 
+                    # Contabiliza dados
+                    self.qtd_clicks_all += 1
+
                 except:
+
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
+
                     logging.info('Houve um problema na etapa Encaminhar para... segunda etapa')
                     logging.info('Evidenciando com o print da tela.')
                     image = Print(firefox, caminhoImages)
@@ -382,11 +502,17 @@ class TaskTransitarJulgado:
                         (By.CSS_SELECTOR, 'ul li a[title="Encaminhar para 02 - Devolver para instância de origem"i]')))
                 firefox.execute_script("arguments[0].click();", element)
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 time.sleep(20)
 
             except:
 
                 logging.info('Tentando novamente "Encaminhar para 02 - Devolver para instância de origem" . . .')
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 time.sleep(10)
 
@@ -397,10 +523,18 @@ class TaskTransitarJulgado:
                             (By.CSS_SELECTOR,
                              'ul li a[title="Encaminhar para 02 - Devolver para instância de origem"i]')))
                     firefox.execute_script("arguments[0].click();", element)
+
+                    # Contabiliza dados
+                    self.qtd_clicks_all += 1
+
                     #############
                     time.sleep(20)
 
                 except:
+
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
+
                     logging.info('Houve um problema na etapa devolver para instancia de origem.')
                     logging.info('Evidenciando com o print da tela.')
                     image = Print(firefox, caminhoImages)
@@ -420,6 +554,9 @@ class TaskTransitarJulgado:
                 # Seleciona o Motivo da Remessa
                 select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.propertyView div.value select'))
                 select.select_by_visible_text('outros motivos')
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
 
                 time.sleep(3)
             except:
@@ -444,9 +581,15 @@ class TaskTransitarJulgado:
                     select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.propertyView div.value select'))
                     select.select_by_visible_text('outros motivos')
 
+                    # Contabiliza dados
+                    self.qtd_clicks_all += 1
+
                     time.sleep(3)
 
                 except:
+
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
 
                     logging.info('Houve um problema na etapa de selecionar o motivo da remessa.')
                     logging.info('Evidenciando com o print da tela.')
@@ -462,6 +605,9 @@ class TaskTransitarJulgado:
                          'input.btn-primary[value="Retornar para instância de origem"i]')))
                 firefox.execute_script("arguments[0].click();", element)
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 time.sleep(25)
 
                 # Deleta o ultimo registro
@@ -472,12 +618,6 @@ class TaskTransitarJulgado:
 
                 ##################################################################################
                 try:
-                    # Clica no botao Confirmar
-                    # element = WebDriverWait(firefox, 10).until(
-                    #     EC.presence_of_element_located(
-                    #         (By.CSS_SELECTOR,
-                    #          'input.btn-primary[value="Confirmar"i]')))
-
                     element = firefox.find_element(By.CSS_SELECTOR, 'input.btn-primary[value="Confirmar"i]')
 
                     time.sleep(15)
@@ -502,12 +642,18 @@ class TaskTransitarJulgado:
 
                 except:
                     logging.info('Nao houver alerta de documentos nao assinados nesse processo. Continuando . . .')
+
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
                 ##################################################################################
 
                 time.sleep(2)
 
             # Caso haja falha tentar mais uma vez o processo de envio
             except:
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 logging.info('Houver falha, tentando novamente . . .')
 
@@ -524,6 +670,9 @@ class TaskTransitarJulgado:
                              'input.btn-primary[value="Retornar para instância de origem"i]')))
                     firefox.execute_script("arguments[0].click();", element)
 
+                    # Contabiliza dados
+                    self.qtd_clicks_all += 1
+
                     time.sleep(25)
 
                     # Deleta o ultimo registro
@@ -534,12 +683,6 @@ class TaskTransitarJulgado:
 
                     ##################################################################################
                     try:
-                        # Clica no botao Confirmar
-                        # element = WebDriverWait(firefox, 10).until(
-                        #     EC.presence_of_element_located(
-                        #         (By.CSS_SELECTOR,
-                        #          'input.btn-primary[value="Confirmar"i]')))
-
                         element = firefox.find_element(By.CSS_SELECTOR, 'input.btn-primary[value="Confirmar"i]')
 
                         time.sleep(15)
@@ -563,6 +706,10 @@ class TaskTransitarJulgado:
                         # logging.info('Clicando em confirmar.')
 
                     except:
+
+                        # Contabiliza dados
+                        self.qtd_erros_tentativa_processo_all += 1
+
                         logging.info('Nao houver alerta de documentos nao assinados nesse processo. Continuando . . .')
                     ##################################################################################
 
@@ -573,6 +720,9 @@ class TaskTransitarJulgado:
                     logging.info('Houve um problema ao retornar para instancia de origem.')
                     logging.info('Evidenciando com o print da tela.')
                     image = Print(firefox, caminhoImages)
+
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
 
                     # Deleta o ultimo registro
                     del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
@@ -599,11 +749,15 @@ class TaskTransitarJulgado:
             return self.listProcessos
 
         else:
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
             logging.info('Houve um travamento do processo no sistema ao clica em Encaminhar para Cumprir acardao.')
 
             return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, csv, dataBase, inicioTime):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
 
         self.countEncaminhados = 0
 
@@ -617,13 +771,22 @@ class TaskTransitarJulgado:
                      'a[title="Abrir menu"i]')))
             element.click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
             
             firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
+
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
 
             iframe = WebDriverWait(firefox, 60).until(
                 EC.presence_of_element_located((By.ID, 'ngFrame')))
@@ -633,6 +796,9 @@ class TaskTransitarJulgado:
             element = WebDriverWait(firefox, 40).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
 
             # Registra horario que iniciou a tarefa
             # inicio = time.time()
@@ -710,7 +876,12 @@ class TaskTransitarJulgado:
 
             firefox.switch_to.default_content()
 
-            # print(self.listProcessos)
+            # Registra base
+            dataBaseModel['qtd_processos'] = (str(len(self.listProcessos[0])))
+            dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
+            dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
+            dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
+            dataBaseModel['tempo_execucao_min'] = str(timeTotal)
 
             try:
                 firefox.close()
@@ -721,8 +892,6 @@ class TaskTransitarJulgado:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
-            return self.listProcessos
-
         except:
 
             image = Print(firefox, caminhoImages)
@@ -730,5 +899,5 @@ class TaskTransitarJulgado:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-            # Retorna valor caso haja algum erro durante a execucao
-            return self.listProcessos
+        # Retorna valor caso haja algum erro durante a execucao
+        return self.listProcessos

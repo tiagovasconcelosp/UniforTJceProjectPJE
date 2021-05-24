@@ -9,7 +9,7 @@
 # ## Email: tiagovasconcelosp@gmail.com
 # ###################################################
 # ###################################################
-
+import os
 import sys
 import pandas as pd
 from unicodedata import normalize
@@ -17,6 +17,7 @@ from unicodedata import normalize
 class OpenXls:
 
     pathXls = ""
+    listProcessosInaptos = []
 
     def __init__(self, pathXls):
         self._pathXls = pathXls
@@ -37,6 +38,7 @@ class OpenXls:
             except:
                 firefox.quit()
 
+            os._exit(0)
             sys.exit(0)
 
     def getDataProcessAguardandoSessaoXLS(self, data, firefox, logging, xml):
@@ -73,6 +75,7 @@ class OpenXls:
                 except:
                     firefox.quit()
 
+                os._exit(0)
                 sys.exit(0)
 
         except:
@@ -85,6 +88,7 @@ class OpenXls:
             except:
                 firefox.quit()
 
+            os._exit(0)
             sys.exit(0)
 
     def getDataProcessInclusaoXLS(self, data, firefox, logging, xml):
@@ -202,6 +206,7 @@ class OpenXls:
                 except:
                     firefox.quit()
 
+                os._exit(0)
                 sys.exit(0)
 
         except:
@@ -214,6 +219,7 @@ class OpenXls:
             except:
                 firefox.quit()
 
+            os._exit(0)
             sys.exit(0)
 
     def getDataProcessTrasidarJulgadoXLS(self, data, firefox, logging, xml):
@@ -269,6 +275,7 @@ class OpenXls:
                     except:
                         firefox.quit()
 
+                    os._exit(0)
                     sys.exit(0)
             else:
                 logging.info('Planilha esta vazia. Finalizando o robo.')
@@ -279,6 +286,7 @@ class OpenXls:
                 except:
                     firefox.quit()
 
+                os._exit(0)
                 sys.exit(0)
 
         except:
@@ -291,6 +299,7 @@ class OpenXls:
             except:
                 firefox.quit()
 
+        os._exit(0)
         sys.exit(0)
 
     def getDataProcessLancamentoXLS(self, data, firefox, logging, xml):
@@ -358,13 +367,14 @@ class OpenXls:
                     target2 = normalize('NFKD', source2).encode('ASCII', 'ignore').decode('ASCII')
 
                     if (str(target1).upper()).strip() == (str(target2).upper()).strip():
-                        listDataResultado[x] = str(listDataRecorrenteXML[y][1])
+                        # listDataResultado[x] = str(listDataRecorrenteXML[y][1])
+                        listDataResultado[x] = listDataRecorrenteXML[y][1]
                     else:
-                        count+=1
+                        count += 1
 
                 # Usado para registrar caso nao encontre o respectivo codigo
                 if count == len(listDataRecorrenteXML):
-                    countAux+=1
+                    countAux += 1
 
                 count = 0
 
@@ -392,6 +402,7 @@ class OpenXls:
                         except:
                             firefox.quit()
 
+                        os._exit(0)
                         sys.exit(0)
                 else:
                     logging.info('Planilha esta vazia. Finalizando o robo.')
@@ -402,27 +413,60 @@ class OpenXls:
                     except:
                         firefox.quit()
 
+                    os._exit(0)
                     sys.exit(0)
             else:
-                logging.info('Houve divergencia ao elaborar os dados. Nao foi possivel comparar todos os Resultados com seus Codigos')
-                logging.info('Confira a divergencia na lista:')
+                if len(listDataProcessos) > 0:
+                    if len(listDataProcessos) == len(listDataResultado):
 
-                # [['3000323-07.2017.8.06.0004', '387'], ['3000746-69.2019.8.06.0012', '446']]
-                listAllProcess = []
+                        logging.info('Houve divergencia ao elaborar os dados. Nao foi possivel comparar todos os Resultados com todos os codigos.')
+                        logging.info('Confira a divergencia na lista:')
 
-                for x in range(len(listDataProcessos)):
-                    listAllProcess.append([listDataProcessos[x], listDataResultado[x]])
+                        # [['3000323-07.2017.8.06.0004', '387'], ['3000746-69.2019.8.06.0012', '446']]
+                        listAllProcess = []
+                        listAllProcess2 = []
 
-                logging.info(listAllProcess)
+                        for x in range(len(listDataProcessos)):
+                            if listDataResultado[x].isdigit():
+                                listAllProcess.append([listDataProcessos[x], listDataResultado[x]])
+                            else:
+                                listAllProcess2.append([listDataProcessos[x], listDataResultado[x]])
 
-                logging.shutdown()
+                        self.listProcessosInaptos = listAllProcess2
 
-                try:
-                    firefox.close()
-                except:
-                    firefox.quit()
+                        logging.info(listAllProcess2)
 
-                sys.exit(0)
+                        logging.info('Total de processo(s): ' + str(len(listAllProcess2)))
+
+                        logging.info('-------------------------------')
+
+                        logging.info('Elaboracao dos dados realizada com sucesso.')
+                        # [['3000323-07.2017.8.06.0004', '387'], ['3000746-69.2019.8.06.0012', '446']]
+                        return listAllProcess
+
+                    else:
+                        logging.info('Planilha esta com coluna Resultado faltando dados. Finalizando o robo.')
+                        logging.shutdown()
+
+                        try:
+                            firefox.close()
+                        except:
+                            firefox.quit()
+
+                        os._exit(0)
+                        sys.exit(0)
+                else:
+                    logging.info('Planilha esta vazia. Finalizando o robo.')
+                    logging.shutdown()
+
+                    try:
+                        firefox.close()
+                    except:
+                        firefox.quit()
+
+                    os._exit(0)
+                    sys.exit(0)
+
 
         except:
             logging.exception('Falha ao ler dados da planilha.')
@@ -434,4 +478,5 @@ class OpenXls:
             except:
                 firefox.quit()
 
+            os._exit(0)
             sys.exit(0)

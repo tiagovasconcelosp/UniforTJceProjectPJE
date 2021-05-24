@@ -28,14 +28,14 @@ class TaskAguardandoSessaoJulgamento:
     qtd_clicks_all = 0
     qtd_erros_tentativa_processo_all = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime, arrayVarRefDados):
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
         self.qtd_clicks_all = 0
         self.qtd_erros_tentativa_processo_all = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime, arrayVarRefDados)
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados)
 
     def localizarProcessoEmcaminhar(self, firefox, numProcesso, logging, caminhoImages):
 
@@ -71,6 +71,9 @@ class TaskAguardandoSessaoJulgamento:
                 logging.info('Evidenciando com o print da tela.')
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
             # Clica no primeiro processo retornado
             element = WebDriverWait(firefox, 10).until(
@@ -144,7 +147,10 @@ class TaskAguardandoSessaoJulgamento:
 
                 if self.countEnviaProcesso == 0:
                     self.countEnviaProcesso += 1
+
+                    # Contabiliza dados
                     self.qtd_erros_tentativa_processo_all += 1
+
                     # Deleta registro de verificacao de encaminhado para executar novamente
                     del (self.listProcessos[0][(len(self.listProcessos[0]) - 1)])
                     logging.info('---------------------------')
@@ -173,10 +179,16 @@ class TaskAguardandoSessaoJulgamento:
             self.listProcessos[2].append(str(numProcesso))
             firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
 
         return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, csv, dataBase, inicioTime, arrayVarRefDados):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
 
         self.countEncaminhados = 0
 
@@ -298,11 +310,11 @@ class TaskAguardandoSessaoJulgamento:
             firefox.switch_to.default_content()
 
             # Registra base
-            dataBase['qtd_processos'] = (str(len(self.listProcessos[0])))
-            dataBase['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
-            dataBase['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
-            dataBase['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
-            dataBase['tempo_execucao_min'] = str(timeTotal // 60)
+            dataBaseModel['qtd_processos'] = (str(len(self.listProcessos[0])))
+            dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
+            dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
+            dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
+            dataBaseModel['tempo_execucao_min'] = str(timeTotal)
 
             try:
                 firefox.close()
@@ -313,18 +325,12 @@ class TaskAguardandoSessaoJulgamento:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
-
         except:
-
-            arrayVarRefDados['qtd_erros_robo'] += 1
 
             image = Print(firefox, caminhoImages)
             logging.exception('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-            # Retorna valor caso haja algum erro durante a execucao
-
-
-
+        # Retorna valor caso haja algum erro durante a execucao
         return self.listProcessos

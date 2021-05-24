@@ -26,11 +26,15 @@ class TaskInclusaoProcessos:
     countIncluidos = 0
     countEnviaProcesso = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime):
+    # Geração de dados
+    qtd_clicks_all = 0
+    qtd_erros_tentativa_processo_all = 0
+
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime)
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados)
 
     def pecorreProcessoPauta(self, firefox, process, element, dayProcess, logging, caminhoImages):
 
@@ -102,6 +106,9 @@ class TaskInclusaoProcessos:
                         #############################################
                         logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
 
+                        # Contabiliza dados
+                        self.qtd_erros_tentativa_processo_all += 1
+
                         # Processo nao incluido
                         self.listProcessos[1].append(1)
 
@@ -139,6 +146,9 @@ class TaskInclusaoProcessos:
 
                 elementInput.send_keys(process[i][0])
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 time.sleep(2)
 
                 try:
@@ -147,8 +157,13 @@ class TaskInclusaoProcessos:
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR, 'div.rich-sb-common-container table.rich-sb-int-decor-table tr.richfaces_suggestionEntry')))
                     firefox.execute_script("arguments[0].click();", elementIn)
+                    # Contabiliza dados
+                    self.qtd_clicks_all += 1
                 except:
                     logging.info('Nao foi possivel clicar na sugestao de processo na busca.')
+
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
 
                 time.sleep(2)
 
@@ -158,6 +173,9 @@ class TaskInclusaoProcessos:
                         (By.XPATH,
                          '//*[@id="processoEmMesaForm:cadastrar"]')))
                 elementInn.click()
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
 
                 # Confirma o alerto caso exista
                 # Messagem: A classe exige pauta. Deseja continuar?
@@ -188,6 +206,9 @@ class TaskInclusaoProcessos:
                 # Limpa campo
                 elementInput.clear()
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 time.sleep(2)
 
             except:
@@ -199,10 +220,15 @@ class TaskInclusaoProcessos:
 
                 elementInput.clear()
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 time.sleep(2)
 
                 # Inclui lista de processos nao localizados
                 self.listProcessos[2].append(process[i][0])
+
+                self.qtd_erros_tentativa_processo_all += 1
 
                 image = Print(firefox, caminhoImages)
                 logging.info('---------------------------')
@@ -264,10 +290,13 @@ class TaskInclusaoProcessos:
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
 
-                try:
-                    firefox.close()
-                except:
-                    firefox.quit()
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
+
+                # try:
+                #     firefox.close()
+                # except:
+                #     firefox.quit()
 
                 return self.listProcessos
 
@@ -278,6 +307,9 @@ class TaskInclusaoProcessos:
                 logging.info('---------------------------')
 
                 element.click()
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
 
                 time.sleep(1)
 
@@ -307,6 +339,9 @@ class TaskInclusaoProcessos:
 
                                 sessao = 'Presencial'
 
+                                # Contabiliza dados
+                                self.qtd_clicks_all += 1
+
                             elif len(processVirtual) > 0 and countDef == 1:
 
                                 try:
@@ -321,11 +356,17 @@ class TaskInclusaoProcessos:
 
                                 sessao = 'Virtual'
 
+                                # Contabiliza dados
+                                self.qtd_clicks_all += 1
+
                             elif len(processPresencial) > 0:
                                 firefox.find_element(By.XPATH,
                                                      "//table[@id='sessaoRelacaoJulgamentoDt']/tbody/tr[1]/td[1]/a").click()
 
                                 sessao = 'Presencial'
+
+                                # Contabiliza dados
+                                self.qtd_clicks_all += 1
 
                             elif len(processVirtual) > 0:
                                 firefox.find_element(By.XPATH,
@@ -333,7 +374,13 @@ class TaskInclusaoProcessos:
 
                                 sessao = 'Virtual'
 
+                                # Contabiliza dados
+                                self.qtd_clicks_all += 1
+
                         except:
+
+                            # Contabiliza dados
+                            self.qtd_erros_tentativa_processo_all += 1
 
                             logging.info('Houve um problema a selecionar sessao correta. Por favor verificar se os dados da planilha estao corretos.')
                             logging.info('---------------------------')
@@ -342,14 +389,18 @@ class TaskInclusaoProcessos:
                             logging.info('Virtual:')
                             logging.info(str(processVirtual))
                             logging.info('---------------------------')
-                            try:
-                                firefox.close()
-                            except:
-                                firefox.quit()
+
+                            # try:
+                            #     firefox.close()
+                            # except:
+                            #     firefox.quit()
 
                             return self.listProcessos
 
                     firefox.find_element(By.CSS_SELECTOR, "span#fecharModal").click()
+
+                    # Contabiliza dados
+                    self.qtd_clicks_all += 1
 
                 except:
 
@@ -421,7 +472,11 @@ class TaskInclusaoProcessos:
                     logging.info('Sessao deste dia esta fechada. Dia: ' + str(dayProcess))
                     logging.info('Fechando janela aberta.')
 
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
+
                     return self.listProcessos
+
                 except:
 
                     try:
@@ -455,9 +510,15 @@ class TaskInclusaoProcessos:
                             # Para sair do objeto popup
                             firefox.switch_to.window(main_window_handle)
 
+                            # Contabiliza dados
+                            self.qtd_erros_tentativa_processo_all += 1
+
                             return self.listProcessos
 
                         pauta.click()
+
+                        # Contabiliza dados
+                        self.qtd_clicks_all += 1
 
                         ##########################################################
                         # Inicia a busca
@@ -480,6 +541,9 @@ class TaskInclusaoProcessos:
                                     (By.CSS_SELECTOR,
                                      'table#pautaJulgamentoList tbody tr')))
                         except:
+
+                            # Contabiliza dados
+                            self.qtd_erros_tentativa_processo_all += 1
 
                             logging.info('Nao existe processos para serem incluidos nessa sessao e nessa data. Data: ' + str(dayProcess))
                             logging.info('Os processos abaixos nao poderam ser localizados. A lista esta vazia.')
@@ -528,6 +592,9 @@ class TaskInclusaoProcessos:
                                  'form#j_id1620 input')))
                         element.click()
                         ##########################################################
+
+                        # Contabiliza dados
+                        self.qtd_clicks_all += 1
 
                         logging.info('Incluindo os processos...')
                         logging.info('---------------------------')
@@ -586,6 +653,9 @@ class TaskInclusaoProcessos:
                             logging.info('Finalizando a busca na sessao do dia: ' + str(dayProcess))
                             logging.info('---------------------------')
 
+                            # Contabiliza dados
+                            self.qtd_erros_tentativa_processo_all += 1
+
                             try:
                                 firefox.close()
                             except:
@@ -630,6 +700,9 @@ class TaskInclusaoProcessos:
                         return self.listProcessos
 
         except:
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
 
             image = Print(firefox, caminhoImages)
             logging.exception('Falha ao concluir a tarefa especificada.')
@@ -709,6 +782,9 @@ class TaskInclusaoProcessos:
                                  "//div[./text()='>']")))
                         element.click()
 
+                        # Contabiliza dados
+                        self.qtd_clicks_all += 1
+
                         logging.info('Avancando para o proximo mes.')
                         logging.info('---------------------------')
 
@@ -730,7 +806,7 @@ class TaskInclusaoProcessos:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, csv, dataBase, inicioTime):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
 
         try:
 
@@ -742,6 +818,9 @@ class TaskInclusaoProcessos:
                      'a[title="Abrir menu"i]')))
             element.click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             # selecao last-child nao funciona
@@ -752,6 +831,9 @@ class TaskInclusaoProcessos:
                      '#menu div.nivel-aberto ul li:nth-of-type(2) a')))
             element.click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             element = WebDriverWait(firefox, 20).until(
@@ -759,6 +841,9 @@ class TaskInclusaoProcessos:
                     (By.CSS_SELECTOR,
                      '#menu .nivel-overlay div.nivel-aberto ul li:first-child a')))
             element.click()
+
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
 
             time.sleep(1)
 
@@ -841,6 +926,15 @@ class TaskInclusaoProcessos:
 
             logging.info('---------------------------')
 
+            firefox.switch_to.default_content()
+
+            # Registra base
+            dataBaseModel['qtd_processos'] = (str(len(self.listProcessos[0])))
+            dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
+            dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
+            dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
+            dataBaseModel['tempo_execucao_min'] = str(timeTotal)
+
             try:
                 firefox.close()
             except:
@@ -850,8 +944,6 @@ class TaskInclusaoProcessos:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
-            return self.listProcessos
-
         except:
 
             image = Print(firefox, caminhoImages)
@@ -859,5 +951,5 @@ class TaskInclusaoProcessos:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-            # Retorna valor caso haja algum erro durante a execucao
-            return self.listProcessos
+        # Retorna valor caso haja algum erro durante a execucao
+        return self.listProcessos

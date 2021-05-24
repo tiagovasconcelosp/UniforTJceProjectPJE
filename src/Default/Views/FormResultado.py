@@ -36,6 +36,10 @@ class FormResultado:
     def criaForm(self, resultadoTarefa, valorDescricao):
 
         self.window = Tk()
+
+        # Detecta se clicou no X
+        self.window.protocol("WM_DELETE_WINDOW", self.clickClose)
+
         self.window.title("Resultado da Atividade Executada")
         self.window.geometry("644x700")
 
@@ -108,7 +112,7 @@ class FormResultado:
                             label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                             self.tab1.grid_columnconfigure(column, weight=1)
                         else:
-                            if valorDescricao == 0:
+                            if valorDescricao == 0 or valorDescricao == 3:
                                 descricao = 'Encaminhado'
                             elif valorDescricao == 1:
                                 descricao = 'Incluído'
@@ -131,7 +135,7 @@ class FormResultado:
                             if (resultadoTarefa[1][row-1]) == 0:
                                 Cor = 'green'
 
-                                if valorDescricao == 0:
+                                if valorDescricao == 0 or valorDescricao == 3:
                                     Texto = 'Enviado com sucesso'
                                 elif valorDescricao == 1:
                                     Texto = 'Incluído com sucesso'
@@ -145,8 +149,10 @@ class FormResultado:
                                     Texto = 'Houve falha ao conluir'
                                 elif valorDescricao == 2:
                                     Texto = 'Houve falha ao assinar'
+                                # elif valorDescricao == 3:
+                                #     Texto = 'Multi Recorrido/Recorrente'
                                 elif valorDescricao == 3:
-                                    Texto = 'Multi Recorrido/Recorrente'
+                                    Texto = 'Processo Inapto'
 
 
                             label = Label(self.tab1, text=Texto, bg=Cor, relief=RIDGE, fg="white", padx=3, pady=3)
@@ -252,6 +258,10 @@ class FormResultado:
 
     def onFrameConfigure(self, canvas):
         canvas.configure(scrollregion=canvas.bbox("all"))
+
+    def clickClose(self):
+
+        return self.window.destroy()
 
     def ScrollTab(self, tablayout, resultadoTarefa):
 

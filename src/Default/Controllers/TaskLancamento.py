@@ -25,12 +25,18 @@ class TaskLancamento:
     listProcessos = [[], [], [], ]
     countEncaminhados = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime):
+    # Geração de dados
+    qtd_clicks_all = 0
+    qtd_erros_tentativa_processo_all = 0
+
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime,
+                 arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, csv, dataBase, inicioTime)
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime,
+                     arrayVarRefDados)
 
     def localizarProcesso(self, firefox, numProcesso, codRecorrente, logging, caminhoImages):
 
@@ -40,16 +46,23 @@ class TaskLancamento:
                     (By.ID, 'inputPesquisaTarefas')))
             element.clear()
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             firefox.find_element(By.ID, "inputPesquisaTarefas").send_keys(numProcesso)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             element = firefox.find_element(By.CSS_SELECTOR, '#divActions button[title="Pesquisar"]')
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             time.sleep(1)
 
             # Valida se houve mais de um resultado
-            # caminho no ambiente da unifor
-            # element = firefox.find_element(By.CSS_SELECTOR, 'span[title="Quantidade de processos na tarefa"]').text
             element = firefox.find_element(By.CSS_SELECTOR,
                                            'div#divProcessosTarefa div.painel-listagem div.row span.badge').text
 
@@ -61,6 +74,9 @@ class TaskLancamento:
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
 
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
+
             time.sleep(2)
 
             # Clica no primeiro processo retornado
@@ -69,6 +85,9 @@ class TaskLancamento:
                     (By.CSS_SELECTOR,
                      'div.ui-datalist-content ul.ui-datalist-data li:first-child a.selecionarProcesso')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             logging.info('Processo ' + str(numProcesso) + ' foi localizado.')
             self.listProcessos[0].append(str(numProcesso))
@@ -85,6 +104,12 @@ class TaskLancamento:
             self.listProcessos[2].append(str(numProcesso))
             firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
             return self.listProcessos
 
         try:
@@ -93,6 +118,9 @@ class TaskLancamento:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div.header-wrapper div.toolbar-processo button[tooltip="Autos"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(3)
 
@@ -120,6 +148,9 @@ class TaskLancamento:
             logging.info('Houve um problema ao encontrar a nova tela.')
             logging.info('---------------------------')
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
             firefox.switch_to.default_content()
 
             # Localiza frame para o proximo processo
@@ -129,6 +160,9 @@ class TaskLancamento:
             firefox.switch_to.frame(iframe)
 
             firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             try:
                 firefox.close()
@@ -143,6 +177,9 @@ class TaskLancamento:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'form#navbar ul li.mais-detalhes a')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(1)
 
@@ -160,12 +197,15 @@ class TaskLancamento:
                 self.listProcessos[1].append(3)
 
                 logging.info('---------------------------')
-                logging.info('O processo '+ str(numProcesso) + ' possui mais de um Recorrente ou Recorrido.')
+                logging.info('O processo ' + str(numProcesso) + ' possui mais de um Recorrente ou Recorrido.')
                 logging.info('Evidenciando com o print da tela.')
                 logging.info('Interrompedo a execução desse processo.')
                 logging.info('Iniciando a busca pelo proximo processo.')
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 try:
                     firefox.close()
@@ -187,13 +227,16 @@ class TaskLancamento:
 
                 firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 return self.listProcessos
 
             nameRecorrente = firefox.find_element(By.CSS_SELECTOR,
-                                     'div#poloAtivo table tbody tr td span').text
+                                                  'div#poloAtivo table tbody tr td span').text
 
             nameRecorrido = firefox.find_element(By.CSS_SELECTOR,
-                                     'div#poloPassivo table tbody tr td span').text
+                                                 'div#poloPassivo table tbody tr td span').text
 
             logging.info('---------------------------')
             logging.info('Encontrado o recorrente: ' + str(nameRecorrente))
@@ -205,6 +248,9 @@ class TaskLancamento:
             logging.info('Houve um erro ao procurar pela informacoes do recorrente e recorrido.')
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
+
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
 
             # Deleta o ultimo registro
             del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
@@ -261,6 +307,9 @@ class TaskLancamento:
                                  'form#taskInstanceForm div.rich-panel-body span div.col-sm-6 div.col-sm-12 fieldset input.inputText').send_keys(
                 codRecorrente)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             # Clica no botao pesquisar
             element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
@@ -268,11 +317,14 @@ class TaskLancamento:
                      'form#taskInstanceForm div.rich-panel-body span div.col-sm-6 div.col-sm-12 fieldset input.btn-primary')))
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             time.sleep(3)
 
             try:
                 element = firefox.find_element(By.XPATH,
-                                         "*//span[contains(., '(" + codRecorrente + ")')]").text
+                                               "*//span[contains(., '(" + codRecorrente + ")')]").text
 
                 logging.info('---------------------------')
                 logging.info('Codigo localizado: ' + str(element))
@@ -281,12 +333,15 @@ class TaskLancamento:
             except:
 
                 logging.info('---------------------------')
-                logging.info('Nao foi possivel encontrar o codigo de lancamento para o processo: '+ str(numProcesso))
+                logging.info('Nao foi possivel encontrar o codigo de lancamento para o processo: ' + str(numProcesso))
                 logging.info('Evidenciando com o print da tela.')
                 logging.info('Interrompedo a execução desse processo.')
                 logging.info('Iniciando a busca pelo proximo processo.')
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 firefox.switch_to.default_content()
 
@@ -297,6 +352,9 @@ class TaskLancamento:
                 firefox.switch_to.frame(iframe)
 
                 firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
 
                 return self.listProcessos
 
@@ -309,12 +367,15 @@ class TaskLancamento:
 
             # Seleciona o elemento clicavel para incluir o codigo de lancamento
             element = firefox.find_element(By.CSS_SELECTOR,
-                                            'form#taskInstanceForm .value' + elementDiv + ' td:last-child')
+                                           'form#taskInstanceForm .value' + elementDiv + ' td:last-child')
 
             # Usa funcoes para simular o uso do mouse, nao é possivel executar por script
             actions = ActionChains(firefox)
             actions.click(on_element=element)
             actions.perform()
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             # Verificar se tem botao "preencher complemento"
             try:
@@ -324,11 +385,17 @@ class TaskLancamento:
                          'a[title="Preencher complementos"i]')))
                 firefox.execute_script("arguments[0].click();", element)
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 time.sleep(1)
 
                 # Seleciona o recorrente
                 select = Select(firefox.find_element(By.CSS_SELECTOR, "form#taskInstanceForm select"))
                 select.select_by_visible_text(nameRecorrente)
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
 
                 # Clica em 'Ok'
                 element = WebDriverWait(firefox, 3).until(
@@ -336,6 +403,9 @@ class TaskLancamento:
                         (By.CSS_SELECTOR,
                          'form#taskInstanceForm  input[value="OK"i]')))
                 firefox.execute_script("arguments[0].click();", element)
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
 
                 logging.info('---------------------------')
                 logging.info('O codigo lancado possui complemento.')
@@ -356,8 +426,11 @@ class TaskLancamento:
             element = WebDriverWait(firefox, 5).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
-                        'div.actionButtons input[value="Salvar"i]')))
+                     'div.actionButtons input[value="Salvar"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(3)
 
@@ -381,6 +454,9 @@ class TaskLancamento:
                     (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             time.sleep(1)
 
             # Clica em Encaminhar para Finalizar e sair da tarefa
@@ -389,6 +465,9 @@ class TaskLancamento:
                     (By.CSS_SELECTOR,
                      'ul.dropdown-transicoes li a[title="Encaminhar para Finalizar e sair da tarefa"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             time.sleep(3)
 
@@ -406,6 +485,9 @@ class TaskLancamento:
                 EC.presence_of_element_located(
                     (By.ID, 'inputPesquisaTarefas')))
             element.clear()
+
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
 
             # Deleta o ultimo registro
             del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
@@ -427,6 +509,9 @@ class TaskLancamento:
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
 
+            # Contabiliza dados
+            self.qtd_erros_tentativa_processo_all += 1
+
             firefox.switch_to.default_content()
 
             # Localiza frame para o proximo processo
@@ -437,6 +522,9 @@ class TaskLancamento:
 
             firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             # Deleta o ultimo registro
             del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
             # Inclui novo registro
@@ -446,7 +534,8 @@ class TaskLancamento:
 
             return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, csv, dataBase, inicioTime):
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, dataset, dataBaseModel,
+                inicioTime, arrayVarRefDados):
 
         self.countEncaminhados = 0
 
@@ -460,13 +549,22 @@ class TaskLancamento:
                      'a[title="Abrir menu"i]')))
             element.click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
+
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
 
             iframe = WebDriverWait(firefox, 60).until(
                 EC.presence_of_element_located((By.ID, 'ngFrame')))
@@ -477,6 +575,9 @@ class TaskLancamento:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
             firefox.execute_script("arguments[0].click();", element)
+
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
 
             # Registra horario que iniciou a tarefa
             # inicio = time.time()
@@ -555,7 +656,12 @@ class TaskLancamento:
 
             firefox.switch_to.default_content()
 
-            # print(self.listProcessos)
+            # Registra base
+            dataBaseModel['qtd_processos'] = (str(len(self.listProcessos[0])))
+            dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
+            dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
+            dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
+            dataBaseModel['tempo_execucao_min'] = str(timeTotal)
 
             try:
                 firefox.close()
@@ -566,8 +672,6 @@ class TaskLancamento:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
-            return self.listProcessos
-
         except:
 
             image = Print(firefox, caminhoImages)
@@ -575,5 +679,5 @@ class TaskLancamento:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-            # Retorna valor caso haja algum erro durante a execucao
-            return self.listProcessos
+        # Retorna valor caso haja algum erro durante a execucao
+        return self.listProcessos

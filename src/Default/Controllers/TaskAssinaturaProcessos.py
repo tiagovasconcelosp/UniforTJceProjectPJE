@@ -33,12 +33,17 @@ class TaskAssinaturaProcessos:
     # Etiqueta a ser buscada
     etiqueta = "ASSINAR"
 
-    def __init__(self, firefox, caminhoImages, logging, atividade, csv, dataBase, inicioTime):
+
+    # Geração de dados
+    qtd_clicks_all = 0
+    qtd_erros_tentativa_processo_all = 0
+
+    def __init__(self, firefox, caminhoImages, logging, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, atividade, csv, dataBase, inicioTime)
+        self.Execute(firefox, caminhoImages, logging, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados)
 
     def checkQtdProcessosAtividade(self, firefox, logging, caminhoImages):
 
@@ -80,6 +85,9 @@ class TaskAssinaturaProcessos:
                                 (By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + self.listAtividades[i] + '"i]')))
                         firefox.execute_script("arguments[0].click();", element)
 
+                        # Contabiliza dados
+                        self.qtd_clicks_all += 1
+
                         logging.info('Iniciando tarefa: ' + str(self.listAtividades[i]))
 
                         self.assinaAtividadeEmbDeclaracao(firefox, logging, caminhoImages, i)
@@ -101,6 +109,9 @@ class TaskAssinaturaProcessos:
                                  '#divTarefasPendentes .menuItem a[title="' + self.listAtividades[i] + '"i]')))
                         firefox.execute_script("arguments[0].click();", element)
 
+                        # Contabiliza dados
+                        self.qtd_clicks_all += 1
+
                         logging.info('Iniciando tarefa: ' + str(self.listAtividades[i]))
 
                         self.assinaAtividadeInteiroTeor(firefox, logging, caminhoImages, i)
@@ -110,6 +121,9 @@ class TaskAssinaturaProcessos:
             except:
                 logging.info('---------------------------')
                 logging.info('Nao foi encontrado pendencias na atividade: ' + str(self.listAtividades[i]))
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 try:
 
@@ -124,6 +138,9 @@ class TaskAssinaturaProcessos:
                         element = firefox.find_element(By.CSS_SELECTOR, 'ul#menu li#liHome a')
                         firefox.execute_script("arguments[0].click();", element)
 
+                        # Contabiliza dados
+                        self.qtd_clicks_all += 1
+
                         time.sleep(3)
 
                         # Para nao entrar mais nessa atividade
@@ -136,6 +153,10 @@ class TaskAssinaturaProcessos:
                         # Repete o processo de busca por processos - Não faz sentido implementar a mesma tarefa
                         self.checkQtdProcessosAtividade(firefox, logging, caminhoImages)
                 except:
+
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
+
                     logging.info('Houve um erro ao retornar a atividade.')
                     logging.info('---------------------------')
 
@@ -151,11 +172,17 @@ class TaskAssinaturaProcessos:
                 (By.ID, 'inputPesquisaTarefas')))
         element.clear()
 
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
+
         time.sleep(1)
 
         # Abre filtro da pesquisa para etiquetas
         element = firefox.find_element(By.CSS_SELECTOR, 'button#dropdown-filtro-tarefas')
         firefox.execute_script("arguments[0].click();", element)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         time.sleep(1)
 
@@ -164,15 +191,24 @@ class TaskAssinaturaProcessos:
 
         firefox.find_element(By.ID, "porEtiqueta").send_keys(self.etiqueta)
 
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
+
         # Clica em pesquisar processos
         element = firefox.find_element(By.CSS_SELECTOR, '.col-sm-12 button.btn-pesquisar-filtro')
         firefox.execute_script("arguments[0].click();", element)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         time.sleep(1) # Verificar time em lista grande de processos
 
         # Fecha filtro da pesquisa
         element = firefox.find_element(By.CSS_SELECTOR, 'button#dropdown-filtro-tarefas')
         firefox.execute_script("arguments[0].click();", element)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         #############################################################################################################
 
@@ -211,6 +247,9 @@ class TaskAssinaturaProcessos:
                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(1) a.selecionarProcesso')))
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             logging.info('---------------------------')
             logging.info('Abrindo o processo: ' + e[1])
 
@@ -230,6 +269,9 @@ class TaskAssinaturaProcessos:
 
                 firefox.execute_script("arguments[0].click();", ass)
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 logging.info('Processo assinado.')
                 logging.info('---------------------------')
 
@@ -239,6 +281,9 @@ class TaskAssinaturaProcessos:
                 self.listProcessos[1].append(0)
 
             except:
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 logging.info('---------------------------')
                 logging.info('Nao foi possivel assinar o processo.')
@@ -269,17 +314,26 @@ class TaskAssinaturaProcessos:
         element = firefox.find_element(By.CSS_SELECTOR, 'button#dropdown-filtro-tarefas')
         firefox.execute_script("arguments[0].click();", element)
 
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
+
         time.sleep(1)
 
         # Clica em limpar
         element = firefox.find_element(By.CSS_SELECTOR, '.col-sm-12 button.ml-5')
         firefox.execute_script("arguments[0].click();", element)
 
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
+
         time.sleep(1)
 
         # Fecha filtro da pesquisa
         element = firefox.find_element(By.CSS_SELECTOR, '#divActions button[title="Pesquisar"]')
         firefox.execute_script("arguments[0].click();", element)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         time.sleep(2)
 
@@ -288,6 +342,9 @@ class TaskAssinaturaProcessos:
         # Volta para a lista de tarefas
         element = firefox.find_element(By.CSS_SELECTOR, 'ul#menu li#liHome a')
         firefox.execute_script("arguments[0].click();", element)
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         time.sleep(3)
 
@@ -310,6 +367,9 @@ class TaskAssinaturaProcessos:
             EC.presence_of_element_located(
                 (By.ID, 'inputPesquisaTarefas')))
         element.clear()
+
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
 
         time.sleep(1)
 
@@ -347,6 +407,9 @@ class TaskAssinaturaProcessos:
                      'div.ui-datalist-content ul.ui-datalist-data li:nth-child(1) a.selecionarProcesso')))
             firefox.execute_script("arguments[0].click();", element)
 
+            # Contabiliza dados
+            self.qtd_clicks_all += 1
+
             logging.info('---------------------------')
             logging.info('Abrindo o processo: ' + e[1])
 
@@ -377,6 +440,9 @@ class TaskAssinaturaProcessos:
 
                 firefox.execute_script("arguments[0].click();", ass)
 
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
                 logging.info('Processo assinado.')
                 logging.info('---------------------------')
 
@@ -386,6 +452,9 @@ class TaskAssinaturaProcessos:
                 self.listProcessos[1].append(0)
 
             except:
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
                 logging.info('---------------------------')
                 logging.info('Nao foi possivel assinar o processo.')
@@ -414,6 +483,9 @@ class TaskAssinaturaProcessos:
         element = firefox.find_element(By.CSS_SELECTOR, 'ul#menu li#liHome a')
         firefox.execute_script("arguments[0].click();", element)
 
+        # Contabiliza dados
+        self.qtd_clicks_all += 1
+
         # time.sleep(3)
 
         # Para nao entrar mais nessa atividade
@@ -426,7 +498,7 @@ class TaskAssinaturaProcessos:
         # Repete o processo de busca por processos
         self.checkQtdProcessosAtividade(firefox, logging, caminhoImages)
 
-    def Execute(self, firefox, caminhoImages, logging, atividade, csv, dataBase, inicioTime):
+    def Execute(self, firefox, caminhoImages, logging, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
 
         self.countEncaminhados = 0
 
@@ -440,13 +512,22 @@ class TaskAssinaturaProcessos:
                      'a[title="Abrir menu"i]')))
             element.click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
+
             time.sleep(1)
 
             firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
+
+            # Contabiliza dados
+            arrayVarRefDados['qtd_clicks'] += 1
 
             iframe = WebDriverWait(firefox, 60).until(
                 EC.presence_of_element_located((By.ID, 'ngFrame')))
@@ -513,6 +594,13 @@ class TaskAssinaturaProcessos:
 
             firefox.switch_to.default_content()
 
+            # Registra base
+            dataBaseModel['qtd_processos'] = (str(len(self.listProcessos[0])))
+            dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
+            dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
+            dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
+            dataBaseModel['tempo_execucao_min'] = str(timeTotal)
+
             try:
                 firefox.close()
             except:
@@ -522,8 +610,6 @@ class TaskAssinaturaProcessos:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
-            return self.listProcessos
-
         except:
 
             image = Print(firefox, caminhoImages)
@@ -531,5 +617,5 @@ class TaskAssinaturaProcessos:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-            # Retorna valor caso haja algum erro durante a execucao
-            return self.listProcessos
+        # Retorna valor caso haja algum erro durante a execucao
+        return self.listProcessos

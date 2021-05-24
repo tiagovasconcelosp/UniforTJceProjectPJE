@@ -95,6 +95,22 @@
   },
   {
    "optionDest": "hiddenimports",
+   "value": "sys"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "win32api"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "unicodedata"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "tkinter"
+  },
+  {
+   "optionDest": "hiddenimports",
    "value": "os"
   },
   {
@@ -104,6 +120,18 @@
   {
    "optionDest": "hiddenimports",
    "value": "urllib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "datetime"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "csv"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "io"
   },
   {
    "optionDest": "hiddenimports",
@@ -119,7 +147,51 @@
   },
   {
    "optionDest": "hiddenimports",
+   "value": "re"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "random"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pandas._libs.tslib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "browsermobproxy"
+  },
+  {
+   "optionDest": "hiddenimports",
    "value": "selenium.webdriver.common.by"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.keys"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.firefox.options"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.action_chains"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.support.wait"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.support.select"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.support"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium"
   },
   {
    "optionDest": "hiddenimports",
@@ -132,10 +204,6 @@
   {
    "optionDest": "hiddenimports",
    "value": "src.Default.Controllers.OpenWebDriver"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "src.Default.Models.OpenXls"
   },
   {
    "optionDest": "hiddenimports",
@@ -155,54 +223,6 @@
   },
   {
    "optionDest": "hiddenimports",
-   "value": "selenium.webdriver.common.keys"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "pandas._libs.tslib"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "win32api"
-  },
-  {
-   "optionDest": "datas",
-   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/config;config/"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "sys"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "selenium.webdriver.firefox.options"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "datetime"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "io"
-  },
-  {
-   "optionDest": "datas",
-   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/images;images/"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "unicodedata"
-  },
-  {
-   "optionDest": "hiddenimports",
-   "value": "tkinter"
-  },
-  {
-   "optionDest": "datas",
-   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/icon_pje.ico;."
-  },
-  {
-   "optionDest": "hiddenimports",
    "value": "src.Default.Views.FormResultado"
   },
   {
@@ -211,15 +231,39 @@
   },
   {
    "optionDest": "hiddenimports",
-   "value": "selenium.webdriver.common.action_chains"
+   "value": "src.Default.Models.OpenXls"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Models.CSV"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Models.Dataset"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/config;config/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/images;images/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/icon_pje.ico;."
   },
   {
    "optionDest": "datas",
    "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/database;database/"
   },
   {
-   "optionDest": "hiddenimports",
-   "value": "src.Default.Models.DataCsv"
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/traffic;traffic/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/browsermobproxy;browsermobproxy/"
   }
  ],
  "nonPyinstallerOptions": {

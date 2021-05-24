@@ -9,7 +9,7 @@
 ### Email: tiagovasconcelosp@gmail.com
 ####################################################
 ####################################################
-
+import os
 import sys
 
 from selenium.webdriver.common.by import By
@@ -40,5 +40,5 @@ class Auth:
             logging.exception('Falha realizar autenticacao.')
             logging.info('Finalizando o robo.')
             logging.shutdown()
-            # firefox.quit()
+            os._exit(0)
             sys.exit(0)

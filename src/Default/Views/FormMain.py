@@ -17,6 +17,7 @@ from tkinter.filedialog import askopenfile
 from tkinter.ttk import Combobox
 from tkinter import messagebox
 import time
+import sys
 
 from src.Default.Controllers.StartRobo import StartRobo
 
@@ -28,56 +29,62 @@ class Form(StartRobo):
     csv = ""
     time_string = ""
     inFileTxt = ""
+    form = ""
+    fileName = ""
 
-    dataBase = {}
+    dataBaseModel = {}
     inicioAppTime = 0
 
-    def __init__(self, log, xml, csv):
+    def __init__(self, log, xml, dataset, fileName):
         self._log = log
         self._xml = xml
-        self._csv = csv
-        self.criaForm()
+        self._dataset = dataset
+        self._fileName = fileName
 
         # Tempo da aplicacao iniciada
         named_tuple = time.localtime()
+
         self.time_string = time.strftime("%d-%m-%Y %H:%M:%S", named_tuple)
 
         # Registra horario que iniciou a tarefa
         self.inicioAppTime = time.time()
 
-    def on_exit(signal_type):
-        print('caught signal:', str(signal_type))
+        self.criaForm()
 
     def setDatabase(self):
-        self.dataBase = {
-                    'data_aplicacao' : [self.time_string],
-                    'qtd_processos' : [],
-                    'qtd_processos_nao_localizados' : [],
-                    'tempo_execucao_min' : [],
-                    'qtd_clicks' : [],
-                    'qtd_erros_tentativa_processo' : [],
-                    'endereco_mac' : [],
-                    'qtd_erros_robo' : [],
-                    'cod_atividade' : [],
-                    'tempo_uso_aplicacao_min' : [],
-                    'qtd_trafeco_baixado_kb' : [],
-        'cod_processo' : [],
-        'tempo_execucao_individual_min' : [],
-        'processo_localizado' : [], }
+        self.dataBaseModel = {
+                    'data_aplicacao' : self.time_string,
+                    'qtd_processos' : 0,
+                    'qtd_processos_nao_localizados' : 0,
+                    'tempo_execucao_min' : 0,
+                    'qtd_clicks' : 0,
+                    'qtd_erros_tentativa_processo' : 0,
+                    'endereco_mac' : 0,
+                    'qtd_erros_robo' : 0,
+                    'cod_atividade' : 0,
+                    'tempo_uso_aplicacao_min' : 0,
+                    'qtd_trafeco_baixado_kb' : 0,
+                    'qtd_requisicao' : 0,
+        'individual' : {
+                'cod_processo': [],
+                'tempo_execucao_individual_min': [],
+                'processo_localizado': [],
+            },
+        }
 
     def criaForm(self):
-        form = Tkinter.Tk()
+        self.form = Tkinter.Tk()
 
         # Detecta se clicou no X
-        form.protocol("WM_DELETE_WINDOW", self.clickClose)
+        self.form.protocol("WM_DELETE_WINDOW", self.clickClose)
 
         getFld = Tkinter.IntVar()
 
-        form.iconbitmap(self.resource_path('icon_pje.ico'))
+        self.form.iconbitmap(self.resource_path('icon_pje.ico'))
 
-        form.wm_title([i.text for i in self._xml.iter('title')][0])
+        self.form.wm_title([i.text for i in self._xml.iter('title')][0])
 
-        frame = Tkinter.Frame(form, relief=RAISED, borderwidth=1)
+        frame = Tkinter.Frame(self.form, relief=RAISED, borderwidth=1)
         frame.pack(fill=BOTH, expand=True)
 
         stepOne = Tkinter.LabelFrame(frame, text=" 1. Informe a localização da planilha: ")
@@ -127,8 +134,8 @@ class Form(StartRobo):
             # "5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Subitituto",
             # "6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Subitituto",
             # "05ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
-            'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal de Iguatu / Juiz de Direito',
-            'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal do Crato / Juiz Substituto',
+            # 'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal de Iguatu / Juiz de Direito',
+            # 'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal do Crato / Juiz Substituto',
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral",
@@ -147,12 +154,12 @@ class Form(StartRobo):
         selectPerfil.grid(row=7, sticky='W', padx=5, pady=2, ipady=2)
         # #########################################################
 
-        closeButton = Tkinter.Button(form, text="Fechar", command=lambda: self.clickClose())
+        closeButton = Tkinter.Button(self.form, text="Fechar", command=lambda: self.clickClose())
         closeButton.pack(side=RIGHT, padx=5, pady=5)                                                       # Usado com autenticacao com login
-        okButton = Tkinter.Button(form, text="OK", command=lambda: self.clickOk(selectTask, selectPerfil)) # self.clickOk(outTblTxt, outTblTxtS, selectTask, selectPerfil, selectDrive)
+        okButton = Tkinter.Button(self.form, text="OK", command=lambda: self.clickOk(selectTask, selectPerfil)) # self.clickOk(outTblTxt, outTblTxtS, selectTask, selectPerfil, selectDrive)
         okButton.pack(side=RIGHT)
 
-        form.mainloop()
+        self.form.mainloop()
 
     def clickClose(self):
 
@@ -164,8 +171,13 @@ class Form(StartRobo):
         timeTotal = float('{:.2f}'.format(timeTotal))
 
         # Registra base
-        self.dataBase['tempo_uso_aplicacao_min'] = str(timeTotal // 60)
+        self.dataBaseModel['tempo_uso_aplicacao_min'] = str(timeTotal // 60)
 
+        self.form.destroy()
+
+        self._log.info('Finalizando o robo.')
+
+        os._exit(0)
         sys.exit(0)
 
     def clickOk(self, selectTask, selectPerfil):
@@ -195,7 +207,7 @@ class Form(StartRobo):
                     selectTask.focus()
                     return 0
 
-        robo = self.startRobo(self._log, self._xml, dataForm, self._csv, self.dataBase)
+        robo = self.startRobo(self._log, self._xml, dataForm, self._dataset, self.dataBaseModel, self._fileName)
 
     def open_file(self):
 
