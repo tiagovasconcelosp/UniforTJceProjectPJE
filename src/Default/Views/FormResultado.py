@@ -118,6 +118,8 @@ class FormResultado:
                                 descricao = 'Incluído'
                             elif valorDescricao == 2:
                                 descricao = 'Assinado'
+                            else:
+                                descricao = '-------'
 
                             label = Label(self.tab1, text=descricao, bg="#f0f0f0", fg="black", relief=RAISED,
                                               padx=3, pady=3)
@@ -141,6 +143,8 @@ class FormResultado:
                                     Texto = 'Incluído com sucesso'
                                 elif valorDescricao == 2:
                                     Texto = 'Assinado com sucesso'
+                                else:
+                                    descricao = '-------'
 
                             else:
                                 Cor = 'red'
@@ -153,6 +157,8 @@ class FormResultado:
                                 #     Texto = 'Multi Recorrido/Recorrente'
                                 elif valorDescricao == 3:
                                     Texto = 'Processo Inapto'
+                                else:
+                                    Texto = '-------'
 
 
                             label = Label(self.tab1, text=Texto, bg=Cor, relief=RIDGE, fg="white", padx=3, pady=3)

@@ -15,6 +15,7 @@ import os
 import socket
 import sys
 import time
+from random import randint
 from urllib import request
 
 import win32api
@@ -144,10 +145,10 @@ class StartRobo:
 
         # Registra base
         dataBaseModel['endereco_mac'] = str(get_mac_address())
+        dataBaseModel['id'] = dataBaseModel['id'] + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99))
 
         # Abrir WebDriver
-        webdriver = OpenWebDriver(self.caminhoWebDrive, self.webDriveName, self.versao, self.url, self.proxy,
-                                  self.traffic, fileName)
+        webdriver = OpenWebDriver(self.caminhoWebDrive, self.webDriveName, self.versao, self.url, self.proxy)
 
         # Inicia os Objetos
         firefox = webdriver.Open(log)
@@ -172,6 +173,10 @@ class StartRobo:
 
         if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
 
+            log.info('---------------------------')
+            log.info('Atividade: Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão')
+            log.info('---------------------------')
+
             # Registra Base
             dataBaseModel['cod_atividade'] = '1'
 
@@ -182,11 +187,24 @@ class StartRobo:
                                                                                xml, dataset, dataBaseModel, inicioTime,
                                                                                self.arrayVarRefDados)
 
-            # Request
-            trafficData = self.registre_request(self, webdriver, log)
+            # Registra os dados
+            try:
 
-            # Dataset
-            self.dataset_csv(self, dataBaseModel, trafficData, log)
+                log.info(dataBaseModel)
+
+                # Request
+                trafficData = self.registre_request(webdriver, fileName, log)
+
+                individual = dataBaseModel['individual']
+
+                # Dataset
+                self.dataset_csv(dataBaseModel, trafficData, log)
+
+                if individual['cod_processo']:
+                    self.dataset_csv_individual(dataBaseModel, individual, trafficData, log)
+            except:
+                log.exception('Falha ao gerar os dados.')
+                log.info('Finalizando o robo.')
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -200,6 +218,10 @@ class StartRobo:
 
         elif dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
 
+            log.info('---------------------------')
+            log.info('Atividade: Inclusão de processos na relação de julgamento')
+            log.info('---------------------------')
+
             # Registra Base
             dataBaseModel['cod_atividade'] = '2'
 
@@ -209,12 +231,24 @@ class StartRobo:
                                                              'Inclusão de processos na relação de julgamento',
                                                              xml, dataset, dataBaseModel, inicioTime,
                                                              self.arrayVarRefDados)
+            # Registra os dados
+            try:
 
-            # Request
-            trafficData = self.registre_request(self, webdriver, log)
+                log.info(dataBaseModel)
 
-            # Dataset
-            self.dataset_csv(self, dataBaseModel, trafficData, log)
+                # Request
+                trafficData = self.registre_request(webdriver, fileName, log)
+
+                individual = dataBaseModel['individual']
+
+                # Dataset
+                self.dataset_csv(dataBaseModel, trafficData, log)
+
+                if individual['cod_processo']:
+                    self.dataset_csv_individual(dataBaseModel, individual, trafficData, log)
+            except:
+                log.exception('Falha ao gerar os dados.')
+                log.info('Finalizando o robo.')
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -228,6 +262,10 @@ class StartRobo:
 
         elif dataForm['atividade'] == 'Assinaturas de Processos para Juiz Titular':
 
+            log.info('---------------------------')
+            log.info('Atividade: Assinaturas de Processos para Juiz Titular')
+            log.info('---------------------------')
+
             # Registra Base
             dataBaseModel['cod_atividade'] = '3'
 
@@ -236,23 +274,37 @@ class StartRobo:
                                                                  'Assinaturas de Processos para Juiz Titular', dataset,
                                                                  dataBaseModel, inicioTime, self.arrayVarRefDados)
 
-            # Request
-            trafficData = self.registre_request(self, webdriver, log)
+            # Registra os dados
+            try:
 
-            # Dataset
-            self.dataset_csv(self, dataBaseModel, trafficData, log)
+                log.info(dataBaseModel)
+
+                # Request
+                trafficData = self.registre_request(webdriver, fileName, log)
+
+                individual = dataBaseModel['individual']
+
+                # Dataset
+                self.dataset_csv(dataBaseModel, trafficData, log)
+
+                if individual['cod_processo']:
+                    self.dataset_csv_individual(dataBaseModel, individual, trafficData, log)
+            except:
+                log.exception('Falha ao gerar os dados.')
+                log.info('Finalizando o robo.')
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
                 form = FormResultado(executaAssinaturaProcessos.listProcessos, 2, log)
             except:
-                log.exception('Falha ao gerar o formulario final.')
+                log.exception('Falha ao gerar os dados.')
                 log.info('Finalizando o robo.')
-                log.shutdown()
-                os._exit(0)
-                sys.exit(0)
 
         elif dataForm['atividade'] == 'Transitar em Julgado':
+
+            log.info('---------------------------')
+            log.info('Atividade: Transitar em Julgado')
+            log.info('---------------------------')
 
             # Registra Base
             dataBaseModel['cod_atividade'] = '4'
@@ -263,12 +315,24 @@ class StartRobo:
                                                            '(TR) Julgados em sessão',
                                                            xml, dataset, dataBaseModel, inicioTime,
                                                            self.arrayVarRefDados)
+            # Registra os dados
+            try:
 
-            # Request
-            trafficData = self.registre_request(self, webdriver, log)
+                log.info(dataBaseModel)
 
-            # Dataset
-            self.dataset_csv(self, dataBaseModel, trafficData, log)
+                # Request
+                trafficData = self.registre_request(webdriver, fileName, log)
+
+                individual = dataBaseModel['individual']
+
+                # Dataset
+                self.dataset_csv(dataBaseModel, trafficData, log)
+
+                if individual['cod_processo']:
+                    self.dataset_csv_individual(dataBaseModel, individual, trafficData, log)
+            except:
+                log.exception('Falha ao gerar os dados.')
+                log.info('Finalizando o robo.')
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -281,6 +345,10 @@ class StartRobo:
                 sys.exit(0)
 
         elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
+
+            log.info('---------------------------')
+            log.info('Atividade: Lançamento de movimentação TPU')
+            log.info('---------------------------')
 
             # Registra Base
             dataBaseModel['cod_atividade'] = '5'
@@ -295,21 +363,33 @@ class StartRobo:
                                                openXls, xlsData,
                                                '(TR) Lançar movimentações de julgamento',
                                                xml, dataset, dataBaseModel, inicioTime, self.arrayVarRefDados)
+            # Registra os dados
+            try:
+                # Adiciona a lista de processos nao aptos
+                # A partir dos dados da planilha
+                listDataProcessosInaptos = openXls.listProcessosInaptos
 
-            # Adiciona a lista de processos nao aptos
-            # A partir dos dados da planilha
-            listDataProcessosInaptos = openXls.listProcessosInaptos
+                if len(listDataProcessosInaptos) > 0:
+                    for x in range(len(listDataProcessosInaptos)):
+                        executaLancamento.listProcessos[0].append(listDataProcessosInaptos[x][0])
+                        executaLancamento.listProcessos[1].append(4)
 
-            if len(listDataProcessosInaptos) > 0:
-                for x in range(len(listDataProcessosInaptos)):
-                    executaLancamento.listProcessos[0].append(listDataProcessosInaptos[x][0])
-                    executaLancamento.listProcessos[1].append(4)
+                log.info(dataBaseModel)
 
-            # Request
-            trafficData = self.registre_request(self, webdriver, log)
+                # Request
+                trafficData = self.registre_request(webdriver, fileName, log)
 
-            # Dataset
-            self.dataset_csv(self, dataBaseModel, trafficData, log)
+                individual = dataBaseModel['individual']
+
+                # Dataset
+                self.dataset_csv(dataBaseModel, trafficData, log)
+
+                if individual['cod_processo']:
+                    self.dataset_csv_individual(dataBaseModel, individual, trafficData, log)
+
+            except:
+                log.exception('Falha ao gerar os dados.')
+                log.info('Finalizando o robo.')
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -332,19 +412,35 @@ class StartRobo:
             csv = CSV(self.pathDatabaseGeral)
             csv.registraCsvDatabase(dataBaseModel)
         except:
-            log.info('Houve uma falha ao registrar os dados de execucao.')
+            log.info('Houve uma falha ao registrar os dados de execucao geral.')
 
-    def registre_request(self, firefox, log):
+    def dataset_csv_individual(self, dataBaseModel, individual, trafficData, log):
+
+        # Registra trafico
+        dataBaseModel['qtd_requisicao'] = trafficData[1]
+        dataBaseModel['qtd_trafeco_baixado_kb'] = trafficData[2]
 
         try:
-            # Captura os dados de trafeco
-            trafficData = firefox.monitor_traffic()
-            # Registra trafico em CSV
-            firefox.registre_traffic(trafficData[0])
+            # Registra dados de execução geral
+            csv = CSV(self.pathDatabaseIndividual)
+            csv.registraCsvDatabaseIndividual(dataBaseModel, individual)
+        except:
+            log.info('Houve uma falha ao registrar os dados de execucao individual.')
+
+    def registre_request(self, webdriver, fileName, log):
+
+        # Captura os dados de trafeco
+        trafficData = webdriver.monitor_traffic()
+
+        # Registra trafico em CSV
+        # webdriver.registre_traffic(trafficData[0])
+        try:
+            csv = CSV(self.traffic)
+            csv.registraCsvTraffic(fileName, trafficData[0])
         except:
             log.info('Houve uma falha ao registrar os dados de trafico.')
 
-        firefox.stop_proxy()
+        webdriver.stop_proxy()
 
         return trafficData
 
@@ -355,6 +451,7 @@ class StartRobo:
         except:
             firefox_filepath = r"C:\Program Files\Mozilla Firefox\firefox.exe"
             version_info = win32api.GetFileVersionInfo(firefox_filepath, "\\")
+
         product_version = version_info["ProductVersionMS"]
         product_version = float(f"{product_version >> 16}.{product_version & 0xFFFF}")
 

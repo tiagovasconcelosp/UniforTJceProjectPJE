@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <title>Robô de Automações de Atividades PJE - 8.0</title>
-    <url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>
-   <!-- <url>https://pje.tjce.jus.br/pje2grau/login.seam</url>-->
+    <title>Robô de Automações de Atividades PJE - 9.0</title>
+    <!--<url>https://pje2unifor.tjce.jus.br/pje2grau/login.seam</url>-->
+    <url>https://pje.tjce.jus.br/pje2grau/login.seam</url>
     <directoryLog>Logs</directoryLog>
     <directoryImages>Images</directoryImages>
     <directoryDriver>Driver</directoryDriver>

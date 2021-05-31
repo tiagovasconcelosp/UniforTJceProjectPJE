@@ -860,14 +860,41 @@ class TaskInclusaoProcessos:
             #                 }
             listDataProcessos = openXls.getDataProcessInclusaoXLS(xlsData, firefox, logging, xml)
 
+            timeProcList = []
             # Chama metodo que localiza os processos
             for i in listDataProcessos:
+
+                # Registra horario que iniciou o processo
+                inicioTimeProc = time.time()
+
                 logging.info('---------------------------')
                 logging.info('Iniciando uma nova busca...')
                 logging.info('Incluindo processos na sessao do dia: ' + str(i))
                 logging.info('Abrindo a sessao...')
                 logging.info('---------------------------')
                 self.localizarDataCalendarioIncluir(firefox, listDataProcessos[i], str(i), logging, caminhoImages)
+
+                fimProc = time.time()
+                timeTotal = fimProc - inicioTimeProc
+                timeTotal = float('{:.2f}'.format(timeTotal))
+
+                # Inclui processo na lista dataset
+                # timeProcList.append(str(timeTotal))
+
+                for x in range(len(listDataProcessos[i])):
+                    dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
+
+            print(timeProcList)
+
+            for i in range(len(self.listProcessos[0])):
+                dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
+                dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+
+            # for i in range(len(self.listProcessos[2])):
+            #     try:
+            #         dataBaseModel['individual']['processo_nao_encontrado'].append(str(self.listProcessos[2][i]))
+            #     except:
+            #         continue
 
             logging.info('---------------------------')
 
@@ -944,6 +971,8 @@ class TaskInclusaoProcessos:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
+            return self.listProcessos
+
         except:
 
             image = Print(firefox, caminhoImages)
@@ -951,5 +980,5 @@ class TaskInclusaoProcessos:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-        # Retorna valor caso haja algum erro durante a execucao
-        return self.listProcessos
+            # Retorna valor caso haja algum erro durante a execucao
+            return self.listProcessos

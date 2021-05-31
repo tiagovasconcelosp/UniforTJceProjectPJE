@@ -12,7 +12,6 @@
 
 import os
 import tkinter as Tkinter
-from random import randint
 from tkinter import *
 from tkinter.filedialog import askopenfile
 from tkinter.ttk import Combobox
@@ -57,7 +56,7 @@ class Form(StartRobo):
 
     def setDatabase(self):
         self.dataBaseModel = {
-                    'id' : self.time_string2 + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)),
+                    'id' : self.time_string2,
                     'data_aplicacao' : self.time_string,
                     'qtd_processos' : 0,
                     'qtd_processos_nao_localizados' : 0,
@@ -72,8 +71,8 @@ class Form(StartRobo):
                     'qtd_requisicao' : 0,
         'individual' : {
                 'cod_processo': [],
-                'processo_localizado': [],
-                'processo_concluido': [],
+                'processo_realizado': [],
+                'processo_nao_encontrado': [],
                 'tempo_execucao_individual_sec': [],
             },
         }

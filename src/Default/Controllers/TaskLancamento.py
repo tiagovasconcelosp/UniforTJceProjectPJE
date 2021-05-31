@@ -593,9 +593,30 @@ class TaskLancamento:
             listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, logging, xml)
 
             for i in range(len(listDataProcessos)):
+
+                # Registra horario que iniciou o processo
+                inicioTimeProc = time.time()
+
                 logging.info('Buscando o processo: ' + str(listDataProcessos[i][0]))
                 self.localizarProcesso(firefox, listDataProcessos[i][0], listDataProcessos[i][1], logging,
                                        caminhoImages)
+
+                fimProc = time.time()
+                timeTotal = fimProc - inicioTimeProc
+                timeTotal = float('{:.2f}'.format(timeTotal))
+
+                # Inclui processo na lista dataset
+                dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
+
+            for i in range(len(self.listProcessos[0])):
+                dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
+                dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+
+            # for i in range(len(self.listProcessos[2])):
+            #     try:
+            #         dataBaseModel['individual']['processo_nao_encontrado'].append(str(self.listProcessos[2][i]))
+            #     except:
+            #         continue
 
             logging.info('---------------------------')
 
@@ -672,6 +693,8 @@ class TaskLancamento:
             logging.info(str(self.listProcessos))
             logging.info('---------------------------')
 
+            return self.listProcessos
+
         except:
 
             image = Print(firefox, caminhoImages)
@@ -679,5 +702,5 @@ class TaskLancamento:
             logging.info('Finalizando o robo.')
             logging.shutdown()
 
-        # Retorna valor caso haja algum erro durante a execucao
-        return self.listProcessos
+            # Retorna valor caso haja algum erro durante a execucao
+            return self.listProcessos

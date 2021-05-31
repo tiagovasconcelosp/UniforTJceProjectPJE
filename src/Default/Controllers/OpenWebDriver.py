@@ -34,19 +34,16 @@ class OpenWebDriver():
     proxy = ""
     traffic = ""
     versao = 0.0
-    fileName = ""
     server = ""
     entries = ""
     proxy = ""
 
-    def __init__(self, pathDriver, driveName, versao, pathUrl, proxy, traffic, fileName):
+    def __init__(self, pathDriver, driveName, versao, pathUrl, proxy):
         self._pathUrl = pathUrl
         self._pathDriver = pathDriver
         self._driveName = driveName
         self._versao = versao
         self._proxy = proxy
-        self._traffic = traffic
-        self._fileName = fileName
 
     def Open(self, logging):
 
@@ -97,6 +94,10 @@ class OpenWebDriver():
             options.add_argument("--headless")
             logging.info('Entrou no option de <= 78.0.')
 
+        options.add_argument("--marionette")
+
+        # options.headless = True
+        options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument('--allow-running-insecure-content')
         options.add_argument('--disable-web-security')
@@ -166,11 +167,10 @@ class OpenWebDriver():
 
         return firefox
 
-    def registre_traffic(self, trafficData):
-
-        csvOb = CSV(self._traffic)
-
-        csvOb.registraCsvTraffic(self, self._fileName, trafficData)
+    # def registre_traffic(self, trafficData):
+    #
+    #     csvOb = CSV(self._traffic)
+    #     csvOb.registraCsvTraffic(self, self._fileName, trafficData)
 
     def stop_proxy(self):
         self.server.stop()
