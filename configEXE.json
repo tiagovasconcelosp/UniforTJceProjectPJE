@@ -264,6 +264,10 @@
   {
    "optionDest": "datas",
    "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/browsermobproxy;browsermobproxy/"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pyperclip"
   }
  ],
  "nonPyinstallerOptions": {

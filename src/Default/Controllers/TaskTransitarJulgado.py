@@ -29,12 +29,12 @@ class TaskTransitarJulgado:
     qtd_clicks_all = 0
     qtd_erros_tentativa_processo_all = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados)
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime, arrayVarRefDados)
 
     def localizarProcesso(self, firefox, numProcesso, dateProcesso, logging, caminhoImages):
 
@@ -765,7 +765,7 @@ class TaskTransitarJulgado:
 
             time.sleep(3)
 
-            element = WebDriverWait(firefox, 200).until(
+            element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'a[title="Abrir menu"i]')))
@@ -831,6 +831,13 @@ class TaskTransitarJulgado:
             for i in range(len(self.listProcessos[0])):
                 dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
                 dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+                dataBaseModel['individual']['processo_nao_encontrado'].append(0)
+
+            if self.listProcessos[2]:
+                for i in range(len(self.listProcessos[2])):
+                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
+                    dataBaseModel['individual']['processo_realizado'].append(1)
+                    dataBaseModel['individual']['processo_nao_encontrado'].append(1)
 
             # for i in range(len(self.listProcessos[2])):
             #     try:
@@ -904,6 +911,8 @@ class TaskTransitarJulgado:
             dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
             dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
 
+            logging.info(dataBaseModel)
+
             try:
                 firefox.close()
             except:
@@ -915,11 +924,13 @@ class TaskTransitarJulgado:
 
             return self.listProcessos
 
-        except:
+
+        except Exception as e:
 
             image = Print(firefox, caminhoImages)
-            logging.exception('Falha ao concluir a tarefa especificada. - ' + str(atividade))
+            logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
 
             # Retorna valor caso haja algum erro durante a execucao

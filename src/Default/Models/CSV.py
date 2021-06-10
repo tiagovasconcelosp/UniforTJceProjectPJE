@@ -17,60 +17,90 @@ class CSV:
 
     pathCsvExecucao = ""
 
+    arquivoOutput = ""
+
     columnsGeral = ['id', 'data_aplicacao', 'qtd_processos', 'qtd_processos_nao_localizados', 'tempo_execucao_sec',
                     'qtd_clicks',
                     'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
-                    'tempo_uso_aplicacao_sec', 'qtd_trafeco_baixado_kb', 'qtd_requisicao']
+                    'tempo_uso_aplicacao_sec', 'qtd_trafeco_baixado_kb', 'qtd_requisicao',]
 
-    columnsIndividual = ['id', 'data_aplicacao', 'cod_processo', 'processo_localizado', 'tempo_execucao_sec',
+    columnsIndividual = ['id', 'data_aplicacao', 'qtd_processos', 'qtd_processos_nao_localizados', 'tempo_execucao_sec',
                          'qtd_clicks',
                          'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
                          'tempo_uso_aplicacao_sec', 'qtd_trafeco_baixado_kb', 'qtd_requisicao',
                          # Dados Individual
-                         'cod_processo', 'processo_realizado', 'processo_nao_encontrado', 'tempo_execucao_individual_sec',]
+                         'cod_processo', 'processo_realizado',
+                         'processo_nao_encontrado',
+                         'tempo_execucao_individual_sec',]
 
     def __init__(self, pathCsvExecucao):
         self.pathCsvExecucao = pathCsvExecucao
 
-    def registraCsvTraffic(self, fileName, listaDadosGerarCsv):
-        arquivoOutput = self.pathCsvExecucao + fileName + '.csv'
+    def registraCsvTraffic(self, fileName, listaDadosGerarCsv, log):
 
-        fieldnames = ['url', 'milissegundos', 'kbytes']
+        try:
+            self.arquivoOutput = self.pathCsvExecucao + fileName + '.csv'
 
-        with open(arquivoOutput, 'w', newline='') as csvfile:
-            writer = csv.DictWriter(csvfile, delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_MINIMAL)
+            fieldnames = ['url', 'milissegundos', 'kbytes']
 
-            # Escreve Cabecalho
-            writer.writeheader()
-            # Escreve os dados
-            for linha in listaDadosGerarCsv:
-                writer.writerow(linha)
+            file = open(self.arquivoOutput, 'w', newline='')
 
-    def registraCsvDatabase(self, listaDadosGerarCsv):
-        arquivoOutput = self.pathCsvExecucao
+            with file as csvfile:
+                writer = csv.DictWriter(csvfile, delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_MINIMAL)
 
-        del listaDadosGerarCsv['individual']
+                # Escreve Cabecalho
+                writer.writeheader()
+                # Escreve os dados
+                for linha in listaDadosGerarCsv:
+                    writer.writerow(linha)
 
-        with open(arquivoOutput, mode='a+', newline='') as csv_file:
-            writer = csv.DictWriter(csv_file, delimiter=';', fieldnames=self.columnsGeral, quoting=csv.QUOTE_MINIMAL)
+            file.close()
 
-            # Ex data {'data_aplicacao': '01/01/2000 00:00:00', 'qtd_clicks': '10', 'qtd_erros_tentativa_processo': '1'}
-            writer.writerow(listaDadosGerarCsv)
-            csv_file.close()
+        except Exception as e:
+            log.info('Houve uma falha gravar o arquivo traffic.')
+            log.info(repr(e))
 
-    def registraCsvDatabaseIndividual(self, listaDadosIndividualGerarCsv, dadosIndividual):
-        arquivoOutput = self.pathCsvExecucao
+    def registraCsvDatabase(self, listaDadosGerarCsv, log):
 
-        for x in range(len(dadosIndividual['cod_processo'])):
+        try:
+            self.arquivoOutput = self.pathCsvExecucao
 
-            listaDadosIndividualGerarCsv['cod_processo']: dadosIndividual['cod_processo'][x]
-            listaDadosIndividualGerarCsv['processo_realizado']: dadosIndividual['processo_realizado'][x]
-            # listaDadosIndividualGerarCsv['processo_nao_encontrado']: dadosIndividual['processo_nao_encontrado'][x]
-            listaDadosIndividualGerarCsv['tempo_execucao_individual_sec']: dadosIndividual['tempo_execucao_individual_sec'][x]
+            file = open(self.arquivoOutput, mode='a+', newline='')
 
-            with open(arquivoOutput, mode='a+', newline='') as csv_file:
-                writer = csv.DictWriter(csv_file, delimiter=';', fieldnames=self.columnsIndividual, quoting=csv.QUOTE_MINIMAL)
+            with file as csv_file:
+                writer = csv.DictWriter(csv_file, delimiter=';', fieldnames=self.columnsGeral, quoting=csv.QUOTE_MINIMAL)
 
                 # Ex data {'data_aplicacao': '01/01/2000 00:00:00', 'qtd_clicks': '10', 'qtd_erros_tentativa_processo': '1'}
-                writer.writerow(listaDadosIndividualGerarCsv)
-                csv_file.close()
+                writer.writerow(listaDadosGerarCsv)
+
+            file.close()
+
+        except Exception as e:
+            log.info('Houve uma falha gravar o arquivo geral.')
+            log.info(repr(e))
+
+    def registraCsvDatabaseIndividual(self, listaDadosIndividualGerarCsv, dadosIndividual, log):
+
+        try:
+            self.arquivoOutput = self.pathCsvExecucao
+
+            for x in range(len(dadosIndividual['cod_processo'])):
+
+                file = open(self.arquivoOutput, mode='a+', newline='')
+
+                listaDadosIndividualGerarCsv['cod_processo'] = dadosIndividual['cod_processo'][x]
+                listaDadosIndividualGerarCsv['processo_realizado'] = dadosIndividual['processo_realizado'][x]
+                listaDadosIndividualGerarCsv['processo_nao_encontrado'] = dadosIndividual['processo_nao_encontrado'][x]
+                listaDadosIndividualGerarCsv['tempo_execucao_individual_sec'] = dadosIndividual['tempo_execucao_individual_sec'][x]
+
+                with file as csv_file:
+                    writer = csv.DictWriter(csv_file, delimiter=';', fieldnames=self.columnsIndividual, quoting=csv.QUOTE_MINIMAL)
+
+                    # Ex data {'data_aplicacao': '01/01/2000 00:00:00', 'qtd_clicks': '10', 'qtd_erros_tentativa_processo': '1'}
+                    writer.writerow(listaDadosIndividualGerarCsv)
+
+                file.close()
+
+        except Exception as e:
+            log.info('Houve uma falha gravar o arquivo individual.')
+            log.info(repr(e))

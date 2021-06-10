@@ -33,12 +33,14 @@ class Auth:
             # firefox.find_element(By.ID, "password").send_keys('12345')
 
             logging.info("Realizando autenticacao.")
-        except:
+
+        except Exception as e:
 
             image = Print(firefox, caminhoImages)
 
             logging.exception('Falha realizar autenticacao.')
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
             os._exit(0)
             sys.exit(0)

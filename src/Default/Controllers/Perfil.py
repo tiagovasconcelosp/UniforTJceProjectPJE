@@ -39,11 +39,12 @@ class Perfil:
 
             logging.info('Perfil selecionado com sucesso! Selecionado: ' + str(desPerfil))
 
-        except:
+        except Exception as e:
             logging.exception('Falha ao autenticar ou selecionar perfil')
             logging.exception('Falha em selecionar o perfil indicado com codigo ' + str(perfil))
             logging.info('Perfil "' + str(desPerfil) + '" nao identificado.')
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
 
             try:

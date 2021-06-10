@@ -24,7 +24,8 @@ from browsermobproxy import Server
 from random import randint
 from datetime import datetime
 
-from src.Default.Models.CSV import CSV
+import functools
+
 
 class OpenWebDriver():
 
@@ -34,18 +35,28 @@ class OpenWebDriver():
     proxy = ""
     traffic = ""
     versao = 0.0
+    firefox_filepath = 0
     server = ""
     entries = ""
     proxy = ""
 
-    def __init__(self, pathDriver, driveName, versao, pathUrl, proxy):
+    def __init__(self, pathDriver, driveName, versao, pathUrl, proxy, firefox_filepath):
         self._pathUrl = pathUrl
         self._pathDriver = pathDriver
         self._driveName = driveName
         self._versao = versao
         self._proxy = proxy
+        self._firefox_filepath = firefox_filepath
 
     def Open(self, logging):
+
+        # #######################################
+        # Hide Console
+
+        flag = 0x08000000  # No-Window flag
+        # flag = 0x00000008  # Detached-Process flag, if first doesn't work
+        webdriver.common.service.subprocess.Popen = functools.partial(
+            webdriver.common.service.subprocess.Popen, creationflags=flag)
 
         # #######################################
 
@@ -55,9 +66,10 @@ class OpenWebDriver():
             self.server.start()
             self.proxy = self.server.create_proxy()
 
-        except:
+        except Exception as e:
             logging.exception('Falha ao iniciar o proxy.')
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
             os._exit(0)
             sys.exit(0)
@@ -87,12 +99,10 @@ class OpenWebDriver():
         options = FirefoxOptions()
 
         if self._versao >= 80.0:
-            options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
-            logging.info('Entrou no option de > 80.0.')
+            options.binary_location = self._firefox_filepath
 
         if self._versao <= 78.0:
             options.add_argument("--headless")
-            logging.info('Entrou no option de <= 78.0.')
 
         options.add_argument("--marionette")
 
@@ -124,9 +134,10 @@ class OpenWebDriver():
 
             logging.info("Navegador iniciado com sucesso.")
 
-        except:
+        except Exception as e:
             logging.exception('Falha ao iniciar o  navegador.')
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
             self.server.stop()
             os._exit(0)
@@ -166,11 +177,6 @@ class OpenWebDriver():
                 logging.info('Executar parada de carregamento da pagina.')
 
         return firefox
-
-    # def registre_traffic(self, trafficData):
-    #
-    #     csvOb = CSV(self._traffic)
-    #     csvOb.registraCsvTraffic(self, self._fileName, trafficData)
 
     def stop_proxy(self):
         self.server.stop()

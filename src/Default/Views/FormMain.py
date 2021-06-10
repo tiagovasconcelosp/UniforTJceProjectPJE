@@ -36,7 +36,7 @@ class Form(StartRobo):
     dataBaseModel = {}
     inicioAppTime = 0
 
-    def __init__(self, log, xml, dataset, fileName):
+    def __init__(self, log, xml, dataset, fileName,):
         self._log = log
         self._xml = xml
         self._dataset = dataset
@@ -78,6 +78,7 @@ class Form(StartRobo):
         }
 
     def criaForm(self):
+
         self.form = Tkinter.Tk()
 
         # Detecta se clicou no X
@@ -182,8 +183,10 @@ class Form(StartRobo):
 
         self._log.info('Finalizando o robo.')
 
+        self._log.shutdown()
         os._exit(0)
         sys.exit(0)
+
 
     def clickOk(self, selectTask, selectPerfil):
 

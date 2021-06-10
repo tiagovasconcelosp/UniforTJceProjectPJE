@@ -812,7 +812,7 @@ class TaskInclusaoProcessos:
 
             time.sleep(3)
 
-            element = WebDriverWait(firefox, 200).until(
+            element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'a[title="Abrir menu"i]')))
@@ -884,11 +884,16 @@ class TaskInclusaoProcessos:
                 for x in range(len(listDataProcessos[i])):
                     dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
 
-            print(timeProcList)
-
             for i in range(len(self.listProcessos[0])):
                 dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
                 dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+                dataBaseModel['individual']['processo_nao_encontrado'].append(0)
+
+            if self.listProcessos[2]:
+                for i in range(len(self.listProcessos[2])):
+                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
+                    dataBaseModel['individual']['processo_realizado'].append(1)
+                    dataBaseModel['individual']['processo_nao_encontrado'].append(1)
 
             # for i in range(len(self.listProcessos[2])):
             #     try:
@@ -962,6 +967,8 @@ class TaskInclusaoProcessos:
             dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
             dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
 
+            logging.info(dataBaseModel)
+
             try:
                 firefox.close()
             except:
@@ -973,11 +980,12 @@ class TaskInclusaoProcessos:
 
             return self.listProcessos
 
-        except:
+        except Exception as e:
 
             image = Print(firefox, caminhoImages)
-            logging.exception('Falha ao concluir a tarefa especificada. - ' + str(atividade))
+            logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
 
             # Retorna valor caso haja algum erro durante a execucao

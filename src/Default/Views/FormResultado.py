@@ -11,6 +11,7 @@
 # ###################################################
 
 import tkinter as tk
+import pyperclip
 from tkinter import *
 from tkinter.ttk import Notebook
 
@@ -78,6 +79,38 @@ class FormResultado:
         outTblLbl4 = Label(stepOne, \
                           text="Total de processos que não foram localizados: " + str(resultadoTarefa[6]))
         outTblLbl4.grid(row=4, column=0, sticky='W', padx=5, pady=2)
+
+        # -----------------------------------------------------------------------------------
+
+        countP = 0
+        listP = []
+
+        for x in range(len(resultadoTarefa[1])):
+            if resultadoTarefa[1][x] != 0:
+                listP.append(resultadoTarefa[0][x])
+                countP += 1
+
+        if resultadoTarefa[2] or countP > 0:
+
+            stepOne2 = LabelFrame(frame3, text=" Copiar Processos ")
+            stepOne2.grid(row=50, columnspan=7, sticky='W', \
+                         padx=5, pady=5, ipadx=28, ipady=5, )
+
+            if countP > 0:
+                buttonProcess = Button(stepOne2, text="Copiar processo(s) que houve falha: " + str(countP) + "", command=lambda: self.clickCopy(listP))
+                buttonProcess.pack(padx=5, pady=5,)
+
+            if resultadoTarefa[2]:
+
+                countP2 = 0
+                listP2 = []
+                for x in range(len(resultadoTarefa[2])):
+                    if resultadoTarefa[2][x] != 0:
+                        listP2.append(resultadoTarefa[2][x])
+                        countP2 += 1
+
+                buttonProcess2 = Button(stepOne2, text="Copiar processo(s) não localizados:  " + str(countP2) + "", command=lambda: self.clickCopy(listP2))
+                buttonProcess2.pack(padx=5, pady=5)
 
         # ------------------------------------------------------------------------------------
         # ------------------------------------------------------------------------------------
@@ -196,7 +229,6 @@ class FormResultado:
                             label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                             self.tab1.grid_columnconfigure(column, weight=1)
 
-
         # ------------------------------------------------------------------------------------
         # ------------------------------------------------------------------------------------
         # ------------------------------------------------------------------------------------
@@ -261,6 +293,21 @@ class FormResultado:
         tablayout.bind('<ButtonRelease-1>', lambda e: self.ScrollTab(tablayout, resultadoTarefa))
 
         self.window.mainloop()
+
+    def clickCopy(self, list):
+
+        text = ""
+        count = 0
+
+        for x in range(len(list)):
+
+            if count == 0:
+                text = str(list[x])
+            else:
+                text = text + "\n" + str(list[x])
+            count += 1
+
+        return pyperclip.copy(text)
 
     def onFrameConfigure(self, canvas):
         canvas.configure(scrollregion=canvas.bbox("all"))

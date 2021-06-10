@@ -196,7 +196,7 @@ class TaskAguardandoSessaoJulgamento:
 
             time.sleep(3)
 
-            element = WebDriverWait(firefox, 200).until(
+            element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'a[title="Abrir menu"i]')))
@@ -261,15 +261,20 @@ class TaskAguardandoSessaoJulgamento:
                 # Inclui processo na lista dataset
                 dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
 
+            logging.info(dataBaseModel)
+
             for i in range(len(self.listProcessos[0])):
                 dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
                 dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+                dataBaseModel['individual']['processo_nao_encontrado'].append(0)
 
-            # for i in range(len(self.listProcessos[2])):
-            #     try:
-            #         dataBaseModel['individual']['processo_nao_encontrado'].append(str(self.listProcessos[2][i]))
-            #     except:
-            #         continue
+            if self.listProcessos[2]:
+                for i in range(len(self.listProcessos[2])):
+                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
+                    dataBaseModel['individual']['processo_realizado'].append(1)
+                    dataBaseModel['individual']['processo_nao_encontrado'].append(1)
+
+            logging.info(dataBaseModel)
 
             logging.info('---------------------------')
 
@@ -348,11 +353,12 @@ class TaskAguardandoSessaoJulgamento:
 
             return self.listProcessos
 
-        except:
+        except Exception as e:
 
             image = Print(firefox, caminhoImages)
-            logging.exception('Falha ao concluir a tarefa especificada. - ' + str(atividade))
+            logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
 
             # Retorna valor caso haja algum erro durante a execucao
