@@ -342,6 +342,8 @@ class TaskAguardandoSessaoJulgamento:
             dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
             dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
 
+            logging.info(dataBaseModel)
+
             try:
                 firefox.close()
             except:

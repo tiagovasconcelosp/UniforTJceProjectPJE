@@ -363,7 +363,7 @@ class TaskTransitarJulgado:
         ##################################################################################
         try:
             # Clica no botao Encaminhar para (ABRE AS OPCOES)
-            element = WebDriverWait(firefox, 20).until(
+            element = WebDriverWait(firefox, 30).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div.dropdown button#btnTransicoesTarefa')))
             firefox.execute_script("arguments[0].click();", element)
@@ -372,11 +372,11 @@ class TaskTransitarJulgado:
             self.qtd_clicks_all += 1
         except:
 
-            time.sleep(10)
+            time.sleep(30)
 
             try:
                 # Clica no botao Encaminhar para
-                element = WebDriverWait(firefox, 20).until(
+                element = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, 'div.dropdown button#btnTransicoesTarefa')))
                 firefox.execute_script("arguments[0].click();", element)
@@ -396,12 +396,12 @@ class TaskTransitarJulgado:
 
         ##################################################################################
 
-        time.sleep(1)
+        time.sleep(11)
 
         ##################################################################################
         try:
             # Clica no botao Cumprir acordao
-            element = WebDriverWait(firefox, 20).until(
+            element = WebDriverWait(firefox, 30).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'ul.dropdown-transicoes li a[title="Encaminhar para Cumprir acórdão"i]')))
             firefox.execute_script("arguments[0].click();", element)
@@ -416,11 +416,11 @@ class TaskTransitarJulgado:
             # Contabiliza dados
             self.qtd_erros_tentativa_processo_all += 1
 
-            time.sleep(10)
+            time.sleep(30)
 
             try:
                 # Clica no botao Cumprir acordao
-                element = WebDriverWait(firefox, 20).until(
+                element = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'ul.dropdown-transicoes li a[title="Encaminhar para Cumprir acórdão"i]')))
@@ -450,14 +450,14 @@ class TaskTransitarJulgado:
 
         ##################################################################################
 
-        time.sleep(5)
+        time.sleep(15)
 
         ##################################################################################
 
         if registroErroPortal == 0:
             try:
                 # Clica no botao Encaminhar para (ABRE AS OPCOES NOVAMENTE)
-                element = WebDriverWait(firefox, 20).until(
+                element = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, 'button#btnTransicoesTarefa')))
                 firefox.execute_script("arguments[0].click();", element)
@@ -467,7 +467,7 @@ class TaskTransitarJulgado:
 
             except:
 
-                time.sleep(10)
+                time.sleep(30)
 
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
@@ -492,7 +492,7 @@ class TaskTransitarJulgado:
                     image = Print(firefox, caminhoImages)
             ##################################################################################
 
-            time.sleep(4)
+            time.sleep(14)
 
             ##################################################################################
             try:
@@ -505,7 +505,7 @@ class TaskTransitarJulgado:
                 # Contabiliza dados
                 self.qtd_clicks_all += 1
 
-                time.sleep(20)
+                time.sleep(30)
 
             except:
 
@@ -514,7 +514,7 @@ class TaskTransitarJulgado:
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
 
-                time.sleep(10)
+                time.sleep(30)
 
                 try:
                     # Clica no botao Encaminhar para 02 - Devolver para instância de origem
