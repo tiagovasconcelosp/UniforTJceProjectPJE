@@ -21,13 +21,22 @@ class CSV:
 
     columnsGeral = ['id', 'data_aplicacao', 'qtd_processos', 'qtd_processos_nao_localizados', 'tempo_execucao_sec',
                     'qtd_clicks',
-                    'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
-                    'tempo_uso_aplicacao_sec', 'qtd_trafeco_baixado_kb', 'qtd_requisicao',]
+                    'qtd_erros_tentativa_processo', 'endereco_mac',
+                    'qtd_erros_robo',
+                    'cod_atividade',
+                    # 'tempo_uso_aplicacao_sec',
+                    'atividade_concluida',
+                    'qtd_trafego_baixado_kb', 'qtd_requisicao',
+                ]
 
     columnsIndividual = ['id', 'data_aplicacao', 'qtd_processos', 'qtd_processos_nao_localizados', 'tempo_execucao_sec',
                          'qtd_clicks',
-                         'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
-                         'tempo_uso_aplicacao_sec', 'qtd_trafeco_baixado_kb', 'qtd_requisicao',
+                         'qtd_erros_tentativa_processo', 'endereco_mac',
+                         'qtd_erros_robo',
+                         'cod_atividade',
+                         'atividade_concluida',
+                         # 'tempo_uso_aplicacao_sec',
+                         'qtd_trafeco_baixado_kb', 'qtd_requisicao',
                          # Dados Individual
                          'cod_processo', 'processo_realizado',
                          'processo_nao_encontrado',

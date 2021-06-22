@@ -66,9 +66,10 @@ class Form(StartRobo):
                     'endereco_mac' : 0,
                     'qtd_erros_robo' : 0,
                     'cod_atividade' : 0,
-                    'tempo_uso_aplicacao_sec' : 0,
+                    # 'tempo_uso_aplicacao_sec' : 0,
                     'qtd_trafeco_baixado_kb' : 0,
                     'qtd_requisicao' : 0,
+                    'atividade_concluida' : 0,
         'individual' : {
                 'cod_processo': [],
                 'processo_realizado': [],
@@ -177,7 +178,7 @@ class Form(StartRobo):
         timeTotal = float('{:.2f}'.format(timeTotal))
 
         # Registra base
-        self.dataBaseModel['tempo_uso_aplicacao_sec'] = str(timeTotal)
+        # self.dataBaseModel['tempo_uso_aplicacao_sec'] = str(timeTotal)
 
         self.form.destroy()
 

@@ -357,6 +357,10 @@ class TaskAguardandoSessaoJulgamento:
 
         except Exception as e:
 
+            dataBaseModel['qtd_erros_robo'] += 1
+
+            logging.info(dataBaseModel)
+
             image = Print(firefox, caminhoImages)
             logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
