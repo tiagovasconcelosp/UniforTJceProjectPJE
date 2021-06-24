@@ -113,11 +113,20 @@ class TaskLancamento:
             return self.listProcessos
 
         try:
-            # Clica no botao para abrir o processo
-            element = WebDriverWait(firefox, 20).until(
-                EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, 'div.header-wrapper div.toolbar-processo button[tooltip="Autos"i]')))
-            firefox.execute_script("arguments[0].click();", element)
+
+            try:
+                # Clica no botao para abrir o processo
+                element = WebDriverWait(firefox, 20).until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, 'div.header-wrapper div.toolbar-processo button[tooltip="Autos"i]')))
+                firefox.execute_script("arguments[0].click();", element)
+            except:
+                element = WebDriverWait(firefox, 20).until(
+                    EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, 'div#conteudoTarefa div.col-md-12 div.btn-toolbar button[tooltip="Autos"i]')))
+                firefox.execute_script("arguments[0].click();", element)
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
@@ -187,7 +196,8 @@ class TaskLancamento:
             qtdRecorrente = firefox.find_elements_by_css_selector('div#poloAtivo table tbody tr')
             qtdRecorrido = firefox.find_elements_by_css_selector('div#poloPassivo table tbody tr')
 
-            if len(qtdRecorrente) > 1 or len(qtdRecorrido) > 1:
+            # if len(qtdRecorrente) > 1 or len(qtdRecorrido) > 1:
+            if len(qtdRecorrente) > 1:
 
                 # Deleta o ultimo registro
                 del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
