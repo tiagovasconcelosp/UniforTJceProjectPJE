@@ -13,6 +13,7 @@
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/TaskLancamento.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/TaskTransitarJulgado.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Models/Dataset.py" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/Default/Models/OpenXls.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/View/FormMain.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/View/FormResultado.py" charset="windows-1252" />
