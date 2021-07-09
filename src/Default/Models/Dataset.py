@@ -10,48 +10,73 @@
 # ###################################################
 # ###################################################
 
-import sys
-import pandas as pd
-
+import mysql.connector
 
 class Dataset:
-    pathDatabaseGeral = "\database-geral.csv"
-    pathDatabaseIndividual = "\database-individual.csv"
-    pathDatabase = ''
+    tableName = ''
+    columns = ''
+    listData = ''
+    log = ''
 
-    columnsGeral = ['data_aplicacao', 'qtd_processos', 'qtd_processos_nao_localizados', 'tempo_execucao_min',
-                    'qtd_clicks',
-                    'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
-                    'tempo_uso_aplicacao_min', 'qtd_trafeco_baixado_kb', ]
+    hostname = 'kuringacomunicacao.com.br'
+    username = 'domcow36_pontes_app'
+    password = 'pontesKK1#'
+    database = 'domcow36_db_pontes_app'
 
-    columnsIndividual = ['data_aplicacao', 'cod_processo', 'processo_localizado', 'tempo_execucao_individual_min',
-                         'qtd_clicks',
-                         'qtd_erros_tentativa_processo', 'endereco_mac', 'qtd_erros_robo', 'cod_atividade',
-                         'tempo_uso_aplicacao_min', 'qtd_trafeco_baixado_kb', 'data_execucao_individual', ]
+    def __init__(self, tableName, columns, listData, log):
+        self._tableName = tableName
+        self._columns = columns
+        self._listData = listData
+        self._log = log
 
-    def __init__(self, pathDatabase):
-        self._pathDatabase = pathDatabase
+    def setDataGeral(self):
+        try:
+            connection = mysql.connector.connect(host=self.hostname,
+                                                 database=self.database,
+                                                 user=self.username,
+                                                 password=self.password)
+            cursor = connection.cursor()
 
-    def OpenFileGeralCsv(self, logging):
-        csv = pd.read_csv(self._pathDatabase + self.pathDatabaseGeral, header=None, names=self.columnsGeral,
-                          index_col=0, sep=';')
+            mySql_insert_query = """INSERT INTO log_database_execucao
+                                                VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
 
-        return csv
+            record = tuple(self.listData)
+            cursor.execute(mySql_insert_query, record)
+            connection.commit()
+            self.log.info('Valores inseridos com sucesso.')
 
-    def OpenFileIndividualCsv(self, logging):
-        csv = pd.read_csv(self._pathDatabase + self.pathDatabaseIndividual, header=None, names=self.columnsIndividual,
-                          index_col=0, sep=';')
+        except mysql.connector.Error as error:
+            self.log.info('Falha ao inserir valores na tabela: ' + str(error))
 
-        return csv
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+                self.log.info('Conexao fechada.')
 
-    def getDataGeral(self, logging):
-        return False
+    def setDataIndividual(self):
+        try:
+            connection = mysql.connector.connect(host=self.hostname,
+                                                 database=self.database,
+                                                 user=self.username,
+                                                 password=self.password)
+            cursor = connection.cursor()
 
-    def setDataGeral(self, dados, logging):
-        return False
+            for linha in self.listData:
+                mySql_insert_query = """INSERT INTO log_database_execucao
+                                            VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
 
-    def setDataIndividual(self, dados, logging):
-        return False
+                record = tuple(linha)
+                cursor.execute(mySql_insert_query, record)
+                connection.commit()
 
-    def getDataFull(self, logging):
-        return False
+            self.log.info('Valores inseridos com sucesso.')
+
+        except mysql.connector.Error as error:
+            self.log.info('Falha ao inserir valores na tabela: ' + str(error))
+
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+                self.log.info('Conexao fechada.')

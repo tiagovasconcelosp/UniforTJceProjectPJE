@@ -12,6 +12,8 @@
 
 import csv
 
+from src.Default.Models.Dataset import Dataset
+
 
 class CSV:
 
@@ -88,10 +90,19 @@ class CSV:
             log.info('Houve uma falha gravar o arquivo geral.')
             log.info(repr(e))
 
+        try:
+            dataset = Dataset('log_database_execucao', self.columnsGeral, listaDadosGerarCsv, log)
+            dataset.setDataGeral()
+        except Exception as e:
+            log.info('Nao foi possivel registrar os dados via banco.')
+            log.info(repr(e))
+
     def registraCsvDatabaseIndividual(self, listaDadosIndividualGerarCsv, dadosIndividual, log):
 
         try:
             self.arquivoOutput = self.pathCsvExecucao
+
+            list = []
 
             for x in range(len(dadosIndividual['cod_processo'])):
 
@@ -108,8 +119,17 @@ class CSV:
                     # Ex data {'data_aplicacao': '01/01/2000 00:00:00', 'qtd_clicks': '10', 'qtd_erros_tentativa_processo': '1'}
                     writer.writerow(listaDadosIndividualGerarCsv)
 
+                list.append(listaDadosIndividualGerarCsv)
+
                 file.close()
 
         except Exception as e:
             log.info('Houve uma falha gravar o arquivo individual.')
+            log.info(repr(e))
+
+        try:
+            dataset = Dataset('log_database_processo', self.columnsIndividual, list, log)
+            dataset.setDataIndividual()
+        except Exception as e:
+            log.info('Nao foi possivel registrar os dados via banco.')
             log.info(repr(e))
