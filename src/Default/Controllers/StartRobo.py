@@ -53,7 +53,7 @@ class StartRobo:
         'qtd_trafego_baixado_kb': 0,
     }
 
-    def startRobo(self, log, xml, dataForm, dataset, dataBaseModel, fileName):
+    def startRobo(self, log, xml, dataForm, dataBaseModel, fileName):
 
         # Contabiliza dados
         self.qtd_clicks = 0
@@ -189,7 +189,7 @@ class StartRobo:
             executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
                                                                                openXls, xlsData,
                                                                                '(TR) Aguardando sessão de julgamento',
-                                                                               xml, dataset, dataBaseModel, inicioTime,
+                                                                               xml, dataBaseModel, inicioTime,
                                                                                self.arrayVarRefDados)
 
             individual = dataBaseModel['individual']
@@ -291,7 +291,7 @@ class StartRobo:
             executaInclusaoProcessos = TaskInclusaoProcessos(firefox, self.caminhoImages, log,
                                                              openXls, xlsData,
                                                              'Inclusão de processos na relação de julgamento',
-                                                             xml, dataset, dataBaseModel, inicioTime,
+                                                             xml, dataBaseModel, inicioTime,
                                                              self.arrayVarRefDados)
 
             individual = dataBaseModel['individual']
@@ -391,7 +391,7 @@ class StartRobo:
 
             # Assinaturas de Processos para Juiz Titular
             executaAssinaturaProcessos = TaskAssinaturaProcessos(firefox, self.caminhoImages, log,
-                                                                 'Assinaturas de Processos para Juiz Titular', dataset,
+                                                                 'Assinaturas de Processos para Juiz Titular',
                                                                  dataBaseModel, inicioTime, self.arrayVarRefDados)
 
             individual = dataBaseModel['individual']
@@ -493,7 +493,7 @@ class StartRobo:
             executaTransitarJulgado = TaskTransitarJulgado(firefox, self.caminhoImages, log,
                                                            openXls, xlsData,
                                                            '(TR) Julgados em sessão',
-                                                           xml, dataset, dataBaseModel, inicioTime,
+                                                           xml, dataBaseModel, inicioTime,
                                                            self.arrayVarRefDados)
 
             individual = dataBaseModel['individual']
@@ -601,7 +601,7 @@ class StartRobo:
             executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
                                                openXls, xlsData,
                                                '(TR) Lançar movimentações de julgamento',
-                                               xml, dataset, dataBaseModel, inicioTime, self.arrayVarRefDados)
+                                               xml, dataBaseModel, inicioTime, self.arrayVarRefDados)
 
             individual = dataBaseModel['individual']
 

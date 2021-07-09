@@ -29,13 +29,13 @@ class TaskLancamento:
     qtd_clicks_all = 0
     qtd_erros_tentativa_processo_all = 0
 
-    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime,
+    def __init__(self, firefox, caminhoImages, logging, xls, book, atividade, xml, dataBaseModel, inicioTime,
                  arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, dataset, dataBaseModel, inicioTime,
+        self.Execute(firefox, caminhoImages, logging, xls, book, atividade, xml, dataBaseModel, inicioTime,
                      arrayVarRefDados)
 
     def localizarProcesso(self, firefox, numProcesso, codRecorrente, logging, caminhoImages):
@@ -544,7 +544,7 @@ class TaskLancamento:
 
             return self.listProcessos
 
-    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, dataset, dataBaseModel,
+    def Execute(self, firefox, caminhoImages, logging, openXls, xlsData, atividade, xml, dataBaseModel,
                 inicioTime, arrayVarRefDados):
 
         self.countEncaminhados = 0

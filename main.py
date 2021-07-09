@@ -47,6 +47,6 @@ if __name__ == "__main__":
 
     log.info("Iniciando o robo.")
 
-    dataset = Dataset(caminhoDatabase)
+    #dataset = Dataset(caminhoDatabase)
 
-    form = Form(log, root, dataset, fileName)
+    form = Form(log, root, fileName)

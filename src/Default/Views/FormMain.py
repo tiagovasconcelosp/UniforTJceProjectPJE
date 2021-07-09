@@ -36,10 +36,9 @@ class Form(StartRobo):
     dataBaseModel = {}
     inicioAppTime = 0
 
-    def __init__(self, log, xml, dataset, fileName,):
+    def __init__(self, log, xml, fileName,):
         self._log = log
         self._xml = xml
-        self._dataset = dataset
         self._fileName = fileName
 
         # Tempo da aplicacao iniciada
@@ -216,7 +215,7 @@ class Form(StartRobo):
                     selectTask.focus()
                     return 0
 
-        robo = self.startRobo(self._log, self._xml, dataForm, self._dataset, self.dataBaseModel, self._fileName)
+        robo = self.startRobo(self._log, self._xml, dataForm, self.dataBaseModel, self._fileName)
 
     def open_file(self):
 

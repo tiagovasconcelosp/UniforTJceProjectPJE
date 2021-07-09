@@ -38,12 +38,12 @@ class TaskAssinaturaProcessos:
     qtd_clicks_all = 0
     qtd_erros_tentativa_processo_all = 0
 
-    def __init__(self, firefox, caminhoImages, logging, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
+    def __init__(self, firefox, caminhoImages, logging, atividade, dataBaseModel, inicioTime, arrayVarRefDados):
         # Feito para zerar lista de processos
         self.listProcessos = [[], [], [], ]
         self.countEncaminhados = 0
         self.countEnviaProcesso = 0
-        self.Execute(firefox, caminhoImages, logging, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados)
+        self.Execute(firefox, caminhoImages, logging, atividade, dataBaseModel, inicioTime, arrayVarRefDados)
 
     def checkQtdProcessosAtividade(self, firefox, logging, caminhoImages):
 
@@ -498,7 +498,7 @@ class TaskAssinaturaProcessos:
         # Repete o processo de busca por processos
         self.checkQtdProcessosAtividade(firefox, logging, caminhoImages)
 
-    def Execute(self, firefox, caminhoImages, logging, atividade, dataset, dataBaseModel, inicioTime, arrayVarRefDados):
+    def Execute(self, firefox, caminhoImages, logging, atividade, dataBaseModel, inicioTime, arrayVarRefDados):
 
         self.countEncaminhados = 0
 
