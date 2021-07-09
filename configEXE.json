@@ -272,6 +272,10 @@
   {
    "optionDest": "hiddenimports",
    "value": "mysql"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "mysql.connector"
   }
  ],
  "nonPyinstallerOptions": {
