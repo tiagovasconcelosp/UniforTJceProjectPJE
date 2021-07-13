@@ -91,7 +91,10 @@ class CSV:
             log.info(repr(e))
 
         try:
-            dataset = Dataset('log_database_execucao', self.columnsGeral, listaDadosGerarCsv, log)
+
+            listaDadosGerarCsv = listaDadosGerarCsv.values()
+
+            dataset = Dataset(list(listaDadosGerarCsv), log)
             dataset.setDataGeral()
         except Exception as e:
             log.info('Nao foi possivel registrar os dados via banco.')
@@ -128,7 +131,7 @@ class CSV:
             log.info(repr(e))
 
         try:
-            dataset = Dataset('log_database_processo', self.columnsIndividual, list, log)
+            dataset = Dataset(list, log)
             dataset.setDataIndividual()
         except Exception as e:
             log.info('Nao foi possivel registrar os dados via banco.')
