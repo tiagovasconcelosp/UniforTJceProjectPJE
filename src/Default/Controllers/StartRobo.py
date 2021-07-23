@@ -226,50 +226,33 @@ class StartRobo:
             log.info('-------------------------------------------------')
 
             try:
-                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaAguardandoSessaoJulgamento.listProcessos, 0, log)
-                log.info('Formulario gerado com sucesso.')
-                log.info('Atividade realizada com sucesso.')
-
                 # Registra Base
                 dataBaseModel['atividade_concluida'] = '0'
 
                 try:
                     # Dataset
                     self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados geral.')
                     log.info(repr(e))
 
                 try:
                     self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados individual.')
                     log.info(repr(e))
 
             except Exception as e:
+                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info(repr(e))
 
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '1'
-                dataBaseModel['qtd_erros_robo'] += 1
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaAguardandoSessaoJulgamento.listProcessos, 0, log)
+                log.info('Formulario gerado com sucesso.')
+                log.info('Atividade realizada com sucesso.')
 
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+            except Exception as e:
                 log.info('Falha ao gerar o formulario final.')
                 log.info(executaAguardandoSessaoJulgamento.listProcessos)
                 log.info('Finalizando o robo.')
@@ -328,50 +311,33 @@ class StartRobo:
             log.info('-------------------------------------------------')
 
             try:
-                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaInclusaoProcessos.listProcessos, 1, log)
-                log.info('Formulario gerado com sucesso.')
-                log.info('Atividade realizada com sucesso.')
-
                 # Registra Base
                 dataBaseModel['atividade_concluida'] = '0'
 
                 try:
                     # Dataset
                     self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados geral.')
                     log.info(repr(e))
 
                 try:
                     self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados individual.')
                     log.info(repr(e))
 
             except Exception as e:
+                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info(repr(e))
 
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '1'
-                dataBaseModel['qtd_erros_robo'] += 1
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaInclusaoProcessos.listProcessos, 1, log)
+                log.info('Formulario gerado com sucesso.')
+                log.info('Atividade realizada com sucesso.')
 
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+            except Exception as e:
                 log.info('Falha ao gerar o formulario final.')
                 log.info(executaInclusaoProcessos.listProcessos)
                 log.info('Finalizando o robo.')
@@ -428,50 +394,33 @@ class StartRobo:
             log.info('-------------------------------------------------')
 
             try:
-                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaAssinaturaProcessos.listProcessos, 2, log)
-                log.info('Formulario gerado com sucesso.')
-                log.info('Atividade realizada com sucesso.')
-
                 # Registra Base
                 dataBaseModel['atividade_concluida'] = '0'
 
                 try:
                     # Dataset
                     self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados geral.')
                     log.info(repr(e))
 
                 try:
                     self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados individual.')
                     log.info(repr(e))
 
             except Exception as e:
+                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info(repr(e))
 
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '1'
-                dataBaseModel['qtd_erros_robo'] += 1
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaAssinaturaProcessos.listProcessos, 2, log)
+                log.info('Formulario gerado com sucesso.')
+                log.info('Atividade realizada com sucesso.')
 
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+            except Exception as e:
                 log.info('Falha ao gerar o formulario final.')
                 log.info(executaAssinaturaProcessos.listProcessos)
                 log.info('Finalizando o robo.')
@@ -529,6 +478,26 @@ class StartRobo:
             log.info(individual)
             log.info('-------------------------------------------------')
 
+            try:
+                # Registra Base
+                dataBaseModel['atividade_concluida'] = '0'
+
+                try:
+                    # Dataset
+                    self.dataset_csv(dataBaseModel, log)
+                except Exception as e:
+                    log.info('Falha ao registrar dados geral.')
+                    log.info(repr(e))
+
+                try:
+                    self.dataset_csv_individual(dataBaseModel, individual, log)
+                except Exception as e:
+                    log.info('Falha ao registrar dados individual.')
+                    log.info(repr(e))
+
+            except Exception as e:
+                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info(repr(e))
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -536,45 +505,7 @@ class StartRobo:
                 log.info('Formulario gerado com sucesso.')
                 log.info('Atividade realizada com sucesso.')
 
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '0'
-
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
             except Exception as e:
-
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '1'
-                dataBaseModel['qtd_erros_robo'] += 1
-
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
                 log.info('Falha ao gerar o formulario final.')
                 log.info(executaTransitarJulgado.listProcessos)
                 log.info('Finalizando o robo.')
@@ -629,7 +560,7 @@ class StartRobo:
             try:
                 # Request
                 trafficData = self.registre_request(webdriver, fileName, log)
-                log.info('Dados de trafico registrado com sucesso.')
+                log.info('Dados registrados com sucesso - Trafego.')
             except Exception as e:
 
                 dataBaseModel['qtd_erros_robo'] += 1
@@ -655,50 +586,33 @@ class StartRobo:
             log.info('-------------------------------------------------')
 
             try:
-                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaLancamento.listProcessos, 3, log)
-                log.info('Formulario gerado com sucesso.')
-                log.info('Atividade realizada com sucesso.')
-
                 # Registra Base
                 dataBaseModel['atividade_concluida'] = '0'
 
                 try:
                     # Dataset
                     self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados geral.')
                     log.info(repr(e))
 
                 try:
                     self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
                 except Exception as e:
                     log.info('Falha ao registrar dados individual.')
                     log.info(repr(e))
 
             except Exception as e:
+                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info(repr(e))
 
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '1'
-                dataBaseModel['qtd_erros_robo'] += 1
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaLancamento.listProcessos, 3, log)
+                log.info('Formulario gerado com sucesso.')
+                log.info('Atividade realizada com sucesso.')
 
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                    log.info('Dados geral registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                    log.info('Dados individual registrado com sucesso.')
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+            except Exception as e:
                 log.info('Falha ao gerar o formulario final.')
                 log.info(executaLancamento.listProcessos)
                 log.info('Finalizando o robo.')

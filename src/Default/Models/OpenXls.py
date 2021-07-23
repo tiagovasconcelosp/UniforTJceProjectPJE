@@ -427,6 +427,7 @@ class OpenXls:
                         listAllProcess2 = []
 
                         for x in range(len(listDataProcessos)):
+                            # Valida se todos os caracteres sao digitos
                             if listDataResultado[x].isdigit():
                                 listAllProcess.append([listDataProcessos[x], listDataResultado[x]])
                             else:

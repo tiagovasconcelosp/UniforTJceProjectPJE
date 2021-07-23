@@ -38,7 +38,7 @@ class CSV:
                          'cod_atividade',
                          'atividade_concluida',
                          # 'tempo_uso_aplicacao_sec',
-                         'qtd_trafeco_baixado_kb', 'qtd_requisicao',
+                         'qtd_trafego_baixado_kb', 'qtd_requisicao',
                          # Dados Individual
                          'cod_processo', 'processo_realizado',
                          'processo_nao_encontrado',
@@ -86,6 +86,8 @@ class CSV:
 
             file.close()
 
+            log.info('Dados CSV registrados com sucesso - Geral.')
+
         except Exception as e:
             log.info('Houve uma falha gravar o arquivo geral.')
             log.info(repr(e))
@@ -96,6 +98,9 @@ class CSV:
 
             dataset = Dataset(list(listaDadosGerarCsv), log)
             dataset.setDataGeral()
+
+            log.info('Dados SQL inserido com sucesso - Geral.')
+
         except Exception as e:
             log.info('Nao foi possivel registrar os dados via banco.')
             log.info(repr(e))
@@ -126,6 +131,8 @@ class CSV:
 
                 file.close()
 
+            log.info('Dados CSV registrados com sucesso - Individual.')
+
         except Exception as e:
             log.info('Houve uma falha gravar o arquivo individual.')
             log.info(repr(e))
@@ -133,6 +140,9 @@ class CSV:
         try:
             dataset = Dataset(list, log)
             dataset.setDataIndividual()
+
+            log.info('Dados SQL inserido com sucesso - Individual.')
+
         except Exception as e:
             log.info('Nao foi possivel registrar os dados via banco.')
             log.info(repr(e))
