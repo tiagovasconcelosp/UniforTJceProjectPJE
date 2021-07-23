@@ -110,8 +110,6 @@ class CSV:
         try:
             self.arquivoOutput = self.pathCsvExecucao
 
-            list = []
-
             for x in range(len(dadosIndividual['cod_processo'])):
 
                 file = open(self.arquivoOutput, mode='a+', newline='')
@@ -127,8 +125,6 @@ class CSV:
                     # Ex data {'data_aplicacao': '01/01/2000 00:00:00', 'qtd_clicks': '10', 'qtd_erros_tentativa_processo': '1'}
                     writer.writerow(listaDadosIndividualGerarCsv)
 
-                list.append(listaDadosIndividualGerarCsv)
-
                 file.close()
 
             log.info('Dados CSV registrados com sucesso - Individual.')
@@ -138,6 +134,19 @@ class CSV:
             log.info(repr(e))
 
         try:
+
+            list = []
+
+            for x in range(len(dadosIndividual['cod_processo'])):
+
+                listaDadosIndividualGerarCsv['cod_processo'] = dadosIndividual['cod_processo'][x]
+                listaDadosIndividualGerarCsv['processo_realizado'] = dadosIndividual['processo_realizado'][x]
+                listaDadosIndividualGerarCsv['processo_nao_encontrado'] = dadosIndividual['processo_nao_encontrado'][x]
+                listaDadosIndividualGerarCsv['tempo_execucao_individual_sec'] = \
+                dadosIndividual['tempo_execucao_individual_sec'][x]
+
+                list.append(listaDadosIndividualGerarCsv)
+
             dataset = Dataset(list, log)
             dataset.setDataIndividual()
 

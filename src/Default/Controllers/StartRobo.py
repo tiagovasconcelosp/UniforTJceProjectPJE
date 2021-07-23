@@ -44,8 +44,8 @@ class StartRobo:
     firefox_filepath = ""
     webDriveName = ""
 
-    pathDatabaseGeral = "database\database-geral.csv"
-    pathDatabaseIndividual = "database\database-individual.csv"
+    pathDatabaseGeral = ""
+    pathDatabaseIndividual = ""
 
     # var
     arrayVarRefDados = {
@@ -68,6 +68,9 @@ class StartRobo:
         # Proxy
         self.proxy = [i.text for i in xml.iter('directoryProxy')][0] + "\\"
         self.traffic = [i.text for i in xml.iter('directoryLogTraffic')][0] + "\\"
+
+        self.pathDatabaseGeral = [i.text for i in xml.iter('directoryData')][0] + "\\" + "database-geral.csv"
+        self.pathDatabaseIndividual = [i.text for i in xml.iter('directoryData')][0] + "\\" + "database-individual.csv"
 
         self.versao = self.get_installed_version()
 
