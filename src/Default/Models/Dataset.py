@@ -40,7 +40,7 @@ class Dataset:
             record = tuple(self.listData)
             cursor.execute(mySql_insert_query, record)
             connection.commit()
-            self.log.info('Valores inseridos com sucesso.')
+            self.log.info('Dados SQL inserido com sucesso - Geral.')
 
         except mysql.connector.Error as error:
             self.log.info('Falha ao inserir valores na tabela: ' + str(error))
@@ -77,7 +77,7 @@ class Dataset:
                 cursor.execute(mySql_insert_query, record)
                 connection.commit()
 
-            self.log.info('Valores inseridos com sucesso.')
+            self.log.info('Dados SQL inserido com sucesso - Individual.')
 
         except mysql.connector.Error as error:
             self.log.info('Falha ao inserir valores na tabela: ' + str(error))

@@ -84,7 +84,7 @@ class CSV:
                 # Ex data {'data_aplicacao': '01/01/2000 00:00:00', 'qtd_clicks': '10', 'qtd_erros_tentativa_processo': '1'}
                 writer.writerow(listaDadosGerarCsv)
 
-            file.close()
+            # file.close()
 
             log.info('Dados CSV registrados com sucesso - Geral.')
 
@@ -99,7 +99,7 @@ class CSV:
             dataset = Dataset(list(listaDadosGerarCsv), log)
             dataset.setDataGeral()
 
-            log.info('Dados SQL inserido com sucesso - Geral.')
+            # log.info('Dados SQL inserido com sucesso - Geral.')
 
         except Exception as e:
             log.info('Nao foi possivel registrar os dados via banco.')
@@ -125,7 +125,7 @@ class CSV:
                     # Ex data {'data_aplicacao': '01/01/2000 00:00:00', 'qtd_clicks': '10', 'qtd_erros_tentativa_processo': '1'}
                     writer.writerow(listaDadosIndividualGerarCsv)
 
-                file.close()
+                # file.close()
 
             log.info('Dados CSV registrados com sucesso - Individual.')
 
@@ -150,7 +150,7 @@ class CSV:
             dataset = Dataset(list, log)
             dataset.setDataIndividual()
 
-            log.info('Dados SQL inserido com sucesso - Individual.')
+            # log.info('Dados SQL inserido com sucesso - Individual.')
 
         except Exception as e:
             log.info('Nao foi possivel registrar os dados via banco.')
