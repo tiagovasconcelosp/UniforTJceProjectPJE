@@ -697,7 +697,10 @@ class TaskLancamento:
             dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
             dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
 
+            logging.info('---------------------------')
+            logging.info('Final Atividade:')
             logging.info(dataBaseModel)
+            logging.info('---------------------------')
 
             try:
                 firefox.close()
@@ -713,15 +716,18 @@ class TaskLancamento:
 
         except Exception as e:
 
-            dataBaseModel['qtd_erros_robo'] += 1
+            dataBaseModel['qtd_erros_robo'] = 1
 
+            logging.info('---------------------------')
+            logging.info('Atividade Erro:')
             logging.info(dataBaseModel)
+            logging.info('---------------------------')
 
             image = Print(firefox, caminhoImages)
             logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
             logging.info(repr(e))
-            logging.shutdown()
+            # logging.shutdown()
 
             # Retorna valor caso haja algum erro durante a execucao
             return self.listProcessos

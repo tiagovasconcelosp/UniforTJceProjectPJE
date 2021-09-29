@@ -151,6 +151,9 @@ class StartRobo:
         log.info('Driver: ' + str(self.webDriveName))
         log.info('---------------------------')
 
+        # Reset List dataBaseModel
+        self.resetDataBaseModel(dataBaseModel)
+
         # Registra base
         dataBaseModel['endereco_mac'] = str(get_mac_address())
         dataBaseModel['id'] = dataBaseModel['id'] + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99))
@@ -187,6 +190,7 @@ class StartRobo:
 
             # Registra Base
             dataBaseModel['cod_atividade'] = '1'
+            dataBaseModel['atividade_concluida'] = '1'
 
             # Executa a tarefa Aguardando Sessão Julgamento
             executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
@@ -199,27 +203,30 @@ class StartRobo:
 
             del dataBaseModel['individual']
 
-            # Registra os dados
-            try:
-                # Request
-                trafficData = self.registre_request(webdriver, fileName, log)
-                log.info('Dados de trafico registrado com sucesso.')
-            except Exception as e:
+            # ###########################################################################################
+            # Registra os dados Request CSV
+            # try:
+            # Request
+            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            log.info('Dados registrados com sucesso - Trafego.')
+            # except Exception as e:
+            #
+            #     dataBaseModel['qtd_erros_robo'] += 1
+            #
+            #     log.info('Falha ao registrar dados de trafico.')
+            #     log.info(repr(e))
 
-                dataBaseModel['qtd_erros_robo'] += 1
+            # dataBaseModel['qtd_requisicao'] = 0
+            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            # self.dataset_csv(dataBaseModel, log)
+            # self.dataset_csv_individual(dataBaseModel, individual, log)
+            # ###########################################################################################
 
-                log.info('Falha ao registrar dados de trafico.')
-                log.info(repr(e))
-
-                dataBaseModel['qtd_requisicao'] = 0
-                dataBaseModel['qtd_trafego_baixado_kb'] = 0
-                self.dataset_csv(dataBaseModel, log)
-                self.dataset_csv_individual(dataBaseModel, individual, log)
-
-            # Registra trafico
+            # Registra trafico lista principal
             dataBaseModel['qtd_requisicao'] = trafficData[1]
             dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
 
+            log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
             log.info('Dados para registro.')
             log.info('Modelo principal:')
@@ -227,27 +234,31 @@ class StartRobo:
             log.info('Modelo individual:')
             log.info(individual)
             log.info('-------------------------------------------------')
+            log.info('-------------------------------------------------')
+
+            # try:
+            # Registra Base
+            dataBaseModel['atividade_concluida'] = '0'
+
+            # Registrados CSV e SQL
+            # ###########################################################################################
+            try:
+                # Dataset
+                self.dataset_csv(dataBaseModel, log)
+            except Exception as e:
+                log.info('Falha ao registrar dados geral.')
+                log.info(repr(e))
 
             try:
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '0'
-
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+                self.dataset_csv_individual(dataBaseModel, individual, log)
             except Exception as e:
-                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info('Falha ao registrar dados individual.')
                 log.info(repr(e))
+
+            # except Exception as e:
+            #     log.info('Falha ao registrar dados CSV ou SQL.')
+            #     log.info(repr(e))
+            # ###########################################################################################
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -272,6 +283,7 @@ class StartRobo:
 
             # Registra Base
             dataBaseModel['cod_atividade'] = '2'
+            dataBaseModel['atividade_concluida'] = '1'
 
             # Inclusão de processos na relação de julgamento
             executaInclusaoProcessos = TaskInclusaoProcessos(firefox, self.caminhoImages, log,
@@ -284,27 +296,30 @@ class StartRobo:
 
             del dataBaseModel['individual']
 
-            # Registra os dados
-            try:
-                # Request
-                trafficData = self.registre_request(webdriver, fileName, log)
-                log.info('Dados de trafico registrado com sucesso.')
-            except Exception as e:
+            # ###########################################################################################
+            # Registra os dados Request CSV
+            # try:
+            # Request
+            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            log.info('Dados registrados com sucesso - Trafego.')
+            # except Exception as e:
+            #
+            #     dataBaseModel['qtd_erros_robo'] += 1
+            #
+            #     log.info('Falha ao registrar dados de trafico.')
+            #     log.info(repr(e))
 
-                dataBaseModel['qtd_erros_robo'] += 1
+            # dataBaseModel['qtd_requisicao'] = 0
+            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            # self.dataset_csv(dataBaseModel, log)
+            # self.dataset_csv_individual(dataBaseModel, individual, log)
+            # ###########################################################################################
 
-                log.info('Falha ao registrar dados de trafico.')
-                log.info(repr(e))
-
-                dataBaseModel['qtd_requisicao'] = 0
-                dataBaseModel['qtd_trafego_baixado_kb'] = 0
-                self.dataset_csv(dataBaseModel, log)
-                self.dataset_csv_individual(dataBaseModel, individual, log)
-
-            # Registra trafico
+            # Registra trafico lista principal
             dataBaseModel['qtd_requisicao'] = trafficData[1]
             dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
 
+            log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
             log.info('Dados para registro.')
             log.info('Modelo principal:')
@@ -312,27 +327,31 @@ class StartRobo:
             log.info('Modelo individual:')
             log.info(individual)
             log.info('-------------------------------------------------')
+            log.info('-------------------------------------------------')
+
+            # try:
+            # Registra Base
+            dataBaseModel['atividade_concluida'] = '0'
+
+            # Registrados CSV e SQL
+            # ###########################################################################################
+            try:
+                # Dataset
+                self.dataset_csv(dataBaseModel, log)
+            except Exception as e:
+                log.info('Falha ao registrar dados geral.')
+                log.info(repr(e))
 
             try:
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '0'
-
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+                self.dataset_csv_individual(dataBaseModel, individual, log)
             except Exception as e:
-                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info('Falha ao registrar dados individual.')
                 log.info(repr(e))
+
+            # except Exception as e:
+            #     log.info('Falha ao registrar dados CSV ou SQL.')
+            #     log.info(repr(e))
+            # ###########################################################################################
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -357,6 +376,7 @@ class StartRobo:
 
             # Registra Base
             dataBaseModel['cod_atividade'] = '3'
+            dataBaseModel['atividade_concluida'] = '1'
 
             # Assinaturas de Processos para Juiz Titular
             executaAssinaturaProcessos = TaskAssinaturaProcessos(firefox, self.caminhoImages, log,
@@ -367,27 +387,30 @@ class StartRobo:
 
             del dataBaseModel['individual']
 
-            # Registra os dados
-            try:
-                # Request
-                trafficData = self.registre_request(webdriver, fileName, log)
-                log.info('Dados de trafico registrado com sucesso.')
-            except Exception as e:
+            # ###########################################################################################
+            # Registra os dados Request CSV
+            # try:
+            # Request
+            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            log.info('Dados registrados com sucesso - Trafego.')
+            # except Exception as e:
+            #
+            #     dataBaseModel['qtd_erros_robo'] += 1
+            #
+            #     log.info('Falha ao registrar dados de trafico.')
+            #     log.info(repr(e))
 
-                dataBaseModel['qtd_erros_robo'] += 1
+            # dataBaseModel['qtd_requisicao'] = 0
+            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            # self.dataset_csv(dataBaseModel, log)
+            # self.dataset_csv_individual(dataBaseModel, individual, log)
+            # ###########################################################################################
 
-                log.info('Falha ao registrar dados de trafico.')
-                log.info(repr(e))
-
-                dataBaseModel['qtd_requisicao'] = 0
-                dataBaseModel['qtd_trafego_baixado_kb'] = 0
-                self.dataset_csv(dataBaseModel, log)
-                self.dataset_csv_individual(dataBaseModel, individual, log)
-
-            # Registra trafico
+            # Registra trafico lista principal
             dataBaseModel['qtd_requisicao'] = trafficData[1]
             dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
 
+            log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
             log.info('Dados para registro.')
             log.info('Modelo principal:')
@@ -395,27 +418,31 @@ class StartRobo:
             log.info('Modelo individual:')
             log.info(individual)
             log.info('-------------------------------------------------')
+            log.info('-------------------------------------------------')
+
+            # try:
+            # Registra Base
+            dataBaseModel['atividade_concluida'] = '0'
+
+            # Registrados CSV e SQL
+            # ###########################################################################################
+            try:
+                # Dataset
+                self.dataset_csv(dataBaseModel, log)
+            except Exception as e:
+                log.info('Falha ao registrar dados geral.')
+                log.info(repr(e))
 
             try:
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '0'
-
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+                self.dataset_csv_individual(dataBaseModel, individual, log)
             except Exception as e:
-                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info('Falha ao registrar dados individual.')
                 log.info(repr(e))
+
+            # except Exception as e:
+            #     log.info('Falha ao registrar dados CSV ou SQL.')
+            #     log.info(repr(e))
+            # ###########################################################################################
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -440,6 +467,7 @@ class StartRobo:
 
             # Registra Base
             dataBaseModel['cod_atividade'] = '4'
+            dataBaseModel['atividade_concluida'] = '1'
 
             # Transitar em Julgado
             executaTransitarJulgado = TaskTransitarJulgado(firefox, self.caminhoImages, log,
@@ -452,27 +480,30 @@ class StartRobo:
 
             del dataBaseModel['individual']
 
-            # Registra os dados
-            try:
-                # Request
-                trafficData = self.registre_request(webdriver, fileName, log)
-                log.info('Dados de trafico registrado com sucesso.')
-            except Exception as e:
+            # ###########################################################################################
+            # Registra os dados Request CSV
+            # try:
+            # Request
+            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            log.info('Dados registrados com sucesso - Trafego.')
+            # except Exception as e:
+            #
+            #     dataBaseModel['qtd_erros_robo'] += 1
+            #
+            #     log.info('Falha ao registrar dados de trafico.')
+            #     log.info(repr(e))
 
-                dataBaseModel['qtd_erros_robo'] += 1
+            # dataBaseModel['qtd_requisicao'] = 0
+            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            # self.dataset_csv(dataBaseModel, log)
+            # self.dataset_csv_individual(dataBaseModel, individual, log)
+            # ###########################################################################################
 
-                log.info('Falha ao registrar dados de trafico.')
-                log.info(repr(e))
-
-                dataBaseModel['qtd_requisicao'] = 0
-                dataBaseModel['qtd_trafego_baixado_kb'] = 0
-                self.dataset_csv(dataBaseModel, log)
-                self.dataset_csv_individual(dataBaseModel, individual, log)
-
-            # Registra trafico
+            # Registra trafico lista principal
             dataBaseModel['qtd_requisicao'] = trafficData[1]
             dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
 
+            log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
             log.info('Dados para registro.')
             log.info('Modelo principal:')
@@ -480,27 +511,31 @@ class StartRobo:
             log.info('Modelo individual:')
             log.info(individual)
             log.info('-------------------------------------------------')
+            log.info('-------------------------------------------------')
+
+            # try:
+            # Registra Base
+            dataBaseModel['atividade_concluida'] = '0'
+
+            # Registrados CSV e SQL
+            # ###########################################################################################
+            try:
+                # Dataset
+                self.dataset_csv(dataBaseModel, log)
+            except Exception as e:
+                log.info('Falha ao registrar dados geral.')
+                log.info(repr(e))
 
             try:
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '0'
-
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+                self.dataset_csv_individual(dataBaseModel, individual, log)
             except Exception as e:
-                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info('Falha ao registrar dados individual.')
                 log.info(repr(e))
+
+            # except Exception as e:
+            #     log.info('Falha ao registrar dados CSV ou SQL.')
+            #     log.info(repr(e))
+            # ###########################################################################################
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -525,6 +560,7 @@ class StartRobo:
 
             # Registra Base
             dataBaseModel['cod_atividade'] = '5'
+            dataBaseModel['atividade_concluida'] = '1'
 
             # Caso haja dados incorretos na planilha, já será verificado e validado
             # Chamada feita somente para validacao e nao perder tempo na execucao
@@ -541,7 +577,9 @@ class StartRobo:
 
             del dataBaseModel['individual']
 
-            # Registra os dados
+            # ###########################################################################################
+            # Adiciona a lista de processos nao aptos
+            # Particularidade da Atividade
             try:
                 # Adiciona a lista de processos nao aptos
                 # A partir dos dados da planilha
@@ -551,35 +589,40 @@ class StartRobo:
                     for x in range(len(listDataProcessosInaptos)):
                         executaLancamento.listProcessos[0].append(listDataProcessosInaptos[x][0])
                         executaLancamento.listProcessos[1].append(4)
-
             except Exception as e:
 
                 dataBaseModel['qtd_erros_robo'] += 1
 
                 log.info('Falha ao adicionar os dados ingnorados da planilha.')
                 log.info(repr(e))
+            # ###########################################################################################
 
-            # Registra os dados
-            try:
+
+
+            # ###########################################################################################
+            # Registra os dados Request CSV
+            # try:
                 # Request
-                trafficData = self.registre_request(webdriver, fileName, log)
-                log.info('Dados registrados com sucesso - Trafego.')
-            except Exception as e:
+            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            log.info('Dados registrados com sucesso - Trafego.')
+            # except Exception as e:
+            #
+            #     dataBaseModel['qtd_erros_robo'] += 1
+            #
+            #     log.info('Falha ao registrar dados de trafico.')
+            #     log.info(repr(e))
 
-                dataBaseModel['qtd_erros_robo'] += 1
+                # dataBaseModel['qtd_requisicao'] = 0
+                # dataBaseModel['qtd_trafego_baixado_kb'] = 0
+                # self.dataset_csv(dataBaseModel, log)
+                # self.dataset_csv_individual(dataBaseModel, individual, log)
+            # ###########################################################################################
 
-                log.info('Falha ao registrar dados de trafico.')
-                log.info(repr(e))
-
-                dataBaseModel['qtd_requisicao'] = 0
-                dataBaseModel['qtd_trafego_baixado_kb'] = 0
-                self.dataset_csv(dataBaseModel, log)
-                self.dataset_csv_individual(dataBaseModel, individual, log)
-
-            # Registra trafico
+            # Registra trafico lista principal
             dataBaseModel['qtd_requisicao'] = trafficData[1]
             dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
 
+            log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
             log.info('Dados para registro.')
             log.info('Modelo principal:')
@@ -587,27 +630,32 @@ class StartRobo:
             log.info('Modelo individual:')
             log.info(individual)
             log.info('-------------------------------------------------')
+            log.info('-------------------------------------------------')
+
+            # try:
+            # Registra Base
+            dataBaseModel['atividade_concluida'] = '0'
+
+            # Registrados CSV e SQL
+            # ###########################################################################################
+            try:
+                # Dataset
+                self.dataset_csv(dataBaseModel, log)
+            except Exception as e:
+                log.info('Falha ao registrar dados geral.')
+                log.info(repr(e))
 
             try:
-                # Registra Base
-                dataBaseModel['atividade_concluida'] = '0'
-
-                try:
-                    # Dataset
-                    self.dataset_csv(dataBaseModel, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados geral.')
-                    log.info(repr(e))
-
-                try:
-                    self.dataset_csv_individual(dataBaseModel, individual, log)
-                except Exception as e:
-                    log.info('Falha ao registrar dados individual.')
-                    log.info(repr(e))
-
+                self.dataset_csv_individual(dataBaseModel, individual, log)
             except Exception as e:
-                log.info('Falha ao registrar dados CSV ou SQL.')
+                log.info('Falha ao registrar dados individual.')
                 log.info(repr(e))
+
+            # except Exception as e:
+            #     log.info('Falha ao registrar dados CSV ou SQL.')
+            #     log.info(repr(e))
+            # ###########################################################################################
+
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -626,25 +674,25 @@ class StartRobo:
 
     def dataset_csv(self, dataBaseModel, log):
 
-        try:
-            # Registra dados de execução geral
-            csv = CSV(self.pathDatabaseGeral)
-            csv.registraCsvDatabase(dataBaseModel, log)
-        except Exception as e:
-            log.info('Houve uma falha ao registrar os dados de execucao geral.')
-            log.info(repr(e))
+        # try:
+        # Registra dados de execução geral
+        csv = CSV(self.pathDatabaseGeral)
+        csv.registraCsvDatabase(dataBaseModel, log)
+        # except Exception as e:
+        #     log.info('Houve uma falha ao registrar os dados de execucao geral.')
+        #     log.info(repr(e))
 
     def dataset_csv_individual(self, dataBaseModel, individual, log):
 
-        try:
-            # Registra dados de execução geral
-            csv = CSV(self.pathDatabaseIndividual)
-            csv.registraCsvDatabaseIndividual(dataBaseModel, individual, log)
-        except Exception as e:
-            log.info('Houve uma falha ao registrar os dados de execucao individual.')
-            log.info(repr(e))
+        # try:
+        # Registra dados de execução geral
+        csv = CSV(self.pathDatabaseIndividual)
+        csv.registraCsvDatabaseIndividual(dataBaseModel, individual, log)
+        # except Exception as e:
+        #     log.info('Houve uma falha ao registrar os dados de execucao individual.')
+        #     log.info(repr(e))
 
-    def registre_request(self, webdriver, fileName, log):
+    def registre_request(self, webdriver, fileName, log, dataBaseModel):
 
         # Captura os dados de trafeco
         trafficData = webdriver.monitor_traffic()
@@ -655,12 +703,38 @@ class StartRobo:
             csv = CSV(self.traffic)
             csv.registraCsvTraffic(fileName, trafficData[0], log)
         except Exception as e:
+
+            dataBaseModel['qtd_erros_robo'] += 1
+
             log.info('Houve uma falha ao registrar os dados de trafico.')
             log.info(repr(e))
 
         webdriver.stop_proxy()
 
         return trafficData
+
+    def resetDataBaseModel(self, dataBaseModel):
+
+        dataBaseModel['qtd_processos'] = 0
+        dataBaseModel['qtd_processos_nao_localizados'] = 0
+        dataBaseModel['tempo_execucao_sec'] = 0
+        dataBaseModel['qtd_clicks'] = 0
+        dataBaseModel['qtd_erros_tentativa_processo'] = 0
+        dataBaseModel['endereco_mac'] = 0
+        dataBaseModel['qtd_erros_robo'] = 0
+        dataBaseModel['cod_atividade'] = 0
+
+        # 'tempo_uso_aplicacao_sec' : 0,
+        # dataBaseModel['tempo_uso_aplicacao_sec'] = 0
+        dataBaseModel['qtd_trafego_baixado_kb'] = 0
+        dataBaseModel['qtd_requisicao'] = 0
+        dataBaseModel['atividade_concluida'] = 0
+        dataBaseModel['individual'] = {
+                'cod_processo': [],
+                'processo_realizado': [],
+                'processo_nao_encontrado': [],
+                'tempo_execucao_individual_sec': [],
+            },
 
     def get_installed_version(self):
         try:
