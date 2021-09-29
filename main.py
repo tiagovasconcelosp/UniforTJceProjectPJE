@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 
 from src.Default.Controllers.Logging import Logging
-from src.Default.Models.Dataset import Dataset
+# from src.Default.Models.Dataset import Dataset
 from src.Default.Views.FormMain import Form
 
 def resource_path(relative_path):

@@ -60,7 +60,7 @@ class TaskLancamento:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(1)
+            time.sleep(2)
 
             # Valida se houve mais de um resultado
             element = firefox.find_element(By.CSS_SELECTOR,
@@ -77,7 +77,7 @@ class TaskLancamento:
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
 
-            time.sleep(2)
+            time.sleep(3)
 
             # Clica no primeiro processo retornado
             element = WebDriverWait(firefox, 2).until(
@@ -95,7 +95,7 @@ class TaskLancamento:
             # Adicao previa de nao concluido
             self.listProcessos[1].append(1)
 
-            time.sleep(4)
+            time.sleep(5)
 
         except:
             logging.info('Processo nao localizado: ' + str(numProcesso))
@@ -131,7 +131,7 @@ class TaskLancamento:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(3)
+            time.sleep(4)
 
             logging.info('Aguardando a nova janela ser aberta.')
 
@@ -190,7 +190,7 @@ class TaskLancamento:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(1)
+            time.sleep(2)
 
             # Paga as informacoes da quantidade de Recorrente e Recorrido para saber se sera executado
             qtdRecorrente = firefox.find_elements_by_css_selector('div#poloAtivo table tbody tr')
@@ -222,7 +222,7 @@ class TaskLancamento:
                 except:
                     firefox.quit()
 
-                time.sleep(3)
+                time.sleep(4)
 
                 # Para sair do objeto popup
                 firefox.switch_to.window(main_window_handle)
@@ -281,7 +281,7 @@ class TaskLancamento:
             firefox.switch_to.default_content()
 
             # Localiza frame para o proximo processo
-            iframe = WebDriverWait(firefox, 10).until(
+            iframe = WebDriverWait(firefox, 30).until(
                 EC.presence_of_element_located((By.ID, 'ngFrame')))
 
             firefox.switch_to.frame(iframe)
@@ -303,12 +303,12 @@ class TaskLancamento:
             firefox.switch_to.default_content()
 
             # Localiza frame para o proximo processo
-            iframe = WebDriverWait(firefox, 10).until(
+            iframe = WebDriverWait(firefox, 30).until(
                 EC.presence_of_element_located((By.ID, 'ngFrame')))
 
             firefox.switch_to.frame(iframe)
 
-            iframe = WebDriverWait(firefox, 10).until(
+            iframe = WebDriverWait(firefox, 30).until(
                 EC.presence_of_element_located((By.ID, 'frame-tarefa')))
 
             firefox.switch_to.frame(iframe)
@@ -321,7 +321,7 @@ class TaskLancamento:
             self.qtd_clicks_all += 1
 
             # Clica no botao pesquisar
-            element = WebDriverWait(firefox, 20).until(
+            element = WebDriverWait(firefox, 30).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'form#taskInstanceForm div.rich-panel-body span div.col-sm-6 div.col-sm-12 fieldset input.btn-primary')))
@@ -389,7 +389,7 @@ class TaskLancamento:
 
             # Verificar se tem botao "preencher complemento"
             try:
-                element = WebDriverWait(firefox, 3).until(
+                element = WebDriverWait(firefox, 20).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'a[title="Preencher complementos"i]')))
@@ -408,7 +408,7 @@ class TaskLancamento:
                 self.qtd_clicks_all += 1
 
                 # Clica em 'Ok'
-                element = WebDriverWait(firefox, 3).until(
+                element = WebDriverWait(firefox, 20).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'form#taskInstanceForm  input[value="OK"i]')))
@@ -433,7 +433,7 @@ class TaskLancamento:
             time.sleep(3)
 
             # Clica no botao salvar
-            element = WebDriverWait(firefox, 5).until(
+            element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'div.actionButtons input[value="Salvar"i]')))
@@ -467,10 +467,10 @@ class TaskLancamento:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(1)
+            time.sleep(2)
 
             # Clica em Encaminhar para Finalizar e sair da tarefa
-            element = WebDriverWait(firefox, 10).until(  # 5s
+            element = WebDriverWait(firefox, 20).until(  # 5s
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR,
                      'ul.dropdown-transicoes li a[title="Encaminhar para Finalizar e sair da tarefa"i]')))
@@ -489,9 +489,9 @@ class TaskLancamento:
 
             firefox.switch_to.frame(iframe)
 
-            time.sleep(1)
+            time.sleep(2)
 
-            element = WebDriverWait(firefox, 10).until(
+            element = WebDriverWait(firefox, 20).until(
                 EC.presence_of_element_located(
                     (By.ID, 'inputPesquisaTarefas')))
             element.clear()
@@ -697,7 +697,10 @@ class TaskLancamento:
             dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
             dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
 
+            logging.info('---------------------------')
+            logging.info('Final Atividade:')
             logging.info(dataBaseModel)
+            logging.info('---------------------------')
 
             try:
                 firefox.close()
@@ -713,15 +716,18 @@ class TaskLancamento:
 
         except Exception as e:
 
-            dataBaseModel['qtd_erros_robo'] += 1
+            dataBaseModel['qtd_erros_robo'] = 1
 
+            logging.info('---------------------------')
+            logging.info('Atividade Erro:')
             logging.info(dataBaseModel)
+            logging.info('---------------------------')
 
             image = Print(firefox, caminhoImages)
             logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
             logging.info('Finalizando o robo.')
             logging.info(repr(e))
-            logging.shutdown()
+            # logging.shutdown()
 
             # Retorna valor caso haja algum erro durante a execucao
             return self.listProcessos
