@@ -222,7 +222,7 @@ class OpenXls:
             os._exit(0)
             sys.exit(0)
 
-    def getDataProcessTrasidarJulgadoXLS(self, data, firefox, logging, xml):
+    def getDataProcessTrasitarJulgadoXLS(self, data, firefox, logging, xml):
 
         try:
             # Ler o arquivo

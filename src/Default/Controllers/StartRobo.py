@@ -715,26 +715,35 @@ class StartRobo:
 
     def resetDataBaseModel(self, dataBaseModel):
 
-        dataBaseModel['qtd_processos'] = 0
-        dataBaseModel['qtd_processos_nao_localizados'] = 0
-        dataBaseModel['tempo_execucao_sec'] = 0
-        dataBaseModel['qtd_clicks'] = 0
-        dataBaseModel['qtd_erros_tentativa_processo'] = 0
-        dataBaseModel['endereco_mac'] = 0
-        dataBaseModel['qtd_erros_robo'] = 0
-        dataBaseModel['cod_atividade'] = 0
+        # Tempo da aplicacao iniciada
+        named_tuple = time.localtime()
 
-        # 'tempo_uso_aplicacao_sec' : 0,
-        # dataBaseModel['tempo_uso_aplicacao_sec'] = 0
-        dataBaseModel['qtd_trafego_baixado_kb'] = 0
-        dataBaseModel['qtd_requisicao'] = 0
-        dataBaseModel['atividade_concluida'] = 0
-        dataBaseModel['individual'] = {
+        time_string = time.strftime("%d-%m-%Y %H:%M:%S", named_tuple)
+
+        time_string2 = time.strftime("%d%m%Y%H%M", named_tuple)
+
+        dataBaseModel = {
+            'id': time_string2,
+            'data_aplicacao': time_string,
+            'qtd_processos': 0,
+            'qtd_processos_nao_localizados': 0,
+            'tempo_execucao_sec': 0,
+            'qtd_clicks': 0,
+            'qtd_erros_tentativa_processo': 0,
+            'endereco_mac': 0,
+            'qtd_erros_robo': 0,
+            'cod_atividade': 0,
+            # 'tempo_uso_aplicacao_sec' : 0,
+            'qtd_trafego_baixado_kb': 0,
+            'qtd_requisicao': 0,
+            'atividade_concluida': 1,
+            'individual': {
                 'cod_processo': [],
                 'processo_realizado': [],
                 'processo_nao_encontrado': [],
                 'tempo_execucao_individual_sec': [],
             },
+        }
 
     def get_installed_version(self):
         try:

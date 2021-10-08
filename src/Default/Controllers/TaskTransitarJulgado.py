@@ -811,7 +811,7 @@ class TaskTransitarJulgado:
 
             logging.info('Iniciando a busca pelo os processos...')
 
-            listDataProcessos = openXls.getDataProcessTrasidarJulgadoXLS(xlsData, firefox, logging, xml)
+            listDataProcessos = openXls.getDataProcessTrasitarJulgadoXLS(xlsData, firefox, logging, xml)
 
             for i in range(len(listDataProcessos)):
 
@@ -829,9 +829,9 @@ class TaskTransitarJulgado:
                 dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
 
             for i in range(len(self.listProcessos[0])):
-                dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
-                dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
-                dataBaseModel['individual']['processo_nao_encontrado'].append(0)
+                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
+                    dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+                    dataBaseModel['individual']['processo_nao_encontrado'].append(0)
 
             if self.listProcessos[2]:
                 for i in range(len(self.listProcessos[2])):
@@ -935,7 +935,6 @@ class TaskTransitarJulgado:
             logging.info('---------------------------')
             logging.info('Atividade Erro:')
             logging.info(dataBaseModel)
-            logging.info('---------------------------')
 
             image = Print(firefox, caminhoImages)
             logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
