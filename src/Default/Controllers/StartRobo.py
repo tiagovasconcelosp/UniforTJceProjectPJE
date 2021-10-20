@@ -272,8 +272,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                os._exit(0)
-                sys.exit(0)
+                # os._exit(0)
+                # sys.exit(0)
 
         elif dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
 
@@ -365,8 +365,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                os._exit(0)
-                sys.exit(0)
+                # os._exit(0)
+                # sys.exit(0)
 
         elif dataForm['atividade'] == 'Assinaturas de Processos para Juiz Titular':
 
@@ -456,8 +456,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                os._exit(0)
-                sys.exit(0)
+                # os._exit(0)
+                # sys.exit(0)
 
         elif dataForm['atividade'] == 'Transitar em Julgado':
 
@@ -549,8 +549,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                os._exit(0)
-                sys.exit(0)
+                # os._exit(0)
+                # sys.exit(0)
 
         elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
 
@@ -567,15 +567,19 @@ class StartRobo:
             # Nao usa mais
             # listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, log, xml)
 
-            # Lançamento de movimentação TPU
-            executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
-                                               openXls, xlsData,
-                                               '(TR) Lançar movimentações de julgamento',
-                                               xml, dataBaseModel, inicioTime, self.arrayVarRefDados)
+            try:
+                # Lançamento de movimentação TPU
+                executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
+                                                   openXls, xlsData,
+                                                   '(TR) Lançar movimentações de julgamento',
+                                                   xml, dataBaseModel, inicioTime, self.arrayVarRefDados)
 
-            individual = dataBaseModel['individual']
+                individual = dataBaseModel['individual']
 
-            del dataBaseModel['individual']
+                del dataBaseModel['individual']
+
+            except Exception as e:
+                log.info(repr(e))
 
             # ###########################################################################################
             # Adiciona a lista de processos nao aptos
@@ -589,6 +593,8 @@ class StartRobo:
                     for x in range(len(listDataProcessosInaptos)):
                         executaLancamento.listProcessos[0].append(listDataProcessosInaptos[x][0])
                         executaLancamento.listProcessos[1].append(4)
+
+                log.info('Adicionando a lista de processos nao aptos.')
             except Exception as e:
 
                 dataBaseModel['qtd_erros_robo'] += 1
@@ -669,8 +675,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                os._exit(0)
-                sys.exit(0)
+                # os._exit(0)
+                # sys.exit(0)
 
     def dataset_csv(self, dataBaseModel, log):
 

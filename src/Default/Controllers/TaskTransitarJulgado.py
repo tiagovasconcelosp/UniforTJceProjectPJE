@@ -100,9 +100,10 @@ class TaskTransitarJulgado:
 
             time.sleep(4)
 
-        except:
+        except Exception as e:
             self.listProcessos[2].append(str(numProcesso))
             logging.info('Processo ' + str(numProcesso) + ' nao foi localizado.')
+            logging.info(repr(e))
             # registroProcessoEncontrado += 1
 
             # Contabiliza dados
@@ -144,8 +145,9 @@ class TaskTransitarJulgado:
             logging.info('Nova janela encontrada.')
             logging.info('---------------------------')
 
-        except:
+        except Exception as e:
             logging.info('Houve um problema ao encontrar a nova tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
 
             # Contabiliza dados
@@ -170,9 +172,10 @@ class TaskTransitarJulgado:
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]')))
 
-        except:
+        except Exception as e:
             logging.info('Houve um problema na etapa de incluir peticoes. Por ter ocorrido algum problema de conexao.')
             logging.info('Evidenciando com o print da tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
@@ -189,9 +192,11 @@ class TaskTransitarJulgado:
             self.qtd_clicks_all += 1
 
             time.sleep(2)
-        except:
+
+        except Exception as e:
             logging.info('Houve um problema na etapa de selecionar o Tipo Documento')
             logging.info('Evidenciando com o print da tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
@@ -208,7 +213,9 @@ class TaskTransitarJulgado:
             self.qtd_clicks_all += 1
 
             time.sleep(2)
-        except:
+
+        except Exception as e:
+            logging.info(repr(e))
 
             try:
                 # Seleciona o Modelo
@@ -220,9 +227,10 @@ class TaskTransitarJulgado:
                 self.qtd_clicks_all += 1
 
                 time.sleep(2)
-            except:
+            except Exception as e:
                 logging.info('Houve um problema na etapa de selecionar o Modelo')
                 logging.info('Evidenciando com o print da tela.')
+                logging.info(repr(e))
                 logging.info('---------------------------')
                 image = Print(firefox, caminhoImages)
                 countErro += 1
@@ -239,9 +247,11 @@ class TaskTransitarJulgado:
             self.qtd_clicks_all += 1
 
             time.sleep(2)
-        except:
+
+        except Exception as e:
             logging.info('Houve um problema na etapa de selecionar o Tipo de Documento')
             logging.info('Evidenciando com o print da tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
@@ -260,9 +270,11 @@ class TaskTransitarJulgado:
             self.qtd_clicks_all += 1
 
             time.sleep(3)
-        except:
+
+        except Exception as e:
             logging.info('Houve um problema na etapa de selecionar o botao Preencher Documentos')
             logging.info('Evidenciando com o print da tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
@@ -288,9 +300,11 @@ class TaskTransitarJulgado:
             self.qtd_clicks_all += 1
 
             time.sleep(3)
-        except:
+
+        except Exception as e:
             logging.info('Houve um problema na etapa de informar a data')
             logging.info('Evidenciando com o print da tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
@@ -309,9 +323,11 @@ class TaskTransitarJulgado:
             self.qtd_clicks_all += 1
 
             time.sleep(3)
-        except:
+
+        except Exception as e:
             logging.info('Houve um problema ao salvar o processo.')
             logging.info('Evidenciando com o print da tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
             countErro += 1
@@ -332,9 +348,10 @@ class TaskTransitarJulgado:
             # Aguarda a Assinatura, demora em torno de 8s. Pois uso a leitura do certificado
             time.sleep(8)
 
-        except:
+        except Exception as e:
             logging.info('Houve um problema realizar a assinatura.')
             logging.info('Evidenciando com o print da tela.')
+            logging.info(repr(e))
             logging.info('---------------------------')
             image = Print(firefox, caminhoImages)
 
@@ -370,8 +387,9 @@ class TaskTransitarJulgado:
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
-        except:
 
+        except Exception as e:
+            logging.info(repr(e))
             time.sleep(30)
 
             try:
@@ -384,8 +402,8 @@ class TaskTransitarJulgado:
                 # Contabiliza dados
                 self.qtd_clicks_all += 1
 
-            except:
-
+            except Exception as e:
+                logging.info(repr(e))
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
 
@@ -409,9 +427,10 @@ class TaskTransitarJulgado:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-        except:
+        except Exception as e:
 
             logging.info('Tentando novamente "Encaminhar para Cumprir acórdão" . . .')
+            logging.info(repr(e))
 
             # Contabiliza dados
             self.qtd_erros_tentativa_processo_all += 1
@@ -429,9 +448,10 @@ class TaskTransitarJulgado:
                 # Contabiliza dados
                 self.qtd_clicks_all += 1
 
-            except:
+            except Exception as e:
                 logging.info('Houve um problema na etapa Encaminhar para Cumprir acórdão...')
                 logging.info('Evidenciando com o print da tela.')
+                logging.info(repr(e))
                 image = Print(firefox, caminhoImages)
 
                 # Contabiliza dados
@@ -465,8 +485,8 @@ class TaskTransitarJulgado:
                 # Contabiliza dados
                 self.qtd_clicks_all += 1
 
-            except:
-
+            except Exception as e:
+                logging.info(repr(e))
                 time.sleep(30)
 
                 # Contabiliza dados
@@ -482,8 +502,8 @@ class TaskTransitarJulgado:
                     # Contabiliza dados
                     self.qtd_clicks_all += 1
 
-                except:
-
+                except Exception as e:
+                    logging.info(repr(e))
                     # Contabiliza dados
                     self.qtd_erros_tentativa_processo_all += 1
 
@@ -507,10 +527,10 @@ class TaskTransitarJulgado:
 
                 time.sleep(30)
 
-            except:
+            except Exception as e:
 
                 logging.info('Tentando novamente "Encaminhar para 02 - Devolver para instância de origem" . . .')
-
+                logging.info(repr(e))
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
 
@@ -530,13 +550,14 @@ class TaskTransitarJulgado:
                     #############
                     time.sleep(20)
 
-                except:
+                except Exception as e:
 
                     # Contabiliza dados
                     self.qtd_erros_tentativa_processo_all += 1
 
                     logging.info('Houve um problema na etapa devolver para instancia de origem.')
                     logging.info('Evidenciando com o print da tela.')
+                    logging.info(repr(e))
                     image = Print(firefox, caminhoImages)
             ##################################################################################
             try:
@@ -559,9 +580,11 @@ class TaskTransitarJulgado:
                 self.qtd_clicks_all += 1
 
                 time.sleep(3)
-            except:
+
+            except Exception as e:
 
                 logging.info('Tentando novamente selecionar "Motivo Remessa" . . .')
+                logging.info(repr(e))
                 #############
                 time.sleep(20)
 
@@ -586,8 +609,8 @@ class TaskTransitarJulgado:
 
                     time.sleep(3)
 
-                except:
-
+                except Exception as e:
+                    logging.info(repr(e))
                     # Contabiliza dados
                     self.qtd_erros_tentativa_processo_all += 1
 
@@ -640,8 +663,9 @@ class TaskTransitarJulgado:
 
                     # logging.info('Clicando em confirmar.')
 
-                except:
+                except Exception as e:
                     logging.info('Nao houver alerta de documentos nao assinados nesse processo. Continuando . . .')
+                    logging.info(repr(e))
 
                     # Contabiliza dados
                     self.qtd_erros_tentativa_processo_all += 1
@@ -650,8 +674,8 @@ class TaskTransitarJulgado:
                 time.sleep(2)
 
             # Caso haja falha tentar mais uma vez o processo de envio
-            except:
-
+            except Exception as e:
+                logging.info(repr(e))
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
 
@@ -705,8 +729,8 @@ class TaskTransitarJulgado:
 
                         # logging.info('Clicando em confirmar.')
 
-                    except:
-
+                    except Exception as e:
+                        logging.info(repr(e))
                         # Contabiliza dados
                         self.qtd_erros_tentativa_processo_all += 1
 
@@ -719,6 +743,7 @@ class TaskTransitarJulgado:
 
                     logging.info('Houve um problema ao retornar para instancia de origem.')
                     logging.info('Evidenciando com o print da tela.')
+                    logging.info(repr(e))
                     image = Print(firefox, caminhoImages)
 
                     # Contabiliza dados

@@ -42,5 +42,5 @@ class Auth:
             logging.info('Finalizando o robo.')
             logging.info(repr(e))
             logging.shutdown()
-            os._exit(0)
-            sys.exit(0)
+            # os._exit(0)
+            # sys.exit(0)

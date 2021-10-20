@@ -140,8 +140,8 @@ class OpenWebDriver():
             logging.info(repr(e))
             logging.shutdown()
             self.server.stop()
-            os._exit(0)
-            sys.exit(0)
+            # os._exit(0)
+            # sys.exit(0)
 
         # ###################################################################
         # Verificação na abertura do driver
