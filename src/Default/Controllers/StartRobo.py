@@ -53,7 +53,7 @@ class StartRobo:
         'qtd_trafego_baixado_kb': 0,
     }
 
-    def startRobo(self, log, xml, dataForm, dataBaseModel, fileName):
+    def startRobo(self, log, xml, dataForm, dataBaseModel, fileNameRegis):
 
         # Contabiliza dados
         self.qtd_clicks = 0
@@ -207,7 +207,7 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
             log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
@@ -300,7 +300,7 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
             log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
@@ -391,7 +391,7 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
             log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
@@ -484,7 +484,7 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
             log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
@@ -609,7 +609,7 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
                 # Request
-            trafficData = self.registre_request(webdriver, fileName, log, dataBaseModel)
+            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
             log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
@@ -698,7 +698,7 @@ class StartRobo:
         #     log.info('Houve uma falha ao registrar os dados de execucao individual.')
         #     log.info(repr(e))
 
-    def registre_request(self, webdriver, fileName, log, dataBaseModel):
+    def registre_request(self, webdriver, fileNameRegis, log, dataBaseModel):
 
         # Captura os dados de trafeco
         trafficData = webdriver.monitor_traffic()
@@ -707,7 +707,7 @@ class StartRobo:
         # webdriver.registre_traffic(trafficData[0])
         try:
             csv = CSV(self.traffic)
-            csv.registraCsvTraffic(fileName, trafficData[0], log)
+            csv.registraCsvTraffic(fileNameRegis, trafficData[0], log)
         except Exception as e:
 
             dataBaseModel['qtd_erros_robo'] += 1

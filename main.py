@@ -35,7 +35,7 @@ if __name__ == "__main__":
     xmlFile = ET.parse(xmlFile)
     root = xmlFile.getroot()  # recupera a tag principal
 
-    fileName = datetime.now().strftime("%d_%m_%Y__%H_%M_%S")
+    fileNameRegis = datetime.now().strftime("%d_%m_%Y__%H_%M_%S")
 
     caminhoLogExecucao = [i.text for i in root.iter('directoryLog')][0] + "\\"
 
@@ -43,10 +43,10 @@ if __name__ == "__main__":
 
     # Iniciando Logs
     logging = Logging(caminhoLogExecucao)
-    log = logging.createLogExecucao(fileName)
+    log = logging.createLogExecucao(fileNameRegis)
 
     log.info("Iniciando o robo.")
 
     #dataset = Dataset(caminhoDatabase)
 
-    form = Form(log, root, fileName)
+    form = Form(log, root, fileNameRegis)

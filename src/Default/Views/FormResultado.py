@@ -34,6 +34,15 @@ class FormResultado:
         self._log = log
         self.criaForm(resultadoTarefa, valorDescricao)
 
+    def center_window(self, w=300, h=200):
+        # get screen width and height
+        ws = self.window.winfo_screenwidth()
+        hs = self.window.winfo_screenheight()
+        # calculate position x, y
+        x = (ws / 2) - (w / 2)
+        y = (hs / 2) - (h / 2)
+        self.window.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
     def criaForm(self, resultadoTarefa, valorDescricao):
 
         self.window = Tk()
@@ -42,7 +51,10 @@ class FormResultado:
         self.window.protocol("WM_DELETE_WINDOW", self.clickClose)
 
         self.window.title("Resultado da Atividade Executada")
-        self.window.geometry("644x700")
+        # self.window.geometry("644x700")
+        self.center_window(644, 700)
+
+        self.form.resizable(False, False)
 
         # Criar Tab
         tablayout = Notebook(self.window, width=326)

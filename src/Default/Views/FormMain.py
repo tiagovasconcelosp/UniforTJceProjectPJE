@@ -31,15 +31,15 @@ class Form(StartRobo):
     time_string2 = ""
     inFileTxt = ""
     form = ""
-    fileName = ""
+    fileNameRegis = ""
 
     dataBaseModel = {}
     inicioAppTime = 0
 
-    def __init__(self, log, xml, fileName,):
+    def __init__(self, log, xml, fileNameRegis):
         self._log = log
         self._xml = xml
-        self._fileName = fileName
+        self._fileNameRegis = fileNameRegis
 
         # Tempo da aplicacao iniciada
         named_tuple = time.localtime()
@@ -77,12 +77,25 @@ class Form(StartRobo):
             },
         }
 
+    def center_window(self, w=300, h=200):
+        # get screen width and height
+        ws = self.form.winfo_screenwidth()
+        hs = self.form.winfo_screenheight()
+        # calculate position x, y
+        x = (ws / 2) - (w / 2)
+        y = (hs / 2) - (h / 2)
+        self.form.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
     def criaForm(self):
 
         self.form = Tkinter.Tk()
 
         # Detecta se clicou no X
         self.form.protocol("WM_DELETE_WINDOW", self.clickClose)
+
+        self.form.resizable(False, False)
+
+        self.center_window(538, 250)
 
         getFld = Tkinter.IntVar()
 
@@ -97,7 +110,7 @@ class Form(StartRobo):
         stepOne.grid(row=0, columnspan=7, sticky='W', \
                      padx=5, pady=5, ipadx=5, ipady=5,)
 
-        stepThree = Tkinter.LabelFrame(frame, text=" 2. Configure a Atividade: ")
+        stepThree = Tkinter.LabelFrame(frame, text=" 2. Selecione a Atividade: ")
         stepThree.grid(row=1, columnspan=7, sticky='W', \
                        padx=5, pady=5, ipadx=5, ipady=5)
 
@@ -215,7 +228,7 @@ class Form(StartRobo):
                     selectTask.focus()
                     return 0
 
-        robo = self.startRobo(self._log, self._xml, dataForm, self.dataBaseModel, self._fileName)
+        robo = self.startRobo(self._log, self._xml, dataForm, self.dataBaseModel, self._fileNameRegis)
 
     def open_file(self):
 

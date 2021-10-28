@@ -27,7 +27,8 @@ class Auth:
             # Aumenta o tempo de time out para 120s
             # Linhas comentadas para interroper preenchimento do login e senha
 
-            firefox.set_page_load_timeout(120)
+            firefox.implicitly_wait(15)
+            firefox.set_page_load_timeout(300)
 
             # firefox.find_element(By.ID, "username").send_keys('60013884310')
             # firefox.find_element(By.ID, "password").send_keys('12345')
