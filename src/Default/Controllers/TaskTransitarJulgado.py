@@ -183,15 +183,17 @@ class TaskTransitarJulgado:
             # Contabiliza dados
             self.qtd_erros_tentativa_processo_all += 1
 
+        time.sleep(5)
+
         try:
+
             # Seleciona o Tipo de Documento
             select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]'))
-            select.select_by_visible_text('Certidão')
+            # select.select_by_visible_text('Certidão')
+            select.select_by_visible_text('Certidão trânsito em julgado')
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
-
-            time.sleep(2)
 
         except Exception as e:
             logging.info('Houve um problema na etapa de selecionar o Tipo Documento')
@@ -204,29 +206,31 @@ class TaskTransitarJulgado:
             # Contabiliza dados
             self.qtd_erros_tentativa_processo_all += 1
 
+        time.sleep(3)
+
         try:
             # Seleciona o Modelo
             select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
-            select.select_by_visible_text('Certidão de Trânsito')
+            # select.select_by_visible_text('Certidão de Trânsito')
+            select.select_by_visible_text('Certificação Trânsito em Julgado')
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(2)
-
         except Exception as e:
             logging.info(repr(e))
-
+            time.sleep(3)
             try:
                 # Seleciona o Modelo
                 select = Select(
                     firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
-                select.select_by_visible_text('Certidão de Trânsito*')
+                # select.select_by_visible_text('Certidão de Trânsito*')
+                select.select_by_visible_text('Certificação Trânsito em Julgado')
 
                 # Contabiliza dados
                 self.qtd_clicks_all += 1
 
-                time.sleep(2)
+                time.sleep(3)
             except Exception as e:
                 logging.info('Houve um problema na etapa de selecionar o Modelo')
                 logging.info('Evidenciando com o print da tela.')
@@ -238,26 +242,28 @@ class TaskTransitarJulgado:
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
 
-        try:
-            # Seleciona o Tipo de Documento
-            select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]'))
-            select.select_by_visible_text('Certidão trânsito em julgado')
+        time.sleep(3)
 
-            # Contabiliza dados
-            self.qtd_clicks_all += 1
-
-            time.sleep(2)
-
-        except Exception as e:
-            logging.info('Houve um problema na etapa de selecionar o Tipo de Documento')
-            logging.info('Evidenciando com o print da tela.')
-            logging.info(repr(e))
-            logging.info('---------------------------')
-            image = Print(firefox, caminhoImages)
-            countErro += 1
-
-            # Contabiliza dados
-            self.qtd_erros_tentativa_processo_all += 1
+        # try:
+        #     # Seleciona o Tipo de Documento
+        #     select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]'))
+        #     select.select_by_visible_text('Certidão trânsito em julgado')
+        #
+        #     # Contabiliza dados
+        #     self.qtd_clicks_all += 1
+        #
+        #     time.sleep(3)
+        #
+        # except Exception as e:
+        #     logging.info('Houve um problema na etapa de selecionar o Tipo de Documento')
+        #     logging.info('Evidenciando com o print da tela.')
+        #     logging.info(repr(e))
+        #     logging.info('---------------------------')
+        #     image = Print(firefox, caminhoImages)
+        #     countErro += 1
+        #
+        #     # Contabiliza dados
+        #     self.qtd_erros_tentativa_processo_all += 1
 
         try:
             # Clica no botao Preencher Documentos
@@ -269,7 +275,7 @@ class TaskTransitarJulgado:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(3)
+            time.sleep(4)
 
         except Exception as e:
             logging.info('Houve um problema na etapa de selecionar o botao Preencher Documentos')
@@ -299,7 +305,7 @@ class TaskTransitarJulgado:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(3)
+            time.sleep(4)
 
         except Exception as e:
             logging.info('Houve um problema na etapa de informar a data')

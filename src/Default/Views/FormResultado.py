@@ -54,7 +54,7 @@ class FormResultado:
         # self.window.geometry("644x700")
         self.center_window(644, 700)
 
-        self.form.resizable(False, False)
+        self.window.resizable(False, False)
 
         # Criar Tab
         tablayout = Notebook(self.window, width=326)
