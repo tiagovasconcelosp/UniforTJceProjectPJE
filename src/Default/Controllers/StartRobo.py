@@ -207,8 +207,8 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            log.info('Dados registrados com sucesso - Trafego.')
+            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            # log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
             #     dataBaseModel['qtd_erros_robo'] += 1
@@ -223,8 +223,8 @@ class StartRobo:
             # ###########################################################################################
 
             # Registra trafico lista principal
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            dataBaseModel['qtd_requisicao'] = -1
+            dataBaseModel['qtd_trafego_baixado_kb'] = -1
 
             log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
@@ -300,8 +300,8 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            log.info('Dados registrados com sucesso - Trafego.')
+            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            # log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
             #     dataBaseModel['qtd_erros_robo'] += 1
@@ -316,8 +316,8 @@ class StartRobo:
             # ###########################################################################################
 
             # Registra trafico lista principal
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            dataBaseModel['qtd_requisicao'] = -1
+            dataBaseModel['qtd_trafego_baixado_kb'] = -1
 
             log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
@@ -391,8 +391,8 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            log.info('Dados registrados com sucesso - Trafego.')
+            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            # log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
             #     dataBaseModel['qtd_erros_robo'] += 1
@@ -407,8 +407,8 @@ class StartRobo:
             # ###########################################################################################
 
             # Registra trafico lista principal
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            dataBaseModel['qtd_requisicao'] = -1
+            dataBaseModel['qtd_trafego_baixado_kb'] = -1
 
             log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
@@ -484,8 +484,8 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
             # Request
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            log.info('Dados registrados com sucesso - Trafego.')
+            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            # log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
             #     dataBaseModel['qtd_erros_robo'] += 1
@@ -500,8 +500,8 @@ class StartRobo:
             # ###########################################################################################
 
             # Registra trafico lista principal
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            dataBaseModel['qtd_requisicao'] = -1
+            dataBaseModel['qtd_trafego_baixado_kb'] = -1
 
             log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')
@@ -609,8 +609,8 @@ class StartRobo:
             # Registra os dados Request CSV
             # try:
                 # Request
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            log.info('Dados registrados com sucesso - Trafego.')
+            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            # log.info('Dados registrados com sucesso - Trafego.')
             # except Exception as e:
             #
             #     dataBaseModel['qtd_erros_robo'] += 1
@@ -625,8 +625,8 @@ class StartRobo:
             # ###########################################################################################
 
             # Registra trafico lista principal
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            dataBaseModel['qtd_requisicao'] = -1
+            dataBaseModel['qtd_trafego_baixado_kb'] = -1
 
             log.info('-------------------------------------------------')
             log.info('-------------------------------------------------')

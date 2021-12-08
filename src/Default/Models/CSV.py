@@ -91,6 +91,7 @@ class CSV:
         except Exception as e:
             log.info('Houve uma falha gravar o arquivo geral.')
             log.info(repr(e))
+            listaDadosGerarCsv['qtd_erros_robo'] += 1
 
         try:
 
@@ -132,6 +133,7 @@ class CSV:
         except Exception as e:
             log.info('Houve uma falha gravar o arquivo individual.')
             log.info(repr(e))
+            listaDadosIndividualGerarCsv['qtd_erros_robo'] += 1
 
         try:
 

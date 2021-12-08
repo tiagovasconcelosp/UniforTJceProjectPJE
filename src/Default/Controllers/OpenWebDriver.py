@@ -53,26 +53,25 @@ class OpenWebDriver():
         # #######################################
         # Hide Console
 
-        flag = 0x08000000  # No-Window flag
-        # flag = 0x00000008  # Detached-Process flag, if first doesn't work
-        webdriver.common.service.subprocess.Popen = functools.partial(
-            webdriver.common.service.subprocess.Popen, creationflags=flag)
+        # flag = 0x08000000  # No-Window flag
+        # webdriver.common.service.subprocess.Popen = functools.partial(
+        #     webdriver.common.service.subprocess.Popen, creationflags=flag)
 
         # #######################################
 
-        try:
-
-            self.server = Server(self._proxy + "bin\\browsermob-proxy.bat")
-            self.server.start()
-            self.proxy = self.server.create_proxy()
-
-        except Exception as e:
-            logging.exception('Falha ao iniciar o proxy.')
-            logging.info('Finalizando o robo.')
-            logging.info(repr(e))
-            logging.shutdown()
-            os._exit(0)
-            sys.exit(0)
+        # try:
+        #
+        #     self.server = Server(self._proxy + "bin\\browsermob-proxy.bat")
+        #     self.server.start()
+        #     self.proxy = self.server.create_proxy()
+        #
+        # except Exception as e:
+        #     logging.exception('Falha ao iniciar o proxy.')
+        #     logging.info('Finalizando o robo.')
+        #     logging.info(repr(e))
+        #     logging.shutdown()
+        #     os._exit(0)
+        #     sys.exit(0)
 
         # #######################################
 
@@ -86,7 +85,7 @@ class OpenWebDriver():
 
         firefoxProfile.set_preference("plugin.state.java", 0)
 
-        firefoxProfile.set_proxy(self.proxy.selenium_proxy())
+        # firefoxProfile.set_proxy(self.proxy.selenium_proxy())
 
         # #######################################
         # Vericar em ambiente de produção
@@ -114,6 +113,7 @@ class OpenWebDriver():
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
 
+        # Já estava comentado
         # capabilities = webdriver.DesiredCapabilities().FIREFOX
         # capabilities['marionette'] = True
         # capabilities['proxy'] = {
@@ -128,9 +128,9 @@ class OpenWebDriver():
                                         )
 
 
-            waitButtonLogin = WebDriverWait(firefox, 5)
+            waitButtonLogin = WebDriverWait(firefox, 10)
 
-            self.proxy.new_har("Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)), options={'captureHeaders': True, 'captureContent': True})
+            # self.proxy.new_har("Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)), options={'captureHeaders': True, 'captureContent': True})
 
             logging.info("Navegador iniciado com sucesso.")
 
@@ -139,7 +139,8 @@ class OpenWebDriver():
             logging.info('Finalizando o robo.')
             logging.info(repr(e))
             logging.shutdown()
-            self.server.stop()
+            # self.server.stop()
+
             # os._exit(0)
             # sys.exit(0)
 
@@ -151,7 +152,7 @@ class OpenWebDriver():
 
                 firefox.maximize_window()
                 firefox.delete_all_cookies()
-                firefox.set_page_load_timeout(5)
+                firefox.set_page_load_timeout(120)
 
             except:
 
@@ -178,37 +179,38 @@ class OpenWebDriver():
 
         return firefox
 
-    def stop_proxy(self):
-        self.server.stop()
+    # def stop_proxy(self):
+    #     self.server.stop()
 
     def monitor_traffic(self):
 
-        countRequest = 0
-        countKb = 0
-        list_request = []
-        list_request_all = []
-
-        self.entries = self.proxy.har['log']['entries']
-
-        for ent in self.entries:
-
-            gaCollect = (ent['request']['url'])
-
-            if not re.search('mozilla.com', gaCollect, re.IGNORECASE):
-                if not re.search('mozilla.net', gaCollect, re.IGNORECASE):
-
-                    list_request_all.append(ent)
-
-                    list_request.append(
-                                            {
-                                                'url' : str(ent['request']['url'] ),
-                                                'milissegundos' : str(ent['time']),
-                                                'kbytes' : str(round((ent['response']['bodySize'] + ent['response']['headersSize']) / 1024, 2))
-                                          }
-                    )
-
-                    countRequest += 1
-                    countKb += round((ent['response']['bodySize'] + ent['response']['headersSize']) / 1024, 2)
+        # countRequest = 0
+        # countKb = 0
+        # list_request = []
+        # list_request_all = []
+        #
+        # self.entries = self.proxy.har['log']['entries']
+        #
+        # for ent in self.entries:
+        #
+        #     gaCollect = (ent['request']['url'])
+        #
+        #     if not re.search('mozilla.com', gaCollect, re.IGNORECASE):
+        #         if not re.search('mozilla.net', gaCollect, re.IGNORECASE):
+        #
+        #             list_request_all.append(ent)
+        #
+        #             list_request.append(
+        #                                     {
+        #                                         'url' : str(ent['request']['url'] ),
+        #                                         'milissegundos' : str(ent['time']),
+        #                                         'kbytes' : str(round((ent['response']['bodySize'] + ent['response']['headersSize']) / 1024, 2))
+        #                                   }
+        #             )
+        #
+        #             countRequest += 1
+        #             countKb += round((ent['response']['bodySize'] + ent['response']['headersSize']) / 1024, 2)
 
         # [lista individual request, cabecalho total, total de requisicoes, total de kb]
-        return [list_request, countRequest, countKb, list_request_all]
+        # return [list_request, countRequest, countKb, list_request_all]
+        return [{'url': -1, 'milissegundos':-1, 'kbytes':-1}, -1, -1, -1]
