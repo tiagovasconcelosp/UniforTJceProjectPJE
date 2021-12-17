@@ -28,7 +28,7 @@ class Auth:
             # Linhas comentadas para interroper preenchimento do login e senha
 
             firefox.implicitly_wait(15)
-            firefox.set_page_load_timeout(300)
+            firefox.set_page_load_timeout(420)
 
             # firefox.find_element(By.ID, "username").send_keys('60013884310')
             # firefox.find_element(By.ID, "password").send_keys('12345')
@@ -43,5 +43,5 @@ class Auth:
             logging.info('Finalizando o robo.')
             logging.info(repr(e))
             logging.shutdown()
-            # os._exit(0)
-            # sys.exit(0)
+            os._exit(0)
+            sys.exit(0)

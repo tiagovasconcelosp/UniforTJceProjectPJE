@@ -45,6 +45,7 @@ class TaskInclusaoProcessos:
             count = 0
 
             logging.info('Procurando processo: ' + str(process[i][0]))
+            logging.info('Total de linhas: ' + str(len(element)))
 
             for x in range(len(element)):
 
@@ -52,6 +53,9 @@ class TaskInclusaoProcessos:
 
                     firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
                         x + 1) + "]/td[2]/div/div/h6/a[contains(text(), '" + process[i][0] + "')]")
+
+                    logging.info('Processo encontrato.')
+                    # time.sleep(3)
 
                     try:
                         firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
@@ -99,12 +103,13 @@ class TaskInclusaoProcessos:
 
                         ######################################################################################
 
-                    except:
+                    except Exception as e:
 
                         #############################################
                         # Caso acontece de nao existir o botao marcar
                         #############################################
                         logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
+                        logging.info(repr(e))
 
                         # Contabiliza dados
                         self.qtd_erros_tentativa_processo_all += 1
@@ -112,7 +117,8 @@ class TaskInclusaoProcessos:
                         # Processo nao incluido
                         self.listProcessos[1].append(1)
 
-                except:
+                except Exception as e:
+                    logging.info(repr(e))
                     continue
 
             # Caso o processo nao seja localizado, incluir na lista de nao localizados
@@ -159,7 +165,9 @@ class TaskInclusaoProcessos:
                     firefox.execute_script("arguments[0].click();", elementIn)
                     # Contabiliza dados
                     self.qtd_clicks_all += 1
-                except:
+
+                except Exception as e:
+                    logging.info(repr(e))
                     logging.info('Nao foi possivel clicar na sugestao de processo na busca.')
 
                     # Contabiliza dados
@@ -187,7 +195,10 @@ class TaskInclusaoProcessos:
                     logging.info('Confirmando o alerta: A classe exige pauta. Deseja continuar?')
                     logging.info('Processo: ' + str(process[i][0]))
 
-                except:
+
+                except Exception as e:
+
+                    logging.info(repr(e))
                     continue
 
                 logging.info('Processo incluido com sucesso: ' + str(process[i][0]))
@@ -282,7 +293,8 @@ class TaskInclusaoProcessos:
             try:
                 element = firefox.find_element_by_xpath("//span[@class='text-center' and ./text()='" + str(
                     dayProce) + "']//following-sibling::span[@class='ml-10' and contains(text(),'- EASP')]")
-            except:
+            except Exception as e:
+                logging.info(repr(e))
                 logging.info('---------------------------')
                 logging.info('Nao foi possivel abrir a sessao do dia especificado, pois a sessao nao esta como "EASP". Por favor, verificar.')
                 logging.info('Ou pode ter ocorrido desde dia nao haver sessao aberta.')

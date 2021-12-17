@@ -53,9 +53,9 @@ class OpenWebDriver():
         # #######################################
         # Hide Console
 
-        # flag = 0x08000000  # No-Window flag
-        # webdriver.common.service.subprocess.Popen = functools.partial(
-        #     webdriver.common.service.subprocess.Popen, creationflags=flag)
+        flag = 0x08000000  # No-Window flag
+        webdriver.common.service.subprocess.Popen = functools.partial(
+            webdriver.common.service.subprocess.Popen, creationflags=flag)
 
         # #######################################
 
@@ -76,7 +76,7 @@ class OpenWebDriver():
         # #######################################
 
         firefoxProfile = webdriver.FirefoxProfile()
-        firefoxProfile.set_preference("http.response.timeout", 60)
+        firefoxProfile.set_preference("http.response.timeout", 420)
         firefoxProfile.set_preference("dom.max_script_run_time", 30)
         firefoxProfile.set_preference("browser.cache.disk.enable", False)
         firefoxProfile.set_preference("browser.cache.memory.enable", False)
@@ -141,8 +141,8 @@ class OpenWebDriver():
             logging.shutdown()
             # self.server.stop()
 
-            # os._exit(0)
-            # sys.exit(0)
+            os._exit(0)
+            sys.exit(0)
 
         # ###################################################################
         # Verificação na abertura do driver

@@ -82,13 +82,13 @@ class StartRobo:
             self.webDriveName = 'Driver 0.18.0 para Mozilla Superior ou Igual a Versão 53'
         elif self.versao >= 55.0 and self.versao < 63.0:
             self.webDriveName = 'Driver 0.20.1 para Mozilla Superior ou Igual a Versão 55'
-        # elif self.versao >= 78.0 and self.versao < 79.0:
-        #     self.webDriveName = 'Driver 0.26.0 para Mozilla Superior ou Igual a Versão 78'
+        elif self.versao >= 64.0 and self.versao < 94.0:
+            self.webDriveName = 'Driver 0.29.1 para Mozilla Superior ou Igual a Versão 60'
         # elif self.versao >= 63.0 and self.versao < 80.0:
         #     self.webDriveName = 'Driver 0.24.0 para Mozilla Superior ou Igual a Versão 57'
         # elif self.versao >= 80.0:
         else:
-            self.webDriveName = 'Driver 0.29.1 para Mozilla Superior ou Igual a Versão 60'
+            self.webDriveName = 'Driver 0.30.0 para Mozilla Superior ou Igual a Versão 94'
 
         # Codigo fica especificado de acordo com codigo atribuido no sistema
         if dataForm['perfil'] == '5ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito' \
@@ -272,8 +272,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                # os._exit(0)
-                # sys.exit(0)
+                os._exit(0)
+                sys.exit(0)
 
         elif dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
 
@@ -365,8 +365,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                # os._exit(0)
-                # sys.exit(0)
+                os._exit(0)
+                sys.exit(0)
 
         elif dataForm['atividade'] == 'Assinaturas de Processos para Juiz Titular':
 
@@ -456,8 +456,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                # os._exit(0)
-                # sys.exit(0)
+                os._exit(0)
+                sys.exit(0)
 
         elif dataForm['atividade'] == 'Transitar em Julgado':
 
@@ -549,8 +549,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                # os._exit(0)
-                # sys.exit(0)
+                os._exit(0)
+                sys.exit(0)
 
         elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
 
@@ -675,8 +675,8 @@ class StartRobo:
                 log.info('Finalizando o robo.')
                 log.info(repr(e))
                 log.shutdown()
-                # os._exit(0)
-                # sys.exit(0)
+                os._exit(0)
+                sys.exit(0)
 
     def dataset_csv(self, dataBaseModel, log):
 
