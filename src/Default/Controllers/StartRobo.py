@@ -205,21 +205,21 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            # try:
-            # Request
-            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            # log.info('Dados registrados com sucesso - Trafego.')
-            # except Exception as e:
-            #
-            #     dataBaseModel['qtd_erros_robo'] += 1
-            #
-            #     log.info('Falha ao registrar dados de trafico.')
-            #     log.info(repr(e))
+            try:
+                # Request
+                trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+                log.info('Dados registrados com sucesso - Trafego.')
+            except Exception as e:
 
-            # dataBaseModel['qtd_requisicao'] = 0
-            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
-            # self.dataset_csv(dataBaseModel, log)
-            # self.dataset_csv_individual(dataBaseModel, individual, log)
+                dataBaseModel['qtd_erros_robo'] += 1
+
+                log.info('Falha ao registrar dados de trafico.')
+                log.info(repr(e))
+
+            dataBaseModel['qtd_requisicao'] = 0
+            dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            self.dataset_csv(dataBaseModel, log)
+            self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################
 
             # Registra trafico lista principal
@@ -298,21 +298,21 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            # try:
+            try:
             # Request
-            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            # log.info('Dados registrados com sucesso - Trafego.')
-            # except Exception as e:
-            #
-            #     dataBaseModel['qtd_erros_robo'] += 1
-            #
-            #     log.info('Falha ao registrar dados de trafico.')
-            #     log.info(repr(e))
+                trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+                log.info('Dados registrados com sucesso - Trafego.')
+            except Exception as e:
 
-            # dataBaseModel['qtd_requisicao'] = 0
-            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
-            # self.dataset_csv(dataBaseModel, log)
-            # self.dataset_csv_individual(dataBaseModel, individual, log)
+                dataBaseModel['qtd_erros_robo'] += 1
+
+                log.info('Falha ao registrar dados de trafico.')
+                log.info(repr(e))
+
+            dataBaseModel['qtd_requisicao'] = 0
+            dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            self.dataset_csv(dataBaseModel, log)
+            self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################
 
             # Registra trafico lista principal
@@ -389,21 +389,21 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            # try:
+            try:
             # Request
-            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            # log.info('Dados registrados com sucesso - Trafego.')
-            # except Exception as e:
-            #
-            #     dataBaseModel['qtd_erros_robo'] += 1
-            #
-            #     log.info('Falha ao registrar dados de trafico.')
-            #     log.info(repr(e))
+                trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+                log.info('Dados registrados com sucesso - Trafego.')
+            except Exception as e:
 
-            # dataBaseModel['qtd_requisicao'] = 0
-            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
-            # self.dataset_csv(dataBaseModel, log)
-            # self.dataset_csv_individual(dataBaseModel, individual, log)
+                dataBaseModel['qtd_erros_robo'] += 1
+
+                log.info('Falha ao registrar dados de trafico.')
+                log.info(repr(e))
+
+            dataBaseModel['qtd_requisicao'] = 0
+            dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            self.dataset_csv(dataBaseModel, log)
+            self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################
 
             # Registra trafico lista principal
@@ -482,21 +482,21 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            # try:
+            try:
             # Request
-            # trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-            # log.info('Dados registrados com sucesso - Trafego.')
-            # except Exception as e:
-            #
-            #     dataBaseModel['qtd_erros_robo'] += 1
-            #
-            #     log.info('Falha ao registrar dados de trafico.')
-            #     log.info(repr(e))
+                trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+                log.info('Dados registrados com sucesso - Trafego.')
+            except Exception as e:
 
-            # dataBaseModel['qtd_requisicao'] = 0
-            # dataBaseModel['qtd_trafego_baixado_kb'] = 0
-            # self.dataset_csv(dataBaseModel, log)
-            # self.dataset_csv_individual(dataBaseModel, individual, log)
+                dataBaseModel['qtd_erros_robo'] += 1
+
+                log.info('Falha ao registrar dados de trafico.')
+                log.info(repr(e))
+
+            dataBaseModel['qtd_requisicao'] = 0
+            dataBaseModel['qtd_trafego_baixado_kb'] = 0
+            self.dataset_csv(dataBaseModel, log)
+            self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################
 
             # Registra trafico lista principal
@@ -680,23 +680,23 @@ class StartRobo:
 
     def dataset_csv(self, dataBaseModel, log):
 
-        # try:
+        try:
         # Registra dados de execução geral
-        csv = CSV(self.pathDatabaseGeral)
-        csv.registraCsvDatabase(dataBaseModel, log)
-        # except Exception as e:
-        #     log.info('Houve uma falha ao registrar os dados de execucao geral.')
-        #     log.info(repr(e))
+            csv = CSV(self.pathDatabaseGeral)
+            csv.registraCsvDatabase(dataBaseModel, log)
+        except Exception as e:
+            log.info('Houve uma falha ao registrar os dados de execucao geral.')
+            log.info(repr(e))
 
     def dataset_csv_individual(self, dataBaseModel, individual, log):
 
-        # try:
+        try:
         # Registra dados de execução geral
-        csv = CSV(self.pathDatabaseIndividual)
-        csv.registraCsvDatabaseIndividual(dataBaseModel, individual, log)
-        # except Exception as e:
-        #     log.info('Houve uma falha ao registrar os dados de execucao individual.')
-        #     log.info(repr(e))
+            csv = CSV(self.pathDatabaseIndividual)
+            csv.registraCsvDatabaseIndividual(dataBaseModel, individual, log)
+        except Exception as e:
+            log.info('Houve uma falha ao registrar os dados de execucao individual.')
+            log.info(repr(e))
 
     def registre_request(self, webdriver, fileNameRegis, log, dataBaseModel):
 
@@ -704,7 +704,7 @@ class StartRobo:
         trafficData = webdriver.monitor_traffic()
 
         # Registra trafico em CSV
-        # webdriver.registre_traffic(trafficData[0])
+        webdriver.registre_traffic(trafficData[0])
         try:
             csv = CSV(self.traffic)
             csv.registraCsvTraffic(fileNameRegis, trafficData[0], log)
