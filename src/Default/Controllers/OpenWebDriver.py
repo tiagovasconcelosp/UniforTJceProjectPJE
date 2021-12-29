@@ -28,7 +28,6 @@ import functools
 
 
 class OpenWebDriver():
-
     pathDriver = ""
     pathUrl = ""
     driveName = ""
@@ -58,6 +57,12 @@ class OpenWebDriver():
             webdriver.common.service.subprocess.Popen, creationflags=flag)
 
         # #######################################
+
+        if self.server != "":
+            try:
+                self.server.stop()
+            except:
+                self.server = ""
 
         try:
 
@@ -122,15 +127,17 @@ class OpenWebDriver():
         # }
 
         try:
-            firefox = webdriver.Firefox(executable_path=self._pathDriver + self._driveName + '.exe', # capabilities=capabilities,
+            firefox = webdriver.Firefox(executable_path=self._pathDriver + self._driveName + '.exe',
+                                        # capabilities=capabilities,
                                         firefox_profile=firefoxProfile,
                                         options=options,
                                         )
 
-
             waitButtonLogin = WebDriverWait(firefox, 10)
 
-            self.proxy.new_har("Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(10, 99)) + str(randint(10, 99)) + str(randint(10, 99)), options={'captureHeaders': True, 'captureContent': True})
+            self.proxy.new_har(
+                "Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(10, 99)) + str(
+                    randint(10, 99)) + str(randint(10, 99)), options={'captureHeaders': True, 'captureContent': True})
 
             logging.info("Navegador iniciado com sucesso.")
 
@@ -197,15 +204,15 @@ class OpenWebDriver():
 
             if not re.search('mozilla.com', gaCollect, re.IGNORECASE):
                 if not re.search('mozilla.net', gaCollect, re.IGNORECASE):
-
                     list_request_all.append(ent)
 
                     list_request.append(
-                                            {
-                                                'url' : str(ent['request']['url'] ),
-                                                'milissegundos' : str(ent['time']),
-                                                'kbytes' : str(round((ent['response']['bodySize'] + ent['response']['headersSize']) / 1024, 2))
-                                          }
+                        {
+                            'url': str(ent['request']['url']),
+                            'milissegundos': str(ent['time']),
+                            'kbytes': str(
+                                round((ent['response']['bodySize'] + ent['response']['headersSize']) / 1024, 2))
+                        }
                     )
 
                     countRequest += 1

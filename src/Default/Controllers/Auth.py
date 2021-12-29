@@ -12,6 +12,7 @@
 import os
 import sys
 
+
 from selenium.webdriver.common.by import By
 from src.Default.Controllers.Print import Print
 
@@ -30,10 +31,15 @@ class Auth:
             firefox.implicitly_wait(15)
             firefox.set_page_load_timeout(420)
 
-            # firefox.find_element(By.ID, "username").send_keys('60013884310')
-            # firefox.find_element(By.ID, "password").send_keys('12345')
+            firefox.find_element(By.ID, "username").send_keys('60013884310')
+            firefox.find_element(By.ID, "password").send_keys('12345')
 
             logging.info("Realizando autenticacao.")
+
+
+
+
+
 
         except Exception as e:
 
