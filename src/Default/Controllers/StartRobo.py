@@ -72,6 +72,14 @@ class StartRobo:
         self.pathDatabaseGeral = [i.text for i in xml.iter('directoryData')][0] + "\\" + "database-geral.csv"
         self.pathDatabaseIndividual = [i.text for i in xml.iter('directoryData')][0] + "\\" + "database-individual.csv"
 
+        try:
+            f = open("harfile.har", "w")
+            f.close()
+        except Exception as e:
+            log.info('Falha ao limpar arquivo harfile.')
+            log.info(repr(e))
+
+
         self.versao = self.get_installed_version()
 
         # Geckodrive Name
@@ -141,8 +149,9 @@ class StartRobo:
             url = request.urlopen('http://ip-api.com/json').read()
             jsn = json.loads(url.decode('UTF-8'))
             log.info('IP Internet: ' + str(jsn['query']))
-        except:
+        except Exception as e:
             log.info('Nao foi possivel identificar endereco de IP. Falha na conexao.')
+            log.info(repr(e))
 
         log.info('IP Local: ' + str(IP))
         log.info('Nome da maquina: ' + str(hostname))
@@ -665,7 +674,7 @@ class StartRobo:
     def registre_request(self, webdriver, fileNameRegis, log, dataBaseModel):
 
         # Captura os dados de trafeco
-        trafficData = webdriver.monitor_traffic()
+        trafficData = webdriver.monitor_traffic(log)
 
         # Registra trafico em CSV
         try:

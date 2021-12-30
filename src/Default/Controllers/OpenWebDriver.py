@@ -13,6 +13,7 @@
 import os
 import re
 import sys
+import json
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -189,7 +190,7 @@ class OpenWebDriver():
     def stop_proxy(self):
         self.server.stop()
 
-    def monitor_traffic(self):
+    def monitor_traffic(self, logging):
 
         countRequest = 0
         countKb = 0
@@ -197,6 +198,13 @@ class OpenWebDriver():
         list_request_all = []
 
         self.entries = self.proxy.har['log']['entries']
+
+        try:
+            with open("harfile.har", "w") as harfile:
+                harfile.write(json.dumps(self.proxy.har))
+        except Exception as e:
+            logging.info('Falha ao registrar arquivo harfile.')
+            logging.info(repr(e))
 
         for ent in self.entries:
 
@@ -218,6 +226,6 @@ class OpenWebDriver():
                     countRequest += 1
                     countKb += round((ent['response']['bodySize'] + ent['response']['headersSize']) / 1024, 2)
 
-        # [lista individual request, cabecalho total, total de requisicoes, total de kb]
+        # [lista individual request, cabecalho total, total de kb, total de requisicoes]
         return [list_request, countRequest, countKb, list_request_all]
         # return [{'url': -1, 'milissegundos':-1, 'kbytes':-1}, -1, -1, -1]
