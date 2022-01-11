@@ -66,9 +66,9 @@ class Form(StartRobo):
                     'qtd_erros_robo' : 0,
                     'cod_atividade' : 0,
                     # 'tempo_uso_aplicacao_sec' : 0,
+                    'atividade_concluida' : 1,
                     'qtd_trafego_baixado_kb' : 0,
                     'qtd_requisicao' : 0,
-                    'atividade_concluida' : 1,
         'individual' : {
                 'cod_processo': [],
                 'processo_realizado': [],
