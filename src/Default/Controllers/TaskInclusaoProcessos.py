@@ -17,6 +17,7 @@ from datetime import date
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.select import Select
 
 from src.Default.Controllers.Print import Print
 
@@ -38,91 +39,59 @@ class TaskInclusaoProcessos:
 
     def pecorreProcessoPauta(self, firefox, process, element, dayProcess, logging, caminhoImages):
 
+        # Ordena os processos
+        # select = Select(firefox.find_element(By.CSS_SELECTOR, 'table#richTabRelacaoJulgamento select'))
+        # select.select_by_visible_text('Órgão julgador')
+        # time.sleep(14)
+
         # Localiza os processos do dia e marca
         ##########################################################
         for i in range(len(process)):
             # Usado para verificar se o processo nao foi localizado
-            count = 0
+            # count = 0
 
             logging.info('Procurando processo: ' + str(process[i][0]))
-            logging.info('Total de linhas: ' + str(len(element)))
+            # logging.info('Total de linhas: ' + str(len(element)))
 
-            for x in range(len(element)):
+            try:
 
-                try:  # Para verificar se o processo existe na listagem
+                # firefox.find_element(By.XPATH,
+                # "//table[@id='pautaJulgamentoList']/tbody/tr/td/div/div/h6/a[contains(text(), '" + process[i][0] + "')]//ancestor::td[1]/form/center/input").click()
 
-                    firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
-                        x + 1) + "]/td[2]/div/div/h6/a[contains(text(), '" + process[i][0] + "')]")
+                firefox.find_element(By.XPATH,
+                                     "//a[contains(text(), '" +
+                                     process[i][0] + "')]//ancestor::tr/td[1]/form/center/input").click()
 
-                    logging.info('Processo encontrato.')
-                    # time.sleep(3)
+                # Inclui lista de processos localizados
+                self.listProcessos[0].append(str(process[i][0]))
+                logging.info('Processo selecionado: ' + str(process[i][0]))
 
-                    try:
-                        firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
-                            x + 1) + "]/td[1]/form/center/input").click()
+                # Processo incluido
+                self.listProcessos[1].append(0)
 
-                        # Inclui lista de processos localizados
-                        self.listProcessos[0].append(str(process[i][0]))
-                        logging.info('Processo selecionado: ' + str(process[i][0]))
+                self.countIncluidos += 1
 
-                        # Processo incluido
-                        self.listProcessos[1].append(0)
+                # Processo localizado
+                # count += 1
 
-                        self.countIncluidos += 1
+                # Aguarda loading do click
+                # Verifica time de click
+                time.sleep(4)
 
-                        # Processo localizado
-                        count += 1
+            except Exception as e:
 
-                        # Aguarda loading do click
-                        # Verifica time de click
-                        time.sleep(4)
+                #############################################
+                # Caso acontece de nao existir o botao marcar
+                #############################################
+                logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
+                logging.info(repr(e))
 
-                        ######################################################################################
-                        # Alteracao Solicitada Karyna
-                        ######################################################################################
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
 
-                        # Clica em incluir processos
-                        # Finaliza atividade
-                        ##########################################################
-                        # element2 = WebDriverWait(firefox, 20).until(
-                        #     EC.presence_of_element_located(
-                        #         (By.CSS_SELECTOR,
-                        #          'form#j_id1620 input')))
-                        # element2.click()
-                        ##########################################################
+                # Processo nao incluido
+                self.listProcessos[1].append(1)
 
-                        # logging.info('Processo incluido: ' + str(process[i][0]))
-                        # logging.info('---------------------------')
-
-                        ##########################################################
-                        # Demora 11s a inclusao
-                        ##########################################################
-                        ##########################################################
-                        ##########################################################
-                        # time.sleep(8)
-
-                        ######################################################################################
-
-                    except Exception as e:
-
-                        #############################################
-                        # Caso acontece de nao existir o botao marcar
-                        #############################################
-                        logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
-                        logging.info(repr(e))
-
-                        # Contabiliza dados
-                        self.qtd_erros_tentativa_processo_all += 1
-
-                        # Processo nao incluido
-                        self.listProcessos[1].append(1)
-
-                except Exception as e:
-                    logging.info(repr(e))
-                    continue
-
-            # Caso o processo nao seja localizado, incluir na lista de nao localizados
-            if count == 0:
                 # Inclui lista de processos nao localizados
                 self.listProcessos[2].append(str(process[i][0]))
 
@@ -131,6 +100,93 @@ class TaskInclusaoProcessos:
                 logging.info('O processo nao ser localizado na sessao. Data: ' + str(dayProcess))
                 logging.info('Processo nao foi localizado: ' + str(process[i][0]))
                 logging.info('---------------------------')
+
+
+
+            # for x in range(len(element)):
+            #
+            #     try:  # Para verificar se o processo existe na listagem
+            #
+            #         firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
+            #             x + 1) + "]/td[2]/div/div/h6/a[contains(text(), '" + process[i][0] + "')]")
+            #
+            #         logging.info('Processo encontrato.')
+            #         # time.sleep(3)
+            #
+            #         try:
+            #             firefox.find_element(By.XPATH, "//table[@id='pautaJulgamentoList']/tbody/tr[" + str(
+            #                 x + 1) + "]/td[1]/form/center/input").click()
+            #
+            #             # Inclui lista de processos localizados
+            #             self.listProcessos[0].append(str(process[i][0]))
+            #             logging.info('Processo selecionado: ' + str(process[i][0]))
+            #
+            #             # Processo incluido
+            #             self.listProcessos[1].append(0)
+            #
+            #             self.countIncluidos += 1
+            #
+            #             # Processo localizado
+            #             count += 1
+            #
+            #             # Aguarda loading do click
+            #             # Verifica time de click
+            #             time.sleep(4)
+            #
+            #             ######################################################################################
+            #             # Alteracao Solicitada Karyna
+            #             ######################################################################################
+            #
+            #             # Clica em incluir processos
+            #             # Finaliza atividade
+            #             ##########################################################
+            #             # element2 = WebDriverWait(firefox, 20).until(
+            #             #     EC.presence_of_element_located(
+            #             #         (By.CSS_SELECTOR,
+            #             #          'form#j_id1620 input')))
+            #             # element2.click()
+            #             ##########################################################
+            #
+            #             # logging.info('Processo incluido: ' + str(process[i][0]))
+            #             # logging.info('---------------------------')
+            #
+            #             ##########################################################
+            #             # Demora 11s a inclusao
+            #             ##########################################################
+            #             ##########################################################
+            #             ##########################################################
+            #             # time.sleep(8)
+            #
+            #             ######################################################################################
+            #
+            #         except Exception as e:
+            #
+            #             #############################################
+            #             # Caso acontece de nao existir o botao marcar
+            #             #############################################
+            #             logging.info('Processo nao pode ser selecionado: ' + str(process[i][0]))
+            #             logging.info(repr(e))
+            #
+            #             # Contabiliza dados
+            #             self.qtd_erros_tentativa_processo_all += 1
+            #
+            #             # Processo nao incluido
+            #             self.listProcessos[1].append(1)
+            #
+            #     except Exception as e:
+            #         logging.info(repr(e))
+            #         continue
+
+            # Caso o processo nao seja localizado, incluir na lista de nao localizados
+            # if count == 0:
+            #     # Inclui lista de processos nao localizados
+            #     self.listProcessos[2].append(str(process[i][0]))
+            #
+            #     image = Print(firefox, caminhoImages)
+            #     logging.info('---------------------------')
+            #     logging.info('O processo nao ser localizado na sessao. Data: ' + str(dayProcess))
+            #     logging.info('Processo nao foi localizado: ' + str(process[i][0]))
+            #     logging.info('---------------------------')
 
         logging.info('Atividade de incluir processos em "Aptos para Inclusao em Pauta" foi realizada com sucesso. Data: ' + str(dayProcess))
         logging.info('---------------------------')
