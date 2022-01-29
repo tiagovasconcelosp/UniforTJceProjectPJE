@@ -546,17 +546,16 @@ class TaskAssinaturaProcessos:
                 dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
                 dataBaseModel['individual']['processo_nao_encontrado'].append(0)
 
-            if self.listProcessos[2]:
-                for i in range(len(self.listProcessos[2])):
-                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
-                    dataBaseModel['individual']['processo_realizado'].append(1)
-                    dataBaseModel['individual']['processo_nao_encontrado'].append(1)
+            try:
+                if self.listProcessos[2]:
+                    for i in range(len(self.listProcessos[2])):
+                        dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
+                        dataBaseModel['individual']['processo_realizado'].append(1)
+                        dataBaseModel['individual']['processo_nao_encontrado'].append(1)
+                        dataBaseModel['individual']['tempo_execucao_individual_sec'].append(0)
 
-            # for i in range(len(self.listProcessos[2])):
-            #     try:
-            #         dataBaseModel['individual']['processo_nao_encontrado'].append(str(self.listProcessos[2][i]))
-            #     except:
-            #         continue
+            except:
+                logging.info('Falha ao registrar os dados individual.')
 
             ###################################
             # Verificacao dos processos localizado e encaminhados

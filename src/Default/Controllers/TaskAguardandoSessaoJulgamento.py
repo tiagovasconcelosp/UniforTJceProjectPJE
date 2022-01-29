@@ -233,9 +233,6 @@ class TaskAguardandoSessaoJulgamento:
             # Contabiliza dados
             arrayVarRefDados['qtd_clicks'] += 1
 
-            # Registra horario que iniciou a tarefa
-            # inicio = time.time()
-
             logging.info('---------------------------')
             logging.info('Tarefa localizada: ' + str(atividade))
             logging.info('---------------------------')
@@ -258,24 +255,43 @@ class TaskAguardandoSessaoJulgamento:
                 timeTotal = fimProc - inicioTimeProc
                 timeTotal = float('{:.2f}'.format(timeTotal))
 
-                # Inclui processo na lista dataset
-                dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
+                try:
+                    # Inclui processo na lista dataset
+                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
+                    dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+                    dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
 
+                except:
+                    logging.info('Falha ao registrar os dados individual na lista.')
+
+                logging.info('---------------------------')
+                logging.info('---------------------------')
+                logging.info('---------------------------')
+
+            logging.info('---------------------------')
+            logging.info('Dados gerados apos conclusao da super classe')
             logging.info(dataBaseModel)
+            logging.info('---------------------------')
 
-            for i in range(len(self.listProcessos[0])):
-                dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
-                dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
-                dataBaseModel['individual']['processo_nao_encontrado'].append(0)
+            # for i in range(len(self.listProcessos[0])):
+            #     dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
+            #     dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+            #     dataBaseModel['individual']['processo_nao_encontrado'].append(0)
 
-            if self.listProcessos[2]:
-                for i in range(len(self.listProcessos[2])):
-                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
-                    dataBaseModel['individual']['processo_realizado'].append(1)
-                    dataBaseModel['individual']['processo_nao_encontrado'].append(1)
+            try:
+                if self.listProcessos[2]:
+                    for i in range(len(self.listProcessos[2])):
+                        dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
+                        dataBaseModel['individual']['processo_realizado'].append(1)
+                        dataBaseModel['individual']['processo_nao_encontrado'].append(1)
+                        dataBaseModel['individual']['tempo_execucao_individual_sec'].append(0)
 
+            except:
+                logging.info('Falha ao registrar os dados individual.')
+
+            logging.info('---------------------------')
+            logging.info('Dados gerados apos conclusao da super classe - individual')
             logging.info(dataBaseModel)
-
             logging.info('---------------------------')
 
             ###################################

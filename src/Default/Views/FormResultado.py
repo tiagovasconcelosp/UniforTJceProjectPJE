@@ -76,21 +76,41 @@ class FormResultado:
         stepOne.grid(row=0, columnspan=7, sticky='W', \
                      padx=5, pady=5, ipadx=5, ipady=5, )
 
-        outTblLbl1 = Label(stepOne, \
-                                  text="Total de processos localizados: " + str(resultadoTarefa[3]))
-        outTblLbl1.grid(row=1, column=0, sticky='W', padx=5, pady=2)
+        try:
+            outTblLbl1 = Label(stepOne, \
+                                      text="Total de processos localizados: " + str(resultadoTarefa[3]))
+            outTblLbl1.grid(row=1, column=0, sticky='W', padx=5, pady=2)
+        except:
+            outTblLbl1 = Label(stepOne, \
+                               text="Total de processos localizados: X?")
+            outTblLbl1.grid(row=1, column=0, sticky='W', padx=5, pady=2)
 
-        outTblLbl2 = Label(stepOne, \
-                          text="Total de processos encaminhados: " + str(resultadoTarefa[4]))
-        outTblLbl2.grid(row=2, column=0, sticky='W', padx=5, pady=2)
+        try:
+            outTblLbl2 = Label(stepOne, \
+                              text="Total de processos encaminhados: " + str(resultadoTarefa[4]))
+            outTblLbl2.grid(row=2, column=0, sticky='W', padx=5, pady=2)
+        except:
+            outTblLbl2 = Label(stepOne, \
+                              text="Total de processos encaminhados: X?")
+            outTblLbl2.grid(row=2, column=0, sticky='W', padx=5, pady=2)
 
-        outTblLbl3 = Label(stepOne, \
-                          text="Tempo de execucao da atividade: " + str(resultadoTarefa[5]))
-        outTblLbl3.grid(row=3, column=0, sticky='W', padx=5, pady=2)
+        try:
+            outTblLbl3 = Label(stepOne, \
+                              text="Tempo de execucao da atividade: " + str(resultadoTarefa[5]))
+            outTblLbl3.grid(row=3, column=0, sticky='W', padx=5, pady=2)
+        except:
+            outTblLbl3 = Label(stepOne, \
+                              text="Tempo de execucao da atividade: X?")
+            outTblLbl3.grid(row=3, column=0, sticky='W', padx=5, pady=2)
 
-        outTblLbl4 = Label(stepOne, \
-                          text="Total de processos que não foram localizados: " + str(resultadoTarefa[6]))
-        outTblLbl4.grid(row=4, column=0, sticky='W', padx=5, pady=2)
+        try:
+            outTblLbl4 = Label(stepOne, \
+                              text="Total de processos que não foram localizados: " + str(resultadoTarefa[6]))
+            outTblLbl4.grid(row=4, column=0, sticky='W', padx=5, pady=2)
+        except:
+            outTblLbl4 = Label(stepOne, \
+                              text="Total de processos que não foram localizados: X?")
+            outTblLbl4.grid(row=4, column=0, sticky='W', padx=5, pady=2)
 
         # -----------------------------------------------------------------------------------
 
@@ -189,7 +209,7 @@ class FormResultado:
                                 elif valorDescricao == 2:
                                     Texto = 'Assinado com sucesso'
                                 else:
-                                    descricao = '-------'
+                                    Texto = '-------'
 
                             else:
                                 Cor = 'red'
