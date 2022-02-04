@@ -368,7 +368,7 @@ class OpenXls:
 
                     if (str(target1).upper()).strip() == (str(target2).upper()).strip():
                         # listDataResultado[x] = str(listDataRecorrenteXML[y][1])
-                        listDataResultado[x] = listDataRecorrenteXML[y][1]
+                        listDataResultado[x] = str(listDataRecorrenteXML[y][1])
                     else:
                         count += 1
 
@@ -421,6 +421,13 @@ class OpenXls:
 
                         logging.info('Houve divergencia ao elaborar os dados. Nao foi possivel comparar todos os Resultados com todos os codigos.')
                         logging.info('Confira a divergencia na lista:')
+                        logging.info('Lista Processo')
+                        logging.info(listDataProcessos)
+                        logging.info('-------------------------------')
+                        logging.info('Lista Resultado')
+                        logging.info(listDataResultado)
+                        logging.info('-------------------------------')
+                        logging.info('-------------------------------')
 
                         # [['3000323-07.2017.8.06.0004', '387'], ['3000746-69.2019.8.06.0012', '446']]
                         listAllProcess = []
@@ -428,10 +435,10 @@ class OpenXls:
 
                         for x in range(len(listDataProcessos)):
                             # Valida se todos os caracteres sao digitos
-                            if listDataResultado[x].isdigit():
-                                listAllProcess.append([listDataProcessos[x], listDataResultado[x]])
+                            if str(listDataResultado[x]).isdigit():
+                                listAllProcess.append([str(listDataProcessos[x]), str(listDataResultado[x])])
                             else:
-                                listAllProcess2.append([listDataProcessos[x], listDataResultado[x]])
+                                listAllProcess2.append([str(listDataProcessos[x]), str(listDataResultado[x])])
 
                         self.listProcessosInaptos = listAllProcess2
 

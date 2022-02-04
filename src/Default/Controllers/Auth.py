@@ -38,9 +38,6 @@ class Auth:
 
 
 
-
-
-
         except Exception as e:
 
             image = Print(firefox, caminhoImages)
