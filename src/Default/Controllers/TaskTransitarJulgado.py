@@ -212,7 +212,7 @@ class TaskTransitarJulgado:
             # Seleciona o Modelo
             select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
             # select.select_by_visible_text('Certidão de Trânsito')
-            select.select_by_visible_text('Certificação de Trânsito em Julgado')
+            select.select_by_visible_text('Certificação de Trânsito em julgado')
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
@@ -225,7 +225,7 @@ class TaskTransitarJulgado:
                 select = Select(
                     firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
                 # select.select_by_visible_text('Certidão de Trânsito*')
-                select.select_by_visible_text('Certificação de Trânsito em Julgado')
+                select.select_by_visible_text('Certificação de Trânsito em julgado')
 
                 # Contabiliza dados
                 self.qtd_clicks_all += 1

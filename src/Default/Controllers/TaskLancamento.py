@@ -330,9 +330,15 @@ class TaskLancamento:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(3)
+            time.sleep(5)
 
             try:
+
+                element = WebDriverWait(firefox, 20).until(
+                    EC.presence_of_element_located(
+                        (By.XPATH,
+                         "*//span[contains(., '(" + codRecorrente + ")')]")))
+
                 element = firefox.find_element(By.XPATH,
                                                "*//span[contains(., '(" + codRecorrente + ")')]").text
 
@@ -340,7 +346,9 @@ class TaskLancamento:
                 logging.info('Codigo localizado: ' + str(element))
                 logging.info('---------------------------')
 
-            except:
+            except Exception as e:
+
+                logging.info(repr(e))
 
                 logging.info('---------------------------')
                 logging.info('Nao foi possivel encontrar o codigo de lancamento para o processo: ' + str(numProcesso))
@@ -369,20 +377,33 @@ class TaskLancamento:
                 return self.listProcessos
 
             # Usado para consultar a quantidade de elementos gerado, para chegar até o elemento principal
-            elementDiv = ""
-            element = firefox.find_elements_by_css_selector('form#taskInstanceForm .value table')
+            # elementDiv = ""
+            # element = firefox.find_elements_by_css_selector('form#taskInstanceForm .value table')
 
-            for x in range(len(element)):
-                elementDiv = elementDiv + ' div'
+            try:
+                element = firefox.find_element(By.XPATH,
+                               "*//span[contains(., '(" + codRecorrente + ")')]//ancestor::tr/td[last()]")
+            except Exception as e:
+                logging.info(repr(e))
+                logging.info('---------------------------')
+                logging.info('Nao foi possivel localizar elemento com xpath.')
+                logging.info('---------------------------')
+
+            # for x in range(len(element)):
+            #     elementDiv = elementDiv + ' div'
+
+            time.sleep(1)
 
             # Seleciona o elemento clicavel para incluir o codigo de lancamento
-            element = firefox.find_element(By.CSS_SELECTOR,
-                                           'form#taskInstanceForm .value' + elementDiv + ' td:last-child')
+            # element = firefox.find_element(By.CSS_SELECTOR,
+            #                                'form#taskInstanceForm .value' + elementDiv + ' td:last-child')
 
             # Usa funcoes para simular o uso do mouse, nao é possivel executar por script
             actions = ActionChains(firefox)
             actions.click(on_element=element)
             actions.perform()
+
+            time.sleep(1)
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
@@ -423,7 +444,10 @@ class TaskLancamento:
                 logging.info('Finalizando atividade com o processo: ' + str(numProcesso))
                 logging.info('---------------------------')
 
-            except:
+
+            except Exception as e:
+
+                logging.info(repr(e))
                 logging.info('---------------------------')
                 logging.info('O codigo lancado nao possui complemento.')
                 logging.info('Finalizando atividade com o processo: ' + str(numProcesso))
@@ -509,7 +533,9 @@ class TaskLancamento:
             self.countEncaminhados += 1
 
             return self.listProcessos
-        except:
+
+        except Exception as e:
+            logging.info(repr(e))
 
             logging.info('---------------------------')
             logging.info('Nao foi possivel finalizar o processo: ' + str(numProcesso))
