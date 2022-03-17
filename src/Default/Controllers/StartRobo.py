@@ -191,93 +191,93 @@ class StartRobo:
 
         time.sleep(1)
 
-        if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
+        # if dataForm['atividade'] == 'Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão':
+        #
+        #     log.info('---------------------------')
+        #     log.info('Atividade: Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão')
+        #     log.info('---------------------------')
+        #
+        #     # Registra Base
+        #     dataBaseModel['cod_atividade'] = '1'
+        #     dataBaseModel['atividade_concluida'] = '1'
+        #
+        #     # Executa a tarefa Aguardando Sessão Julgamento
+        #     executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
+        #                                                                        openXls, xlsData,
+        #                                                                        '(TR) Aguardando sessão de julgamento',
+        #                                                                        xml, dataBaseModel, inicioTime,
+        #                                                                        self.arrayVarRefDados)
+        #
+        #     individual = dataBaseModel['individual']
+        #
+        #     del dataBaseModel['individual']
+        #
+        #     # ###########################################################################################
+        #     # Registra os dados Request CSV
+        #     trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+        #
+        #     webdriver.stop_proxy()
+        #
+        #     dataBaseModel['qtd_requisicao'] = trafficData[1]
+        #     dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+        #     self.dataset_csv(dataBaseModel, log)
+        #     self.dataset_csv_individual(dataBaseModel, individual, log)
+        #     # ###########################################################################################
+        #
+        #     # Registra trafico lista principal
+        #     # dataBaseModel['qtd_requisicao'] = -1
+        #     # dataBaseModel['qtd_trafego_baixado_kb'] = -1
+        #
+        #     log.info('-------------------------------------------------')
+        #     log.info('-------------------------------------------------')
+        #     log.info('Dados para registro.')
+        #     log.info('Modelo principal:')
+        #     log.info(dataBaseModel)
+        #     log.info('Modelo individual:')
+        #     log.info(individual)
+        #     log.info('-------------------------------------------------')
+        #     log.info('-------------------------------------------------')
+        #
+        #     # try:
+        #     # Registra Base
+        #     dataBaseModel['atividade_concluida'] = '0'
+        #
+        #     # Registrados CSV e SQL
+        #     # ###########################################################################################
+        #     try:
+        #         # Dataset
+        #         self.dataset_csv(dataBaseModel, log)
+        #     except Exception as e:
+        #         log.info('Falha ao registrar dados geral.')
+        #         log.info(repr(e))
+        #
+        #     try:
+        #         self.dataset_csv_individual(dataBaseModel, individual, log)
+        #     except Exception as e:
+        #         log.info('Falha ao registrar dados individual.')
+        #         log.info(repr(e))
+        #
+        #     # except Exception as e:
+        #     #     log.info('Falha ao registrar dados CSV ou SQL.')
+        #     #     log.info(repr(e))
+        #     # ###########################################################################################
+        #
+        #     try:
+        #         # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+        #         form = FormResultado(executaAguardandoSessaoJulgamento.listProcessos, 0, log)
+        #         log.info('Formulario gerado com sucesso.')
+        #         log.info('Atividade realizada com sucesso.')
+        #
+        #     except Exception as e:
+        #         log.info('Falha ao gerar o formulario final.')
+        #         log.info(executaAguardandoSessaoJulgamento.listProcessos)
+        #         log.info('Finalizando o robo.')
+        #         log.info(repr(e))
+        #         log.shutdown()
+        #         os._exit(0)
+        #         sys.exit(0)
 
-            log.info('---------------------------')
-            log.info('Atividade: Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão')
-            log.info('---------------------------')
-
-            # Registra Base
-            dataBaseModel['cod_atividade'] = '1'
-            dataBaseModel['atividade_concluida'] = '1'
-
-            # Executa a tarefa Aguardando Sessão Julgamento
-            executaAguardandoSessaoJulgamento = TaskAguardandoSessaoJulgamento(firefox, self.caminhoImages, log,
-                                                                               openXls, xlsData,
-                                                                               '(TR) Aguardando sessão de julgamento',
-                                                                               xml, dataBaseModel, inicioTime,
-                                                                               self.arrayVarRefDados)
-
-            individual = dataBaseModel['individual']
-
-            del dataBaseModel['individual']
-
-            # ###########################################################################################
-            # Registra os dados Request CSV
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-
-            webdriver.stop_proxy()
-
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
-            self.dataset_csv(dataBaseModel, log)
-            self.dataset_csv_individual(dataBaseModel, individual, log)
-            # ###########################################################################################
-
-            # Registra trafico lista principal
-            # dataBaseModel['qtd_requisicao'] = -1
-            # dataBaseModel['qtd_trafego_baixado_kb'] = -1
-
-            log.info('-------------------------------------------------')
-            log.info('-------------------------------------------------')
-            log.info('Dados para registro.')
-            log.info('Modelo principal:')
-            log.info(dataBaseModel)
-            log.info('Modelo individual:')
-            log.info(individual)
-            log.info('-------------------------------------------------')
-            log.info('-------------------------------------------------')
-
-            # try:
-            # Registra Base
-            dataBaseModel['atividade_concluida'] = '0'
-
-            # Registrados CSV e SQL
-            # ###########################################################################################
-            try:
-                # Dataset
-                self.dataset_csv(dataBaseModel, log)
-            except Exception as e:
-                log.info('Falha ao registrar dados geral.')
-                log.info(repr(e))
-
-            try:
-                self.dataset_csv_individual(dataBaseModel, individual, log)
-            except Exception as e:
-                log.info('Falha ao registrar dados individual.')
-                log.info(repr(e))
-
-            # except Exception as e:
-            #     log.info('Falha ao registrar dados CSV ou SQL.')
-            #     log.info(repr(e))
-            # ###########################################################################################
-
-            try:
-                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaAguardandoSessaoJulgamento.listProcessos, 0, log)
-                log.info('Formulario gerado com sucesso.')
-                log.info('Atividade realizada com sucesso.')
-
-            except Exception as e:
-                log.info('Falha ao gerar o formulario final.')
-                log.info(executaAguardandoSessaoJulgamento.listProcessos)
-                log.info('Finalizando o robo.')
-                log.info(repr(e))
-                log.shutdown()
-                os._exit(0)
-                sys.exit(0)
-
-        elif dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
+        if dataForm['atividade'] == 'Inclusão de processos na relação de julgamento':
 
             log.info('---------------------------')
             log.info('Atividade: Inclusão de processos na relação de julgamento')
@@ -363,89 +363,89 @@ class StartRobo:
                 os._exit(0)
                 sys.exit(0)
 
-        elif dataForm['atividade'] == 'Assinaturas de Processos para Juiz Titular':
-
-            log.info('---------------------------')
-            log.info('Atividade: Assinaturas de Processos para Juiz Titular')
-            log.info('---------------------------')
-
-            # Registra Base
-            dataBaseModel['cod_atividade'] = '3'
-            dataBaseModel['atividade_concluida'] = '1'
-
-            # Assinaturas de Processos para Juiz Titular
-            executaAssinaturaProcessos = TaskAssinaturaProcessos(firefox, self.caminhoImages, log,
-                                                                 'Assinaturas de Processos para Juiz Titular',
-                                                                 dataBaseModel, inicioTime, self.arrayVarRefDados)
-
-            individual = dataBaseModel['individual']
-
-            del dataBaseModel['individual']
-
-            # ###########################################################################################
-            # Registra os dados Request CSV
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
-
-            webdriver.stop_proxy()
-
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
-            self.dataset_csv(dataBaseModel, log)
-            self.dataset_csv_individual(dataBaseModel, individual, log)
-            # ###########################################################################################
-
-            # Registra trafico lista principal
-            # dataBaseModel['qtd_requisicao'] = -1
-            # dataBaseModel['qtd_trafego_baixado_kb'] = -1
-
-            log.info('-------------------------------------------------')
-            log.info('-------------------------------------------------')
-            log.info('Dados para registro.')
-            log.info('Modelo principal:')
-            log.info(dataBaseModel)
-            log.info('Modelo individual:')
-            log.info(individual)
-            log.info('-------------------------------------------------')
-            log.info('-------------------------------------------------')
-
-            # try:
-            # Registra Base
-            dataBaseModel['atividade_concluida'] = '0'
-
-            # Registrados CSV e SQL
-            # ###########################################################################################
-            try:
-                # Dataset
-                self.dataset_csv(dataBaseModel, log)
-            except Exception as e:
-                log.info('Falha ao registrar dados geral.')
-                log.info(repr(e))
-
-            try:
-                self.dataset_csv_individual(dataBaseModel, individual, log)
-            except Exception as e:
-                log.info('Falha ao registrar dados individual.')
-                log.info(repr(e))
-
-            # except Exception as e:
-            #     log.info('Falha ao registrar dados CSV ou SQL.')
-            #     log.info(repr(e))
-            # ###########################################################################################
-
-            try:
-                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
-                form = FormResultado(executaAssinaturaProcessos.listProcessos, 2, log)
-                log.info('Formulario gerado com sucesso.')
-                log.info('Atividade realizada com sucesso.')
-
-            except Exception as e:
-                log.info('Falha ao gerar o formulario final.')
-                log.info(executaAssinaturaProcessos.listProcessos)
-                log.info('Finalizando o robo.')
-                log.info(repr(e))
-                log.shutdown()
-                os._exit(0)
-                sys.exit(0)
+        # elif dataForm['atividade'] == 'Assinaturas de Processos para Juiz Titular':
+        #
+        #     log.info('---------------------------')
+        #     log.info('Atividade: Assinaturas de Processos para Juiz Titular')
+        #     log.info('---------------------------')
+        #
+        #     # Registra Base
+        #     dataBaseModel['cod_atividade'] = '3'
+        #     dataBaseModel['atividade_concluida'] = '1'
+        #
+        #     # Assinaturas de Processos para Juiz Titular
+        #     executaAssinaturaProcessos = TaskAssinaturaProcessos(firefox, self.caminhoImages, log,
+        #                                                          'Assinaturas de Processos para Juiz Titular',
+        #                                                          dataBaseModel, inicioTime, self.arrayVarRefDados)
+        #
+        #     individual = dataBaseModel['individual']
+        #
+        #     del dataBaseModel['individual']
+        #
+        #     # ###########################################################################################
+        #     # Registra os dados Request CSV
+        #     trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+        #
+        #     webdriver.stop_proxy()
+        #
+        #     dataBaseModel['qtd_requisicao'] = trafficData[1]
+        #     dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+        #     self.dataset_csv(dataBaseModel, log)
+        #     self.dataset_csv_individual(dataBaseModel, individual, log)
+        #     # ###########################################################################################
+        #
+        #     # Registra trafico lista principal
+        #     # dataBaseModel['qtd_requisicao'] = -1
+        #     # dataBaseModel['qtd_trafego_baixado_kb'] = -1
+        #
+        #     log.info('-------------------------------------------------')
+        #     log.info('-------------------------------------------------')
+        #     log.info('Dados para registro.')
+        #     log.info('Modelo principal:')
+        #     log.info(dataBaseModel)
+        #     log.info('Modelo individual:')
+        #     log.info(individual)
+        #     log.info('-------------------------------------------------')
+        #     log.info('-------------------------------------------------')
+        #
+        #     # try:
+        #     # Registra Base
+        #     dataBaseModel['atividade_concluida'] = '0'
+        #
+        #     # Registrados CSV e SQL
+        #     # ###########################################################################################
+        #     try:
+        #         # Dataset
+        #         self.dataset_csv(dataBaseModel, log)
+        #     except Exception as e:
+        #         log.info('Falha ao registrar dados geral.')
+        #         log.info(repr(e))
+        #
+        #     try:
+        #         self.dataset_csv_individual(dataBaseModel, individual, log)
+        #     except Exception as e:
+        #         log.info('Falha ao registrar dados individual.')
+        #         log.info(repr(e))
+        #
+        #     # except Exception as e:
+        #     #     log.info('Falha ao registrar dados CSV ou SQL.')
+        #     #     log.info(repr(e))
+        #     # ###########################################################################################
+        #
+        #     try:
+        #         # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+        #         form = FormResultado(executaAssinaturaProcessos.listProcessos, 2, log)
+        #         log.info('Formulario gerado com sucesso.')
+        #         log.info('Atividade realizada com sucesso.')
+        #
+        #     except Exception as e:
+        #         log.info('Falha ao gerar o formulario final.')
+        #         log.info(executaAssinaturaProcessos.listProcessos)
+        #         log.info('Finalizando o robo.')
+        #         log.info(repr(e))
+        #         log.shutdown()
+        #         os._exit(0)
+        #         sys.exit(0)
 
         elif dataForm['atividade'] == 'Transitar em Julgado':
 
@@ -533,15 +533,138 @@ class StartRobo:
                 os._exit(0)
                 sys.exit(0)
 
-        elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
+        # elif dataForm['atividade'] == 'Lançamento de movimentação TPU':
+        #
+        #     log.info('---------------------------')
+        #     log.info('Atividade: Lançamento de movimentação TPU')
+        #     log.info('---------------------------')
+        #
+        #     # Registra Base
+        #     dataBaseModel['cod_atividade'] = '5'
+        #     dataBaseModel['atividade_concluida'] = '1'
+        #
+        #     # Caso haja dados incorretos na planilha, já será verificado e validado
+        #     # Chamada feita somente para validacao e nao perder tempo na execucao
+        #     # Nao usa mais
+        #     # listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, log, xml)
+        #
+        #     try:
+        #         # Lançamento de movimentação TPU
+        #         executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
+        #                                            openXls, xlsData,
+        #                                            '(TR) Lançar movimentações de julgamento',
+        #                                            xml, dataBaseModel, inicioTime, self.arrayVarRefDados)
+        #
+        #         individual = dataBaseModel['individual']
+        #
+        #         del dataBaseModel['individual']
+        #
+        #     except Exception as e:
+        #         log.info(repr(e))
+        #
+        #     # ###########################################################################################
+        #     # Adiciona a lista de processos nao aptos
+        #     # Particularidade da Atividade
+        #     try:
+        #         # Adiciona a lista de processos nao aptos
+        #         # A partir dos dados da planilha
+        #         listDataProcessosInaptos = openXls.listProcessosInaptos
+        #
+        #         if len(listDataProcessosInaptos) > 0:
+        #             for x in range(len(listDataProcessosInaptos)):
+        #                 executaLancamento.listProcessos[0].append(listDataProcessosInaptos[x][0])
+        #                 executaLancamento.listProcessos[1].append(4)
+        #
+        #         log.info('Adicionando a lista de processos nao aptos.')
+        #     except Exception as e:
+        #
+        #         dataBaseModel['qtd_erros_robo'] += 1
+        #
+        #         log.info('Falha ao adicionar os dados ingnorados da planilha.')
+        #         log.info(repr(e))
+        #
+        #
+        #     # ###########################################################################################
+        #     # Registra os dados Request CSV
+        #     trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+        #
+        #     webdriver.stop_proxy()
+        #
+        #     dataBaseModel['qtd_requisicao'] = trafficData[1]
+        #     dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+        #     self.dataset_csv(dataBaseModel, log)
+        #     self.dataset_csv_individual(dataBaseModel, individual, log)
+        #     # ###########################################################################################
+        #
+        #
+        #     # Registra trafico lista principal
+        #     # dataBaseModel['qtd_requisicao'] = -1
+        #     # dataBaseModel['qtd_trafego_baixado_kb'] = -1
+        #
+        #     log.info('-------------------------------------------------')
+        #     log.info('-------------------------------------------------')
+        #     log.info('Dados para registro.')
+        #     log.info('Modelo principal:')
+        #     log.info(dataBaseModel)
+        #     log.info('Modelo individual:')
+        #     log.info(individual)
+        #     log.info('-------------------------------------------------')
+        #     log.info('-------------------------------------------------')
+        #
+        #     # try:
+        #     # Registra Base
+        #     dataBaseModel['atividade_concluida'] = '0'
+        #
+        #     # Registrados CSV e SQL
+        #     # ###########################################################################################
+        #     try:
+        #         # Dataset
+        #         self.dataset_csv(dataBaseModel, log)
+        #     except Exception as e:
+        #         log.info('Falha ao registrar dados geral.')
+        #         log.info(repr(e))
+        #
+        #     try:
+        #         self.dataset_csv_individual(dataBaseModel, individual, log)
+        #     except Exception as e:
+        #         log.info('Falha ao registrar dados individual.')
+        #         log.info(repr(e))
+        #
+        #     # except Exception as e:
+        #     #     log.info('Falha ao registrar dados CSV ou SQL.')
+        #     #     log.info(repr(e))
+        #     # ###########################################################################################
+        #
+        #
+        #     try:
+        #         # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+        #         form = FormResultado(executaLancamento.listProcessos, 3, log)
+        #         log.info('Formulario gerado com sucesso.')
+        #         log.info('Atividade realizada com sucesso.')
+        #
+        #     except Exception as e:
+        #         log.info('Falha ao gerar o formulario final.')
+        #         log.info(executaLancamento.listProcessos)
+        #         log.info('Finalizando o robo.')
+        #         log.info(repr(e))
+        #         log.shutdown()
+        #         os._exit(0)
+        #         sys.exit(0)
+
+        elif dataForm['atividade'] == 'Lançamento de movimentação TPU e Assinatura de Acórdão':
 
             log.info('---------------------------')
-            log.info('Atividade: Lançamento de movimentação TPU')
+            log.info('Atividade: Lançamento de movimentacao TPU e Assinatura de Acordao')
             log.info('---------------------------')
 
             # Registra Base
-            dataBaseModel['cod_atividade'] = '5'
+            dataBaseModel['cod_atividade'] = '6'
             dataBaseModel['atividade_concluida'] = '1'
+
+            webdriver.stop_proxy()
+            log.shutdown()
+            os._exit(0)
+            sys.exit(0)
 
             # Caso haja dados incorretos na planilha, já será verificado e validado
             # Chamada feita somente para validacao e nao perder tempo na execucao
@@ -549,7 +672,7 @@ class StartRobo:
             # listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, log, xml)
 
             try:
-                # Lançamento de movimentação TPU
+                # Lançamento de movimentacao TPU e Assinatura de Acordao
                 executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
                                                    openXls, xlsData,
                                                    '(TR) Lançar movimentações de julgamento',

@@ -25,7 +25,7 @@ class OpenXls:
     def OpenFileXls(self, firefox, logging):
 
         try:
-            xls = pd.ExcelFile(self._pathXls)
+            xls = pd.ExcelFile(self._pathXls, engine='openpyxl')
             logging.debug("Arquivo XLS carregado com sucesso.")
             return xls
         except:

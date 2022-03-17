@@ -513,10 +513,12 @@ class TaskInclusaoProcessos:
 
                 # Seleciona "Aptos para inclusão em mesa"
                 ##########################################################
-                mesa = WebDriverWait(firefox, 200).until(
+                mesa = WebDriverWait(firefox, 600).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'td#processoMesaTab_lbl')))
+
+                time.sleep(5)
 
                 ##########################################################
 
@@ -604,7 +606,7 @@ class TaskInclusaoProcessos:
                         ##########################################################
 
                         try:
-                            element = WebDriverWait(firefox, 30).until(
+                            element = WebDriverWait(firefox, 60).until(
                                 EC.presence_of_element_located(
                                     (By.CSS_SELECTOR,
                                      'table#pautaJulgamentoList tbody tr')))
@@ -654,7 +656,7 @@ class TaskInclusaoProcessos:
                         # Clica em incluir processos
                         # Finaliza atividade
                         ##########################################################
-                        element = WebDriverWait(firefox, 20).until(
+                        element = WebDriverWait(firefox, 60).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
                                  'form#j_id1620 input')))
@@ -738,7 +740,7 @@ class TaskInclusaoProcessos:
 
                         ##########################################################
                         # Para aguardar o carregamento total da pagina
-                        element = WebDriverWait(firefox, 30).until(
+                        element = WebDriverWait(firefox, 60).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
                                  'form#processoEmMesaForm div.propertyView div.value input.suggest')))
@@ -767,7 +769,8 @@ class TaskInclusaoProcessos:
 
                         return self.listProcessos
 
-        except:
+
+        except Exception as e:
 
             # Contabiliza dados
             self.qtd_erros_tentativa_processo_all += 1
@@ -776,6 +779,7 @@ class TaskInclusaoProcessos:
             logging.exception('Falha ao concluir a tarefa especificada.')
             logging.exception('Dia da sessao nao encontrado.')
             logging.info('Finalizando o robo.')
+            logging.info(repr(e))
             logging.shutdown()
 
             # Fecha popup

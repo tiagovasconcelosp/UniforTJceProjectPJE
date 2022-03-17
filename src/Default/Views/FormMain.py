@@ -131,11 +131,12 @@ class Form(StartRobo):
         selectTask = Combobox(stepThree, width=80, state="readonly")
 
         selectTask['values'] = (
-            "Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão",
+            # "Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão",
             "Inclusão de processos na relação de julgamento",
             "Transitar em Julgado",
-            "Assinaturas de Processos para Juiz Titular",
-            "Lançamento de movimentação TPU",
+            "Lançamento de movimentação TPU e Assinatura de Acórdão",
+            # "Assinaturas de Processos para Juiz Titular", # assinatura de acrdaos
+            # "Lançamento de movimentação TPU",
         )
 
         # selectTask.current(0)

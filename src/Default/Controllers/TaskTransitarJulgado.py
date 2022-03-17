@@ -555,10 +555,10 @@ class TaskTransitarJulgado:
 
             ##################################################################################
             try:
-                # Clica no botao Encaminhar para 02 - Devolver para instância de origem
+                # Clica no botao Encaminhar para 10 - Devolver para a origem
                 element = WebDriverWait(firefox, 30).until(
                     EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, 'ul li a[title="Encaminhar para 02 - Devolver para instância de origem"i]')))
+                        (By.CSS_SELECTOR, 'ul li a[title="Encaminhar para 10 - Devolver para a origem"i]')))
                 firefox.execute_script("arguments[0].click();", element)
 
                 # Contabiliza dados
@@ -568,7 +568,7 @@ class TaskTransitarJulgado:
 
             except Exception as e:
 
-                logging.info('Tentando novamente "Encaminhar para 02 - Devolver para instância de origem" . . .')
+                logging.info('Tentando novamente "Encaminhar para 10 - Devolver para a origem" . . .')
                 logging.info(repr(e))
                 # Contabiliza dados
                 self.qtd_erros_tentativa_processo_all += 1
@@ -580,7 +580,7 @@ class TaskTransitarJulgado:
                     element = WebDriverWait(firefox, 30).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR,
-                             'ul li a[title="Encaminhar para 02 - Devolver para instância de origem"i]')))
+                             'ul li a[title="Encaminhar para 10 - Devolver para a origem"i]')))
                     firefox.execute_script("arguments[0].click();", element)
 
                     # Contabiliza dados
@@ -594,7 +594,7 @@ class TaskTransitarJulgado:
                     # Contabiliza dados
                     self.qtd_erros_tentativa_processo_all += 1
 
-                    logging.info('Houve um problema na etapa devolver para instancia de origem.')
+                    logging.info('Houve um problema na etapa devolver para a origem.')
                     logging.info('Evidenciando com o print da tela.')
                     logging.info(repr(e))
                     image = Print(firefox, caminhoImages)

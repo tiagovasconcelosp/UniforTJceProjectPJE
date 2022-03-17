@@ -62,10 +62,6 @@
    "value": false
   },
   {
-   "optionDest": "disable_windowed_traceback",
-   "value": false
-  },
-  {
    "optionDest": "datas",
    "value": "C:/Users/Tiago/PycharmProjects/UniforTJceProject/logs;logs/"
   },
@@ -280,6 +276,10 @@
   {
    "optionDest": "hiddenimports",
    "value": "mysql.connector"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "openpyxl"
   }
  ],
  "nonPyinstallerOptions": {
