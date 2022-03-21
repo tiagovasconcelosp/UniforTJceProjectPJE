@@ -168,9 +168,17 @@ class TaskTransitarJulgado:
             time.sleep(2)
 
             # Usado para carregamento da pagina
-            element = WebDriverWait(firefox, 20).until(
+            # element = WebDriverWait(firefox, 20).until(
+            #     EC.presence_of_element_located(
+            #         (By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]')))
+
+            element = WebDriverWait(firefox, 30).until(
                 EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]')))
+                    (By.XPATH, '//*[@id="cbTDDecoration:cbTD"]')))
+
+            element = WebDriverWait(firefox, 30).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, '//*[@id="modTDDecoration:modTD"]')))
 
         except Exception as e:
             logging.info('Houve um problema na etapa de incluir peticoes. Por ter ocorrido algum problema de conexao.')
@@ -188,9 +196,11 @@ class TaskTransitarJulgado:
         try:
 
             # Seleciona o Tipo de Documento
-            select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]'))
-            # select.select_by_visible_text('Certidão')
+            # select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="cbTDDecoration:cbTD"i]'))
+            select = Select(firefox.find_element(By.XPATH, '//*[@id="cbTDDecoration:cbTD"]'))
+
             select.select_by_visible_text('Certidão trânsito em julgado')
+            # select.select_by_value('14')
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
@@ -206,13 +216,15 @@ class TaskTransitarJulgado:
             # Contabiliza dados
             self.qtd_erros_tentativa_processo_all += 1
 
-        time.sleep(10)
+        time.sleep(5)
 
         try:
             # Seleciona o Modelo
-            select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
-            # select.select_by_visible_text('Certidão de Trânsito')
-            select.select_by_visible_text('Certificação de Trânsito em julgado')
+            # select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
+            select = Select(firefox.find_element(By.XPATH, '//*[@id="modTDDecoration:modTD"]'))
+
+            select.select_by_visible_text('Certificação de Trânsito em Julgado')
+            # select.select_by_value('51')
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
@@ -222,10 +234,11 @@ class TaskTransitarJulgado:
             time.sleep(10)
             try:
                 # Seleciona o Modelo
-                select = Select(
-                    firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
-                # select.select_by_visible_text('Certidão de Trânsito*')
-                select.select_by_visible_text('Certificação de Trânsito em julgado')
+                # select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
+                select = Select(firefox.find_element(By.XPATH, '//*[@id="modTDDecoration:modTD"]'))
+
+                select.select_by_visible_text('Certificação de Trânsito em Julgado')
+                # select.select_by_value('51')
 
                 # Contabiliza dados
                 self.qtd_clicks_all += 1
