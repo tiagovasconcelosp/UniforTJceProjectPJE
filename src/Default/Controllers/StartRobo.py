@@ -29,6 +29,7 @@ from src.Default.Controllers.TaskAssinaturaProcessos import TaskAssinaturaProces
 from src.Default.Controllers.TaskInclusaoProcessos import TaskInclusaoProcessos
 from src.Default.Controllers.TaskLancamento import TaskLancamento
 from src.Default.Controllers.TaskTransitarJulgado import TaskTransitarJulgado
+from src.Default.Controllers.TaskTransitarJulgadoNovo import TaskTransitarJulgadoNovo
 from src.Default.Models.OpenXls import OpenXls
 from src.Default.Models.CSV import CSV
 from src.Default.Views.FormResultado import FormResultado
@@ -447,7 +448,7 @@ class StartRobo:
         #         os._exit(0)
         #         sys.exit(0)
 
-        elif dataForm['atividade'] == 'Transitar em Julgado':
+        elif dataForm['atividade'] == 'Transitar em Julgado - Fluxo Antigo':
 
             log.info('---------------------------')
             log.info('Atividade: Transitar em Julgado')
@@ -461,6 +462,92 @@ class StartRobo:
             executaTransitarJulgado = TaskTransitarJulgado(firefox, self.caminhoImages, log,
                                                            openXls, xlsData,
                                                            '(TR) Julgados em sessão',
+                                                           xml, dataBaseModel, inicioTime,
+                                                           self.arrayVarRefDados)
+
+            individual = dataBaseModel['individual']
+
+            del dataBaseModel['individual']
+
+            # ###########################################################################################
+            # Registra os dados Request CSV
+            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+
+            webdriver.stop_proxy()
+
+            dataBaseModel['qtd_requisicao'] = trafficData[1]
+            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            self.dataset_csv(dataBaseModel, log)
+            self.dataset_csv_individual(dataBaseModel, individual, log)
+            # ###########################################################################################
+
+            # Registra trafico lista principal
+            # dataBaseModel['qtd_requisicao'] = -1
+            # dataBaseModel['qtd_trafego_baixado_kb'] = -1
+
+            log.info('-------------------------------------------------')
+            log.info('-------------------------------------------------')
+            log.info('Dados para registro.')
+            log.info('Modelo principal:')
+            log.info(dataBaseModel)
+            log.info('Modelo individual:')
+            log.info(individual)
+            log.info('-------------------------------------------------')
+            log.info('-------------------------------------------------')
+
+            # try:
+            # Registra Base
+            dataBaseModel['atividade_concluida'] = '0'
+
+            # Registrados CSV e SQL
+            # ###########################################################################################
+            try:
+                # Dataset
+                self.dataset_csv(dataBaseModel, log)
+            except Exception as e:
+                log.info('Falha ao registrar dados geral.')
+                log.info(repr(e))
+
+            try:
+                self.dataset_csv_individual(dataBaseModel, individual, log)
+            except Exception as e:
+                log.info('Falha ao registrar dados individual.')
+                log.info(repr(e))
+
+            # except Exception as e:
+            #     log.info('Falha ao registrar dados CSV ou SQL.')
+            #     log.info(repr(e))
+            # ###########################################################################################
+
+            try:
+                # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
+                form = FormResultado(executaTransitarJulgado.listProcessos, 0, log)
+                log.info('Formulario gerado com sucesso.')
+                log.info('Atividade realizada com sucesso.')
+
+            except Exception as e:
+                log.info('Falha ao gerar o formulario final.')
+                log.info(executaTransitarJulgado.listProcessos)
+                log.info('Finalizando o robo.')
+                log.info(repr(e))
+                log.shutdown()
+                os._exit(0)
+                sys.exit(0)
+
+        elif dataForm['atividade'] == 'Transitar em Julgado - Fluxo Novo':
+
+            log.info('---------------------------')
+            log.info('Atividade: Transitar em Julgado - Fluxo Novo')
+            log.info('---------------------------')
+
+            # Registra Base
+            dataBaseModel['cod_atividade'] = '6'
+            dataBaseModel['atividade_concluida'] = '1'
+
+            # Transitar em Julgado
+            executaTransitarJulgado = TaskTransitarJulgadoNovo(firefox, self.caminhoImages, log,
+                                                           openXls, xlsData,
+                                                           '[Sec] - Prazo - VERIFICAR PRAZO JÁ DECORRIDO',
                                                            xml, dataBaseModel, inicioTime,
                                                            self.arrayVarRefDados)
 
@@ -658,7 +745,7 @@ class StartRobo:
             log.info('---------------------------')
 
             # Registra Base
-            dataBaseModel['cod_atividade'] = '6'
+            dataBaseModel['cod_atividade'] = '7'
             dataBaseModel['atividade_concluida'] = '1'
 
             webdriver.stop_proxy()

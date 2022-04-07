@@ -133,7 +133,8 @@ class Form(StartRobo):
         selectTask['values'] = (
             # "Encaminhar processos julgados em sessão para assinar inteiro teor de acórdão",
             "Inclusão de processos na relação de julgamento",
-            "Transitar em Julgado",
+            "Transitar em Julgado - Fluxo Antigo",
+            "Transitar em Julgado - Fluxo Novo",
             "Lançamento de movimentação TPU e Assinatura de Acórdão",
             # "Assinaturas de Processos para Juiz Titular", # assinatura de acrdaos
             # "Lançamento de movimentação TPU",
