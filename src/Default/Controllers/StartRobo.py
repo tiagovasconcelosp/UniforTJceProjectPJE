@@ -25,9 +25,10 @@ from src.Default.Controllers.Auth import Auth
 from src.Default.Controllers.OpenWebDriver import OpenWebDriver
 from src.Default.Controllers.Perfil import Perfil
 from src.Default.Controllers.TaskAguardandoSessaoJulgamento import TaskAguardandoSessaoJulgamento
-from src.Default.Controllers.TaskAssinaturaProcessos import TaskAssinaturaProcessos
-from src.Default.Controllers.TaskInclusaoProcessos import TaskInclusaoProcessos
 from src.Default.Controllers.TaskLancamento import TaskLancamento
+from src.Default.Controllers.TaskAssinaturaProcessos import TaskAssinaturaProcessos
+from src.Default.Controllers.TaskAssinaturaLancamento import TaskAssinaturaLancamento
+from src.Default.Controllers.TaskInclusaoProcessos import TaskInclusaoProcessos
 from src.Default.Controllers.TaskTransitarJulgado import TaskTransitarJulgado
 from src.Default.Controllers.TaskTransitarJulgadoNovo import TaskTransitarJulgadoNovo
 from src.Default.Models.OpenXls import OpenXls
@@ -343,11 +344,6 @@ class StartRobo:
             except Exception as e:
                 log.info('Falha ao registrar dados individual.')
                 log.info(repr(e))
-
-            # except Exception as e:
-            #     log.info('Falha ao registrar dados CSV ou SQL.')
-            #     log.info(repr(e))
-            # ###########################################################################################
 
             try:
                 # [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 1], ['3000516-78.2020.8.06.0016'], 2, 0, '40.26 segundos', 1]
@@ -748,21 +744,17 @@ class StartRobo:
             dataBaseModel['cod_atividade'] = '7'
             dataBaseModel['atividade_concluida'] = '1'
 
-            webdriver.stop_proxy()
-            log.shutdown()
-            os._exit(0)
-            sys.exit(0)
 
             # Caso haja dados incorretos na planilha, já será verificado e validado
             # Chamada feita somente para validacao e nao perder tempo na execucao
             # Nao usa mais
-            # listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, log, xml)
+            listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, log, xml)
 
             try:
                 # Lançamento de movimentacao TPU e Assinatura de Acordao
-                executaLancamento = TaskLancamento(firefox, self.caminhoImages, log,
+                executaLancamento = TaskAssinaturaLancamento(firefox, self.caminhoImages, log,
                                                    openXls, xlsData,
-                                                   '(TR) Lançar movimentações de julgamento',
+                                                   '[Gab] -Julgamento Colegiado - ASSINAR INTEIRO TEOR',
                                                    xml, dataBaseModel, inicioTime, self.arrayVarRefDados)
 
                 individual = dataBaseModel['individual']

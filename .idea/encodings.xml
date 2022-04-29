@@ -9,6 +9,7 @@
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/Print.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/StartRobo.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/TaskAguardandoSessaoJulgamento.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Default/Controllers/TaskAssinaturaLancamento.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/TaskAssinaturaProcessos.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/TaskLancamento.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Default/Controllers/TaskTransitarJulgado.py" charset="UTF-8" />
