@@ -314,7 +314,7 @@ class TaskAssinaturaLancamento:
             firefox.switch_to.frame(iframe)
 
             firefox.find_element(By.CSS_SELECTOR,
-                                 'form#taskInstanceForm div.rich-panel-body span div.col-sm-6 div.col-sm-12 fieldset input.inputText').send_keys(
+                                 'form#taskInstanceForm input.inputText').send_keys(
                 codRecorrente)
 
             # Contabiliza dados
@@ -330,17 +330,19 @@ class TaskAssinaturaLancamento:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-            time.sleep(5)
+            time.sleep(3)
 
             try:
+
+                codRecorrente = str(codRecorrente)
 
                 element = WebDriverWait(firefox, 20).until(
                     EC.presence_of_element_located(
                         (By.XPATH,
-                         "*//span[contains(., '(" + codRecorrente + ")')]")))
+                         "*//span[contains(text(), '(" + codRecorrente + ")')]")))
 
                 element = firefox.find_element(By.XPATH,
-                                               "*//span[contains(., '(" + codRecorrente + ")')]").text
+                                               "*//span[contains(text(), '(" + codRecorrente + ")')]").text
 
                 logging.info('---------------------------')
                 logging.info('Codigo localizado: ' + str(element))
@@ -384,8 +386,8 @@ class TaskAssinaturaLancamento:
                 # element = firefox.find_element(By.XPATH,
                 #                "*//span[contains(., '(" + codRecorrente + ")')]//ancestor::tr/td[last()]")
 
-                element = firefox.find_element(By.XPATH,
-                                     "//span[contains(text(), '(" + codRecorrente + ")')]//ancestor::tr/td[last()]")
+                element = firefox.find_element_by_xpath(
+                            "*//span[contains(text(), '(" + codRecorrente + ")')]//ancestor-or-self::tr[1]/td[last()]")
 
             except Exception as e:
                 logging.info(repr(e))
@@ -393,21 +395,41 @@ class TaskAssinaturaLancamento:
                 logging.info('Nao foi possivel localizar elemento com xpath.')
                 logging.info('---------------------------')
 
+                image = Print(firefox, caminhoImages)
+
+                # Contabiliza dados
+                self.qtd_erros_tentativa_processo_all += 1
+
+                firefox.switch_to.default_content()
+
+                # Localiza frame para o proximo processo
+                iframe = WebDriverWait(firefox, 30).until(
+                    EC.presence_of_element_located((By.ID, 'ngFrame')))
+
+                firefox.switch_to.frame(iframe)
+
+                firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
+
+                # Contabiliza dados
+                self.qtd_clicks_all += 1
+
+                return self.listProcessos
+
+            script1 = 'var evt = document.createEvent("MouseEvents");'
+            script2 = 'evt.initMouseEvent("mousedown", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);'
+            # script3 = '$x("*//span[contains(text(), \'(230)\')]//ancestor-or-self::tr[1]/td[last()]")[0].dispatchEvent(evt);'
+            script4 = 'arguments[0].dispatchEvent(evt);'
+
+            # Seleciona codigo
+            firefox.execute_script(script1 + script2 + script4, element)
+
             # for x in range(len(element)):
             #     elementDiv = elementDiv + ' div'
 
-            time.sleep(1)
-
-            # Seleciona o elemento clicavel para incluir o codigo de lancamento
-            # element = firefox.find_element(By.CSS_SELECTOR,
-            #                                'form#taskInstanceForm .value' + elementDiv + ' td:last-child')
-
             # Usa funcoes para simular o uso do mouse, nao é possivel executar por script
-            actions = ActionChains(firefox)
-            actions.click(on_element=element)
-            actions.perform()
-
-            time.sleep(1)
+            # actions = ActionChains(firefox)
+            # actions.click(on_element=element)
+            # actions.perform()
 
             # Contabiliza dados
             self.qtd_clicks_all += 1
@@ -496,38 +518,6 @@ class TaskAssinaturaLancamento:
             # Contabiliza dados
             self.qtd_clicks_all += 1
 
-
-
-            # firefox.switch_to.default_content()
-            #
-            # # Localiza frame para o proximo processo
-            # iframe = WebDriverWait(firefox, 20).until(
-            #     EC.presence_of_element_located((By.ID, 'ngFrame')))
-            # firefox.switch_to.frame(iframe)
-            #
-            # # Clica no botao para encaminhar processo
-            # element = WebDriverWait(firefox, 20).until(
-            #     EC.presence_of_element_located(
-            #         (By.CSS_SELECTOR, '#btnTransicoesTarefa')))
-            # firefox.execute_script("arguments[0].click();", element)
-            #
-            # # Contabiliza dados
-            # self.qtd_clicks_all += 1
-            #
-            # time.sleep(2)
-            #
-            # # Clica em Encaminhar para Finalizar e sair da tarefa
-            # element = WebDriverWait(firefox, 20).until(  # 5s
-            #     EC.presence_of_element_located(
-            #         (By.CSS_SELECTOR,
-            #          'ul.dropdown-transicoes li a[title="Encaminhar para Finalizar e sair da tarefa"i]')))
-            # firefox.execute_script("arguments[0].click();", element)
-            #
-            # # Contabiliza dados
-            # self.qtd_clicks_all += 1
-            #
-            # time.sleep(3)
-
             firefox.switch_to.default_content()
 
             # Localiza frame para o proximo processo
@@ -597,203 +587,203 @@ class TaskAssinaturaLancamento:
 
         self.countEncaminhados = 0
 
-        try:
+        # try:
 
-            time.sleep(3)
+        time.sleep(3)
 
-            element = WebDriverWait(firefox, 20).until(
-                EC.presence_of_element_located(
-                    (By.CSS_SELECTOR,
-                     'a[title="Abrir menu"i]')))
-            element.click()
+        element = WebDriverWait(firefox, 20).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR,
+                 'a[title="Abrir menu"i]')))
+        element.click()
 
-            # Contabiliza dados
-            arrayVarRefDados['qtd_clicks'] += 1
+        # Contabiliza dados
+        arrayVarRefDados['qtd_clicks'] += 1
 
-            time.sleep(1)
+        time.sleep(1)
 
-            firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
+        firefox.find_element(By.CSS_SELECTOR, "#menu div.nivel-aberto ul li:first-child a").click()
 
-            # Contabiliza dados
-            arrayVarRefDados['qtd_clicks'] += 1
+        # Contabiliza dados
+        arrayVarRefDados['qtd_clicks'] += 1
 
-            time.sleep(1)
+        time.sleep(1)
 
-            firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
+        firefox.find_element(By.CSS_SELECTOR, "#menu .nivel-overlay div.nivel-aberto ul li:first-child a").click()
 
-            # Contabiliza dados
-            arrayVarRefDados['qtd_clicks'] += 1
+        # Contabiliza dados
+        arrayVarRefDados['qtd_clicks'] += 1
 
-            iframe = WebDriverWait(firefox, 60).until(
-                EC.presence_of_element_located((By.ID, 'ngFrame')))
+        iframe = WebDriverWait(firefox, 60).until(
+            EC.presence_of_element_located((By.ID, 'ngFrame')))
 
-            firefox.switch_to.frame(iframe)
+        firefox.switch_to.frame(iframe)
 
-            element = WebDriverWait(firefox, 40).until(
-                EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
-            firefox.execute_script("arguments[0].click();", element)
+        element = WebDriverWait(firefox, 40).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, '#divTarefasPendentes .menuItem a[title="' + str(atividade) + '"i]')))
+        firefox.execute_script("arguments[0].click();", element)
 
-            # Contabiliza dados
-            arrayVarRefDados['qtd_clicks'] += 1
+        # Contabiliza dados
+        arrayVarRefDados['qtd_clicks'] += 1
 
-            logging.info('---------------------------')
-            logging.info('Tarefa localizada: ' + str(atividade))
-            logging.info('---------------------------')
+        logging.info('---------------------------')
+        logging.info('Tarefa localizada: ' + str(atividade))
+        logging.info('---------------------------')
 
-            time.sleep(2)
+        time.sleep(2)
 
-            logging.info('Iniciando a busca pelo os processos...')
+        logging.info('Iniciando a busca pelo os processos...')
 
-            listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, logging, xml)
+        listDataProcessos = openXls.getDataProcessLancamentoXLS(xlsData, firefox, logging, xml)
 
-            for i in range(len(listDataProcessos)):
+        for i in range(len(listDataProcessos)):
 
-                # Registra horario que iniciou o processo
-                inicioTimeProc = time.time()
+            # Registra horario que iniciou o processo
+            inicioTimeProc = time.time()
 
-                logging.info('Buscando o processo: ' + str(listDataProcessos[i][0]))
-                self.localizarProcesso(firefox, listDataProcessos[i][0], listDataProcessos[i][1], logging,
-                                       caminhoImages)
+            logging.info('Buscando o processo: ' + str(listDataProcessos[i][0]))
+            self.localizarProcesso(firefox, listDataProcessos[i][0], listDataProcessos[i][1], logging,
+                                   caminhoImages)
 
-                fimProc = time.time()
-                timeTotal = fimProc - inicioTimeProc
-                timeTotal = float('{:.2f}'.format(timeTotal))
-
-                try:
-                    # Inclui processo na lista dataset
-                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
-                    dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
-                    dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
-
-                except:
-                    logging.info('Falha ao registrar os dados individual na lista.')
-
-                logging.info('---------------------------')
-                logging.info('---------------------------')
-                logging.info('---------------------------')
-
-            logging.info('---------------------------')
-            logging.info('Dados gerados apos conclusao da super classe')
-            logging.info(dataBaseModel)
-            logging.info('---------------------------')
-
-            # for i in range(len(self.listProcessos[0])):
-            #     dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
-            #     dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
-            #     dataBaseModel['individual']['processo_nao_encontrado'].append(0)
-
-            try:
-                if self.listProcessos[2]:
-                    for i in range(len(self.listProcessos[2])):
-                        dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
-                        dataBaseModel['individual']['processo_realizado'].append(1)
-                        dataBaseModel['individual']['processo_nao_encontrado'].append(1)
-                        dataBaseModel['individual']['tempo_execucao_individual_sec'].append(0)
-
-            except:
-                logging.info('Falha ao registrar os dados individual')
-
-            logging.info('---------------------------')
-            logging.info('Dados gerados apos conclusao da super classe - individual')
-            logging.info(dataBaseModel)
-            logging.info('---------------------------')
-
-            ###################################
-            # Verificacao dos processos localizado e encaminhados
-            ###################################
-
-            if len(self.listProcessos[0]) > 0:
-                logging.info('Lista de processos encontrados:')
-                for i in range(len(self.listProcessos[0])):
-                    logging.info('Processo: ' + str(self.listProcessos[0][i]))
-
-                logging.info("Total de processos encontrados: " + str(len(self.listProcessos[0])))
-                logging.info("Total de processos encaminhados: " + str(self.countEncaminhados))
-            else:
-                logging.info('Nenhum processo foi encontrado.')
-
-            self.listProcessos.append(len(self.listProcessos[0]))
-            self.listProcessos.append(self.countEncaminhados)
-
-            logging.info('---------------------------')
-
-            ###################################
-            # Calculo do tempo de execucao
-            ###################################
-
-            # Registra horario que finalizou a tarefa
-            fim = time.time()
-
-            timeTotal = fim - inicioTime
-
+            fimProc = time.time()
+            timeTotal = fimProc - inicioTimeProc
             timeTotal = float('{:.2f}'.format(timeTotal))
 
-            if timeTotal <= 60:
-                logging.info('Tempo de execucao da atividade: ' + str(timeTotal) + ' segundos')
-                self.listProcessos.append(str(timeTotal) + ' segundos')
-            else:
-                logging.info('Tempo de execucao da atividade: ' + str(timeTotal // 60) + ' minutos')
-                self.listProcessos.append(str(timeTotal // 60) + ' minutos')
-
-            logging.info('---------------------------')
-
-            ###################################
-            # Vericacao dos processos nao localizados
-            ###################################
-
-            if len(self.listProcessos[2]) > 0:
-                logging.info('Lista de processos nao foram encontrados:')
-                for i in range(len(self.listProcessos[2])):
-                    logging.info('Processo: ' + str(self.listProcessos[2][i]))
-                logging.info("Total de processos que nao foram encontrados: " + str(len(self.listProcessos[2])))
-            else:
-                logging.info('Todos os processos foram encontrados corretamente.')
-
-            self.listProcessos.append(len(self.listProcessos[2]))
-
-            logging.info('---------------------------')
-
-            firefox.switch_to.default_content()
-
-            # Registra base
-            dataBaseModel['qtd_processos'] = (str(len(self.listProcessos[0])))
-            dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
-            dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
-            dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
-            dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
-
-            logging.info('---------------------------')
-            logging.info('Final Atividade:')
-            logging.info(dataBaseModel)
-            logging.info('---------------------------')
-
             try:
-                firefox.close()
+                # Inclui processo na lista dataset
+                dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
+                dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+                dataBaseModel['individual']['tempo_execucao_individual_sec'].append(str(timeTotal))
+
             except:
-                firefox.quit()
-
-            logging.info('Lista completa para formulario:')
-            logging.info(str(self.listProcessos))
-            logging.info('---------------------------')
-
-            return self.listProcessos
-
-
-        except Exception as e:
-
-            dataBaseModel['qtd_erros_robo'] = 1
+                logging.info('Falha ao registrar os dados individual na lista.')
 
             logging.info('---------------------------')
-            logging.info('Atividade Erro:')
-            logging.info(dataBaseModel)
+            logging.info('---------------------------')
             logging.info('---------------------------')
 
-            image = Print(firefox, caminhoImages)
-            logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
-            logging.info('Finalizando o robo.')
-            logging.info(repr(e))
-            # logging.shutdown()
+        logging.info('---------------------------')
+        logging.info('Dados gerados apos conclusao da super classe')
+        logging.info(dataBaseModel)
+        logging.info('---------------------------')
 
-            # Retorna valor caso haja algum erro durante a execucao
-            return self.listProcessos
+        # for i in range(len(self.listProcessos[0])):
+        #     dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[0][i]))
+        #     dataBaseModel['individual']['processo_realizado'].append(str(self.listProcessos[1][i]))
+        #     dataBaseModel['individual']['processo_nao_encontrado'].append(0)
+
+        try:
+            if self.listProcessos[2]:
+                for i in range(len(self.listProcessos[2])):
+                    dataBaseModel['individual']['cod_processo'].append(str(self.listProcessos[2][i]))
+                    dataBaseModel['individual']['processo_realizado'].append(1)
+                    dataBaseModel['individual']['processo_nao_encontrado'].append(1)
+                    dataBaseModel['individual']['tempo_execucao_individual_sec'].append(0)
+
+        except:
+            logging.info('Falha ao registrar os dados individual')
+
+        logging.info('---------------------------')
+        logging.info('Dados gerados apos conclusao da super classe - individual')
+        logging.info(dataBaseModel)
+        logging.info('---------------------------')
+
+        ###################################
+        # Verificacao dos processos localizado e encaminhados
+        ###################################
+
+        if len(self.listProcessos[0]) > 0:
+            logging.info('Lista de processos encontrados:')
+            for i in range(len(self.listProcessos[0])):
+                logging.info('Processo: ' + str(self.listProcessos[0][i]))
+
+            logging.info("Total de processos encontrados: " + str(len(self.listProcessos[0])))
+            logging.info("Total de processos encaminhados: " + str(self.countEncaminhados))
+        else:
+            logging.info('Nenhum processo foi encontrado.')
+
+        self.listProcessos.append(len(self.listProcessos[0]))
+        self.listProcessos.append(self.countEncaminhados)
+
+        logging.info('---------------------------')
+
+        ###################################
+        # Calculo do tempo de execucao
+        ###################################
+
+        # Registra horario que finalizou a tarefa
+        fim = time.time()
+
+        timeTotal = fim - inicioTime
+
+        timeTotal = float('{:.2f}'.format(timeTotal))
+
+        if timeTotal <= 60:
+            logging.info('Tempo de execucao da atividade: ' + str(timeTotal) + ' segundos')
+            self.listProcessos.append(str(timeTotal) + ' segundos')
+        else:
+            logging.info('Tempo de execucao da atividade: ' + str(timeTotal // 60) + ' minutos')
+            self.listProcessos.append(str(timeTotal // 60) + ' minutos')
+
+        logging.info('---------------------------')
+
+        ###################################
+        # Vericacao dos processos nao localizados
+        ###################################
+
+        if len(self.listProcessos[2]) > 0:
+            logging.info('Lista de processos nao foram encontrados:')
+            for i in range(len(self.listProcessos[2])):
+                logging.info('Processo: ' + str(self.listProcessos[2][i]))
+            logging.info("Total de processos que nao foram encontrados: " + str(len(self.listProcessos[2])))
+        else:
+            logging.info('Todos os processos foram encontrados corretamente.')
+
+        self.listProcessos.append(len(self.listProcessos[2]))
+
+        logging.info('---------------------------')
+
+        firefox.switch_to.default_content()
+
+        # Registra base
+        dataBaseModel['qtd_processos'] = (str(len(self.listProcessos[0])))
+        dataBaseModel['qtd_processos_nao_localizados'] = str(len(self.listProcessos[2]))
+        dataBaseModel['qtd_clicks'] = arrayVarRefDados['qtd_clicks'] + self.qtd_clicks_all
+        dataBaseModel['qtd_erros_tentativa_processo'] = self.qtd_erros_tentativa_processo_all
+        dataBaseModel['tempo_execucao_sec'] = str(timeTotal)
+
+        logging.info('---------------------------')
+        logging.info('Final Atividade:')
+        logging.info(dataBaseModel)
+        logging.info('---------------------------')
+
+        try:
+            firefox.close()
+        except:
+            firefox.quit()
+
+        logging.info('Lista completa para formulario:')
+        logging.info(str(self.listProcessos))
+        logging.info('---------------------------')
+
+        return self.listProcessos
+
+
+        # except Exception as e:
+        #
+        #     dataBaseModel['qtd_erros_robo'] = 1
+        #
+        #     logging.info('---------------------------')
+        #     logging.info('Atividade Erro:')
+        #     logging.info(dataBaseModel)
+        #     logging.info('---------------------------')
+        #
+        #     image = Print(firefox, caminhoImages)
+        #     logging.info('Falha ao concluir a tarefa especificada. - ' + str(atividade))
+        #     logging.info('Finalizando o robo.')
+        #     logging.info(repr(e))
+        #     # logging.shutdown()
+        #
+        #     # Retorna valor caso haja algum erro durante a execucao
+        #     return self.listProcessos

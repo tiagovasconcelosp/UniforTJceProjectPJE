@@ -103,6 +103,7 @@ class StartRobo:
         # Codigo fica especificado de acordo com codigo atribuido no sistema
         if dataForm['perfil'] == '5ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito' \
                 or dataForm['perfil'] == 'Gab. 3 - 5ª Juizado Especial Cível e Criminal de Iguatu / Juiz de Direito' \
+                or dataForm['perfil'] == '1ª Turma Recursal / Gab. 1 - 1ª Turma Recursal / Juiz Titular' \
                 or dataForm[
             'perfil'] == '5ª Turma Recursal Provisória / Gab. 2 - 5ª Turma Recursal Provisória / Juiz Titular':
             codPerfil = 0

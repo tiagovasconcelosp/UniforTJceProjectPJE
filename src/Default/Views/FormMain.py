@@ -157,6 +157,9 @@ class Form(StartRobo):
             # "05ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
             # 'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal de Iguatu / Juiz de Direito',
             # 'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal do Crato / Juiz Substituto',
+
+            '1ª Turma Recursal / Gab. 1 - 1ª Turma Recursal / Juiz Titular',
+
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral",

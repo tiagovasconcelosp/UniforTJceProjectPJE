@@ -1,8 +1,8 @@
 # ###################################################
 # ###################################################
 # ## Projeto MPCE - Unifor - Universidade de Fortaleza
-# ## Programa Cientista-Chefe, da Fundação Cearense de Apoio ao Desenvolvimento Científico e Tecnológico (Funcap)
-# ## Laboratório M02
+# ## Programa Cientista-Chefe, da FundaÃ§Ã£o Cearense de Apoio ao Desenvolvimento CientÃ­fico e TecnolÃ³gico (Funcap)
+# ## LaboratÃ³rio M02
 # ## Cientista-Chefe: Prof. Carlos Caminha
 # ## Bolsista Desenvolvedor do Projeto:
 # ## Tiago Vasconcelos

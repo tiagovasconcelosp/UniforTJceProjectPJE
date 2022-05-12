@@ -88,6 +88,7 @@ class OpenWebDriver():
         firefoxProfile.set_preference("browser.cache.memory.enable", False)
         firefoxProfile.set_preference("browser.cache.offline.enable", False)
         firefoxProfile.set_preference("network.http.use-cache", False)
+        firefoxProfile.set_preference("devtools.chrome.enabled", True)
 
         firefoxProfile.set_preference("plugin.state.java", 0)
 

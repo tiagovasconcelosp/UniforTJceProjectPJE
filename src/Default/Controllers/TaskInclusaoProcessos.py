@@ -502,6 +502,8 @@ class TaskInclusaoProcessos:
                 # Aguarda o carregamento da nova janela
                 ##########################################################
 
+                time.sleep(30)
+
                 # Seleciona "Aptos para inclusão em pauta"
                 ##########################################################
                 pauta = WebDriverWait(firefox, 600).until(
@@ -517,8 +519,6 @@ class TaskInclusaoProcessos:
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR,
                          'td#processoMesaTab_lbl')))
-
-                time.sleep(5)
 
                 ##########################################################
 
@@ -601,12 +601,14 @@ class TaskInclusaoProcessos:
                         logging.info(processVirtual)
                         logging.info('---------------------------')
 
+                        time.sleep(45)
+
                         # Localiza processos a serem selecionados e seleciona cada um deles
                         # WebDrive usado somente para o aguardo do carregamento da pagina
                         ##########################################################
 
                         try:
-                            element = WebDriverWait(firefox, 60).until(
+                            element = WebDriverWait(firefox, 600).until(
                                 EC.presence_of_element_located(
                                     (By.CSS_SELECTOR,
                                      'table#pautaJulgamentoList tbody tr')))
@@ -656,7 +658,7 @@ class TaskInclusaoProcessos:
                         # Clica em incluir processos
                         # Finaliza atividade
                         ##########################################################
-                        element = WebDriverWait(firefox, 60).until(
+                        element = WebDriverWait(firefox, 600).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
                                  'form#j_id1620 input')))
@@ -738,9 +740,11 @@ class TaskInclusaoProcessos:
 
                         mesa.click()
 
+                        time.sleep(5)
+
                         ##########################################################
                         # Para aguardar o carregamento total da pagina
-                        element = WebDriverWait(firefox, 60).until(
+                        element = WebDriverWait(firefox, 600).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
                                  'form#processoEmMesaForm div.propertyView div.value input.suggest')))
