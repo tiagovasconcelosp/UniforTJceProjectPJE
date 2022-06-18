@@ -160,6 +160,17 @@ class Form(StartRobo):
 
             # '1ª Turma Recursal / Gab. 1 - 1ª Turma Recursal / Juiz Titular',
 
+            "2ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria",
+            "2ª Turma Recursal / Secretaria de Colegiado / Servidor Geral",
+            "2ª Turma Recursal / Secretaria de Colegiado / Secretário da Sessão",
+
+            "1ª Turma Recursal / Gab. 3 - 1ª Turma Recursal / Juiz Substituto",
+            "2ª Turma Recursal / Gab. 3 - 2ª Turma Recursal / Juiz Titular",
+            "2ª Turma Recursal / Gab. 1 - 2ª Turma Recursal / Juiz Titular",
+            "2ª Turma Recursal / Gab. 2 - 2ª Turma Recursal / Juiz Titular",
+            "4ª Turma Recursal / Gab. 1 - 4ª Turma Recursal / Juiz Substituto",
+            "2ª Turma Recursal / Gab.da Presidência da 2ª Turma Recursal / Juiz de Direito",
+
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão",
             "5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral",
