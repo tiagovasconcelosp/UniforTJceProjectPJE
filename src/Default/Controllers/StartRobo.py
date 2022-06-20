@@ -115,27 +115,29 @@ class StartRobo:
                 or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Titular' \
                 or dataForm['perfil'] == 'Gab. 3 - 5ª Juizado Especial Cível e Criminal do Crato / Juiz Substituto':
             codPerfil = 1
-        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria' \
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Colegiado / Diretor de Secretaria' \
                 or dataForm['perfil'] == '2ª Turma Recursal / Gab.da Presidência da 2ª Turma Recursal / Juiz de Direito' \
              or dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Colegiado / Servidor Geral' \
              or dataForm['perfil'] == '6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular':
             codPerfil = 2
-        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão' \
+        elif dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão' \
                 or dataForm[
             'perfil'] == '6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular' \
-                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral':
+                or dataForm['perfil'] == '5ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral':
             codPerfil = 3
         elif dataForm[
-            'perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Diretor de Secretaria'\
+            'perfil'] == '6ª Turma Recursal Provisória / Secretaria de Colegiado / Diretor de Secretaria'\
                 or dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria':
             codPerfil = 4
-        elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Secretário da Sessão' \
+        elif dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão' \
                 or dataForm['perfil'] == '2ª Turma Recursal / Secretaria de Colegiado / Secretário da Sessão' \
-                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Turma Recursal / Servidor Geral':
+                or dataForm['perfil'] == '6ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral':
             codPerfil = 5
         elif dataForm['perfil'] == '4ª Turma Recursal / Gab. 1 - 4ª Turma Recursal / Juiz Substituto'\
                 or dataForm['perfil'] == '2ª Turma Recursal / Gab. 2 - 2ª Turma Recursal / Juiz Titular':
             codPerfil = 3
+        else:
+            codPerfil = 999
 
         # a =  [['3000462-70.2019.8.06.0009', '0046121-55.2016.8.06.0011'], [1, 0], [], 2, 0, '40.26 segundos', 1]
         # form = FormResultado(a, 0, log)
