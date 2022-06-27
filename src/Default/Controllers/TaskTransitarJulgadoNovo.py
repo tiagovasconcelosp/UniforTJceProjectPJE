@@ -626,7 +626,8 @@ class TaskTransitarJulgadoNovo:
 
                 # Seleciona o Motivo da Remessa
                 select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.propertyView div.value select'))
-                select.select_by_visible_text('outros motivos')
+                #select.select_by_visible_text('outros motivos')
+                select.select_by_visible_text('por julgamento definitivo do recurso')
 
                 # Contabiliza dados
                 self.qtd_clicks_all += 1
@@ -654,7 +655,8 @@ class TaskTransitarJulgadoNovo:
 
                     # Seleciona o Motivo da Remessa
                     select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.propertyView div.value select'))
-                    select.select_by_visible_text('outros motivos')
+                    #select.select_by_visible_text('outros motivos')
+                    select.select_by_visible_text('por julgamento definitivo do recurso')
 
                     # Contabiliza dados
                     self.qtd_clicks_all += 1

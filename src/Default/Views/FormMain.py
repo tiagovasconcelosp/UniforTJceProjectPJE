@@ -136,7 +136,7 @@ class Form(StartRobo):
             "Transitar em Julgado - Fluxo Antigo",
             "Transitar em Julgado - Fluxo Novo",
             "Lançamento de movimentação TPU e Assinatura de Acórdão",
-            # "Assinaturas de Processos para Juiz Titular", # assinatura de acrdaos
+            # "Assinaturas de Processos para Juiz Titular", # assinatura de acordaos
             # "Lançamento de movimentação TPU",
         )
 
@@ -159,6 +159,10 @@ class Form(StartRobo):
             # 'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal do Crato / Juiz Substituto',
 
             # '1ª Turma Recursal / Gab. 1 - 1ª Turma Recursal / Juiz Titular',
+
+            "1ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria",
+            "1ª Turma Recursal / Secretaria de Colegiado / Servidor Geral",
+            "1ª Turma Recursal / Secretaria de Colegiado / Secretário da Sessão",
 
             "2ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria",
             "2ª Turma Recursal / Secretaria de Colegiado / Servidor Geral",
