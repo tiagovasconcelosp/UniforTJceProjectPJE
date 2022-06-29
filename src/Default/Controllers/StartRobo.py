@@ -314,12 +314,12 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            #trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
 
-            webdriver.stop_proxy()
+            # webdriver.stop_proxy()
 
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            #dataBaseModel['qtd_requisicao'] = trafficData[1]
+            #dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
             self.dataset_csv(dataBaseModel, log)
             self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################
@@ -479,12 +479,12 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            #trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
 
-            webdriver.stop_proxy()
+            # webdriver.stop_proxy()
 
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            #dataBaseModel['qtd_requisicao'] = trafficData[1]
+            #dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
             self.dataset_csv(dataBaseModel, log)
             self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################
@@ -565,12 +565,12 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            #trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
 
-            webdriver.stop_proxy()
+            # webdriver.stop_proxy()
 
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            #dataBaseModel['qtd_requisicao'] = trafficData[1]
+            ##dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
             self.dataset_csv(dataBaseModel, log)
             self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################
@@ -800,12 +800,12 @@ class StartRobo:
 
             # ###########################################################################################
             # Registra os dados Request CSV
-            trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
+            #trafficData = self.registre_request(webdriver, fileNameRegis, log, dataBaseModel)
 
-            webdriver.stop_proxy()
+            # webdriver.stop_proxy()
 
-            dataBaseModel['qtd_requisicao'] = trafficData[1]
-            dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
+            #dataBaseModel['qtd_requisicao'] = trafficData[1]
+            #dataBaseModel['qtd_trafego_baixado_kb'] = trafficData[2]
             self.dataset_csv(dataBaseModel, log)
             self.dataset_csv_individual(dataBaseModel, individual, log)
             # ###########################################################################################

@@ -14,6 +14,7 @@ import os
 import re
 import sys
 import json
+import time
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -24,6 +25,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from browsermobproxy import Server
 from random import randint
 from datetime import datetime
+import psutil
 
 import functools
 
@@ -59,25 +61,32 @@ class OpenWebDriver():
 
         # #######################################
 
-        if self.server != "":
-            try:
-                self.server.stop()
-            except:
-                self.server = ""
-
-        try:
-
-            self.server = Server(self._proxy + "bin\\browsermob-proxy.bat")
-            self.server.start()
-            self.proxy = self.server.create_proxy()
-
-        except Exception as e:
-            logging.exception('Falha ao iniciar o proxy.')
-            logging.info('Finalizando o robo.')
-            logging.info(repr(e))
-            logging.shutdown()
-            os._exit(0)
-            sys.exit(0)
+        # for proc in psutil.process_iter():
+        #     # check whether the process name matches
+        #     if proc.name() == "browsermob-proxy":
+        #         proc.kill()
+        #
+        # if self.server != "":
+        #     try:
+        #         self.server.stop()
+        #     except:
+        #         self.server = ""
+        #
+        # try:
+        #     dict = {'port': 8090}
+        #     self.server = Server(self._proxy + "bin\\browsermob-proxy.bat")#, options=dict)
+        #     self.server.start()
+        #     time.sleep(1)
+        #     self.proxy = self.server.create_proxy()
+        #     time.sleep(1)
+        #
+        # except Exception as e:
+        #     logging.exception('Falha ao iniciar o proxy.')
+        #     logging.info('Finalizando o robo.')
+        #     logging.info(repr(e))
+        #     logging.shutdown()
+        #     os._exit(0)
+        #     sys.exit(0)
 
         # #######################################
 
@@ -92,7 +101,7 @@ class OpenWebDriver():
 
         firefoxProfile.set_preference("plugin.state.java", 0)
 
-        firefoxProfile.set_proxy(self.proxy.selenium_proxy())
+        #firefoxProfile.set_proxy(self.proxy.selenium_proxy())
 
         # #######################################
         # Vericar em ambiente de produção
@@ -137,9 +146,9 @@ class OpenWebDriver():
 
             waitButtonLogin = WebDriverWait(firefox, 10)
 
-            self.proxy.new_har(
-                "Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(10, 99)) + str(
-                    randint(10, 99)) + str(randint(10, 99)), options={'captureHeaders': True, 'captureContent': True})
+            # self.proxy.new_har(
+            #     "Robo_" + datetime.now().strftime("%d_%m_%Y__%H_%M_%S") + "_" + str(randint(10, 99)) + str(
+            #         randint(10, 99)) + str(randint(10, 99)), options={'captureHeaders': True, 'captureContent': True})
 
             logging.info("Navegador iniciado com sucesso.")
 
@@ -148,7 +157,7 @@ class OpenWebDriver():
             logging.info('Finalizando o robo.')
             logging.info(repr(e))
             logging.shutdown()
-            self.server.stop()
+            #self.server.stop()
 
             os._exit(0)
             sys.exit(0)

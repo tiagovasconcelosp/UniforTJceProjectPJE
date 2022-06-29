@@ -231,7 +231,7 @@ class TaskTransitarJulgadoNovo:
 
         except Exception as e:
             logging.info(repr(e))
-            time.sleep(10)
+            time.sleep(5)
             try:
                 # Seleciona o Modelo
                 # select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
@@ -245,48 +245,62 @@ class TaskTransitarJulgadoNovo:
 
                 time.sleep(3)
 
+
             except Exception as e:
-                logging.info('Houve um problema na etapa de selecionar o Modelo')
-                logging.info('Evidenciando com o print da tela.')
                 logging.info(repr(e))
-                logging.info('---------------------------')
-                image = Print(firefox, caminhoImages)
-                countErro += 1
-
-                # Contabiliza dados
-                self.qtd_erros_tentativa_processo_all += 1
-
-                # ##############################
-
-                # Deleta o ultimo registro
-                del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
-                # Inclui novo registro
-                # Caso nao tenha o botao emcaminhar
-                # coluna encaminhado com valor 1 para não encaminhado
-                self.listProcessos[1].append(1)
-
+                # Mudança de nome que vem aconter
                 try:
-                    firefox.close()
-                except:
-                    firefox.quit()
+                    # Seleciona o Modelo
+                    # select = Select(firefox.find_element(By.CSS_SELECTOR, 'div.col-sm-12 select[name="modTDDecoration:modTD"i]'))
+                    select = Select(firefox.find_element(By.XPATH, '//*[@id="modTDDecoration:modTD"]'))
 
-                time.sleep(3)
+                    select.select_by_visible_text('Certificação de Trânsito em Julgado')
 
-                # Para sair do objeto popup
-                firefox.switch_to.window(main_window_handle)
+                    # Contabiliza dados
+                    self.qtd_clicks_all += 1
 
-                firefox.switch_to.default_content()
+                except Exception as e:
+                    logging.info('Houve um problema na etapa de selecionar o Modelo')
+                    logging.info('Evidenciando com o print da tela.')
+                    logging.info(repr(e))
+                    logging.info('---------------------------')
+                    image = Print(firefox, caminhoImages)
+                    countErro += 1
 
-                # Localiza frame alerta de documento nao assinados
-                iframe = WebDriverWait(firefox, 10).until(
-                    EC.presence_of_element_located((By.ID, 'ngFrame')))
+                    # Contabiliza dados
+                    self.qtd_erros_tentativa_processo_all += 1
 
-                firefox.switch_to.frame(iframe)
+                    # ##############################
 
-                firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
+                    # Deleta o ultimo registro
+                    del (self.listProcessos[1][(len(self.listProcessos[1]) - 1)])
+                    # Inclui novo registro
+                    # Caso nao tenha o botao emcaminhar
+                    # coluna encaminhado com valor 1 para não encaminhado
+                    self.listProcessos[1].append(1)
 
-                return self.listProcessos
-                # ##############################
+                    try:
+                        firefox.close()
+                    except:
+                        firefox.quit()
+
+                    time.sleep(3)
+
+                    # Para sair do objeto popup
+                    firefox.switch_to.window(main_window_handle)
+
+                    firefox.switch_to.default_content()
+
+                    # Localiza frame alerta de documento nao assinados
+                    iframe = WebDriverWait(firefox, 10).until(
+                        EC.presence_of_element_located((By.ID, 'ngFrame')))
+
+                    firefox.switch_to.frame(iframe)
+
+                    firefox.find_element(By.ID, "inputPesquisaTarefas").clear()
+
+                    return self.listProcessos
+                    # ##############################
 
         time.sleep(3)
 
