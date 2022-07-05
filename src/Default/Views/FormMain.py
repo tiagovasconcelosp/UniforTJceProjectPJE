@@ -147,47 +147,38 @@ class Form(StartRobo):
         # #########################################################
         selectPerfil = Combobox(stepFour, width=80, state="readonly")
 
-        selectPerfil['values'] = (
-            # "1ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
-            # "2ª Turma Recursal / Secretaria de Turma Recursal / Servidor Geral",
-            # "4ª Turma Recursal / Gab. 2 - 4ª Turma Recursal / Juiz Substituto",
-            # "5ª Turma Recursal Provisória / Gab. 3 - 5ª Turma Recursal Provisória / Juiz Subitituto",
-            # "5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Subitituto",
-            # "6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Subitituto",
-            # "05ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
-            # 'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal de Iguatu / Juiz de Direito',
-            # 'Gab. 3 - 5ª ' + 'Juizado Especial Cível e Criminal do Crato / Juiz Substituto',
+        # selectPerfil['values'] = (
+        #
+        #     "1ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria",
+        #     "1ª Turma Recursal / Secretaria de Colegiado / Servidor Geral",
+        #     "1ª Turma Recursal / Secretaria de Colegiado / Secretário da Sessão",
+        #
+        #     "2ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria",
+        #     "2ª Turma Recursal / Secretaria de Colegiado / Servidor Geral",
+        #     "2ª Turma Recursal / Secretaria de Colegiado / Secretário da Sessão",
+        #
+        #     "1ª Turma Recursal / Gab. 3 - 1ª Turma Recursal / Juiz Substituto",
+        #     "2ª Turma Recursal / Gab. 3 - 2ª Turma Recursal / Juiz Titular",
+        #     "2ª Turma Recursal / Gab. 1 - 2ª Turma Recursal / Juiz Titular",
+        #     "2ª Turma Recursal / Gab. 2 - 2ª Turma Recursal / Juiz Titular",
+        #     "4ª Turma Recursal / Gab. 1 - 4ª Turma Recursal / Juiz Substituto",
+        #     "2ª Turma Recursal / Gab.da Presidência da 2ª Turma Recursal / Juiz de Direito",
+        #
+        #     "5ª Turma Recursal Provisória / Secretaria de Colegiado / Diretor de Secretaria",
+        #     "5ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão",
+        #     "5ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral",
+        #     "5ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
+        #     "5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Titular",
+        #     "5ª Turma Recursal Provisória / Gab. 2 - 5ª Turma Recursal Provisória / Juiz Titular",
+        #     "6ª Turma Recursal Provisória / Secretaria de Colegiado / Diretor de Secretaria",
+        #     "6ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão",
+        #     "6ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral",
+        #     "6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular",
+        #     "6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Titular",
+        #     "6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular",
+        # )
 
-            # '1ª Turma Recursal / Gab. 1 - 1ª Turma Recursal / Juiz Titular',
-
-            "1ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria",
-            "1ª Turma Recursal / Secretaria de Colegiado / Servidor Geral",
-            "1ª Turma Recursal / Secretaria de Colegiado / Secretário da Sessão",
-
-            "2ª Turma Recursal / Secretaria de Colegiado / Diretor de Secretaria",
-            "2ª Turma Recursal / Secretaria de Colegiado / Servidor Geral",
-            "2ª Turma Recursal / Secretaria de Colegiado / Secretário da Sessão",
-
-            "1ª Turma Recursal / Gab. 3 - 1ª Turma Recursal / Juiz Substituto",
-            "2ª Turma Recursal / Gab. 3 - 2ª Turma Recursal / Juiz Titular",
-            "2ª Turma Recursal / Gab. 1 - 2ª Turma Recursal / Juiz Titular",
-            "2ª Turma Recursal / Gab. 2 - 2ª Turma Recursal / Juiz Titular",
-            "4ª Turma Recursal / Gab. 1 - 4ª Turma Recursal / Juiz Substituto",
-            "2ª Turma Recursal / Gab.da Presidência da 2ª Turma Recursal / Juiz de Direito",
-
-            "5ª Turma Recursal Provisória / Secretaria de Colegiado / Diretor de Secretaria",
-            "5ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão",
-            "5ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral",
-            "5ª Turma Recursal / Presidência da 5ª Turma Recursal / Juiz de Direito",
-            "5ª Turma Recursal Provisória / Gab. 1 - 5ª Turma Recursal Provisória / Juiz Titular",
-            "5ª Turma Recursal Provisória / Gab. 2 - 5ª Turma Recursal Provisória / Juiz Titular",
-            "6ª Turma Recursal Provisória / Secretaria de Colegiado / Diretor de Secretaria",
-            "6ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão",
-            "6ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral",
-            "6ª Turma Recursal Provisória / Gab. 1 - 6ª Turma Recursal Provisória / Juiz Titular",
-            "6ª Turma Recursal Provisória / Gab. 2 - 6ª Turma Recursal Provisória / Juiz Titular",
-            "6ª Turma Recursal Provisória / Gab. da Presidência da 6ª Turma Recursal / Juiz Titular",
-        )
+        selectPerfil['values'] = [i.text for i in self._xml.iter('value')]
 
         # selectPerfil.current(0)
         selectPerfil.grid(row=7, sticky='W', padx=5, pady=2, ipady=2)
