@@ -661,7 +661,8 @@ class TaskInclusaoProcessos:
                         element = WebDriverWait(firefox, 600).until(
                             EC.presence_of_element_located(
                                 (By.CSS_SELECTOR,
-                                 'form#j_id1620 input')))
+                                 #'form#j_id1620 input')))
+                                 'table#richTabRelacaoJulgamento form input[value="Incluir"i]')))
                         element.click()
                         ##########################################################
 
