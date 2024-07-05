@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <title>Automação de Atividades - Robô Clóvis</title>
+    <versao>1.14.4</versao>
+    <ambiente>Todos</ambiente>
+    <aplicacao>Clovis PJE</aplicacao>
+    <matricula></matricula>
+    <url>https://pje.tjce.jus.br/pje1grau/login.seam</url>
+    <urlPje2g>https://pje.tjce.jus.br/pje2grau/login.seam</urlPje2g>
+    <urlSeeu>https://seeu.pje.jus.br/seeu/</urlSeeu>
+    <urlSisbajud>https://sisbajud.cnj.jus.br/</urlSisbajud>
+    <urlRenajud>https://renajud.pdpj.jus.br/</urlRenajud>
+    <directoryLog>Logs</directoryLog>
+    <directoryImagesGui>Images</directoryImagesGui> <!-- Utilizado para manipulação windows -->
+    <directoryImagesPrints>Prints</directoryImagesPrints>
+    <filterXLS>X</filterXLS>
+    <caminhoExecutados></caminhoExecutados>
+    <columnRobo>0</columnRobo>
+    <columnProcess>1</columnProcess>
+    <columnData>2</columnData>
+    <columnSession>3</columnSession>
+    <columnResult>2</columnResult>
+    <acaoEmErro>0</acaoEmErro>
+
+    <elaborarMandadoCitacao>
+        <etiquetaMandado>EMITIR MANDADO CITAÇÃO</etiquetaMandado>
+    </elaborarMandadoCitacao>
+
+    <embargosDeclaracao>
+        <tarefaEmbargo>Embargos de Declaração</tarefaEmbargo>
+    </embargosDeclaracao>
+    <consultaSISBAJUD>
+        <modelo>NÚCLEO 4.0 - ORDEM DE BLOQUEIO</modelo>
+        <juizSisbajud>AUGUSTO LIMA DOS SANTOS</juizSisbajud>
+        <varaSisbajud>50865</varaSisbajud>
+        <etiquetaSISBAJUD>SISBAJUD - bloquear</etiquetaSISBAJUD>
+        <!--
+        <varaSisbajud>84264</varaSisbajud>
+        <etiquetaSISBAJUD>SISBAJUD - RENATO</etiquetaSISBAJUD>
+        -->
+    </consultaSISBAJUD>
+    <cartaCitacao>
+        <modelo>ECARTAS_CARTA DE CITAÇÃO_NUCLEO 40</modelo>
+    </cartaCitacao>
+    <determinarMedidasConstrição>
+        <modelo>2.1 DECISÃO GENÉRICA DEFERIMENTO (ROBÔ)</modelo>
+        <etiqueta>2.1 TODOS OS SISTEMAS DE CONSTRIÇÃO</etiqueta>
+    </determinarMedidasConstrição>
+    <despachoInicial>
+        <modelo>NÚCLEO DESPACHO INICIAL ROBÔS</modelo>
+    </despachoInicial>
+    <resultadoSISBAJUD>
+        <modelo>NÚCLEO 4.0 - RESPOSTA DA ORDEM DE BLOQUEIO</modelo>
+        <etiquetaRespostaSISBAJUD>Resposta Sisbajud</etiquetaRespostaSISBAJUD>
+        <filaRespostaSISBAJUD>[EF] Recebidos da consulta aos convênios</filaRespostaSISBAJUD> 
+    </resultadoSISBAJUD>
+    <mandadoCitacao>
+        <modelo>NÚCLEO 4.0 MANDADO DE CITAÇÃO</modelo>
+    </mandadoCitacao>
+    <intimarPessoalmente>
+        <modelo>mandado INTIMAR APENADO DO DESPACHO EM ANEXO</modelo>
+    </intimarPessoalmente>
+    <incidentesVencer>
+        <dias>5</dias>
+        <modeloBusca>ATO ORDINATÓRIO</modeloBusca>
+        <modelo>Ato Ordinatório</modelo>
+        <modeloAssinar>modelo robo</modeloAssinar>
+    </incidentesVencer>
+    <incidentesVencerCitacao>
+        <dias>5</dias>
+        <modeloBusca>ATO ORDINATÓRIO</modeloBusca>
+        <modelo>Ato Ordinatório</modelo>
+        <modeloAssinar>3ª VEP ROBO RELATORIO DE MONITORAMENTO</modeloAssinar>
+    </incidentesVencerCitacao>
+    <preAnalise>
+        <modeloPesquisa>ROBO MP</modeloPesquisa>
+    </preAnalise>
+    <perfils>
+        <value>5ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão</value>
+        <value>5ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral</value>
+        <value>6ª Turma Recursal Provisória / Secretaria de Colegiado / Secretário da Sessão</value>
+        <value>6ª Turma Recursal Provisória / Secretaria de Colegiado / Servidor Geral</value>
+        <value>SEJUD 1o Grau Fazenda Pública / Direção da SEJUD / Diretor da SEJUD de 1º Grau</value>
+        <value>1º Núcleo de Justiça 4.0 - Execução Fiscal / Direção de Secretaria / Diretor de Secretaria</value>
+        <value>1º Núcleo de Justiça 4.0 - Execução Fiscal / Secretaria / Servidor Geral</value>
+        <value>1º Núcleo de Justiça 4.0 - Execução Fiscal / Juiz de Direito 01</value>
+        <value>12ª Unidade do Juizado Especial Cível da Comarca de Fortaleza / Direção de Secretaria / Diretor de Secretaria</value>
+        <value>1ª Vara de Execuções Fiscais da Comarca de Fortaleza / Direção de Secretaria / Diretor de Secretaria</value>
+        <value>3ª Vara de Execuções Fiscais da Comarca de Fortaleza / Direção de Secretaria / Diretor de Secretaria</value>
+
+        <value>2ª Vara Cível da Comarca de Eusébio / Secretaria / Servidor Geral</value>
+    </perfils>
+    <vara>TJCE - Fortaleza - 3ª Vara de Execução Penal (Regime Semiaberto e Fechado)</vara>
+    <dataRecorren>
+        <recorrentes>
+            <codDesc>Prejudicado</codDesc>
+            <cod>230</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Não Conhecido</codDesc>
+            <cod>235</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Provido</codDesc>
+            <cod>237</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Parcialmente Provido</codDesc>
+            <cod>238</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Improvido</codDesc>
+            <cod>239</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Embargo Acolhido</codDesc>
+            <cod>198</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Embargo não Acolhido</codDesc>
+            <cod>200</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Concedida Segurança</codDesc>
+            <cod>442</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Denegada Segurança</codDesc>
+            <cod>446</cod>
+        </recorrentes>
+        <recorrentes>
+            <codDesc>Embargo Parcialmente Acolhido</codDesc>
+            <cod>871</cod>
+        </recorrentes>
+    </dataRecorren>
+    <mesas>
+        <mesa>TJCE - Fortaleza - 3ª Vara de Execução Penal (Regime Semiaberto e Fechado)</mesa>
+        <mesa>TJCE - Fortaleza - 3ª Vara de Execução Penal (Regime Aberto)</mesa>
+    </mesas>
+    <etiquetaMandado>emitir mandado citação</etiquetaMandado>
+    <etiquetaCitacaoIntimacao>Robotização - intimação diário</etiquetaCitacaoIntimacao>
+    <etiquetaCitacaoIntimacaoSentenca>Robotização - intimação diário - sentença</etiquetaCitacaoIntimacaoSentenca>
+    <etiquetaConsultaRenajud>RENAJUD - consultar</etiquetaConsultaRenajud>
+    <tarefaEmbargo>Embargos de Declaração</tarefaEmbargo>
+</config>

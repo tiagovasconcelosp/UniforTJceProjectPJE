@@ -1,0 +1,309 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject/main.py"
+  },
+  {
+   "optionDest": "onefile",
+   "value": false
+  },
+  {
+   "optionDest": "console",
+   "value": false
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject/icon_pje.ico"
+  },
+  {
+   "optionDest": "name",
+   "value": "clovis"
+  },
+  {
+   "optionDest": "ascii",
+   "value": false
+  },
+  {
+   "optionDest": "clean_build",
+   "value": true
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "disable_windowed_traceback",
+   "value": false
+  },
+  {
+   "optionDest": "embed_manifest",
+   "value": true
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": true
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "win_private_assemblies",
+   "value": false
+  },
+  {
+   "optionDest": "win_no_prefer_redirects",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "argv_emulation",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject/logs;logs/"
+  },
+  {
+   "optionDest": "pathex",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject"
+  },
+  {
+   "optionDest": "hookspath",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "json"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "getmac"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pandas"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "sys"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "unicodedata"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "tkinter"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "os"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "xml.etree.ElementTree"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "urllib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "datetime"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "csv"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "io"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "time"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "asyncio"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pathlib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "urllib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "socket"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "PIL"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "re"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "random"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pyautogui"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "winreg"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "aiohttp"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "pandas._libs.tslib"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.by"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.keys"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.firefox.options"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.common.action_chains"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.support.wait"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.support.select"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.support"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.chrome.options"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.support"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium.webdriver.chrome.service"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "selenium"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "chromedriver_autoinstaller"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "geckodriver_autoinstaller"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Print"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Auth"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Perfil"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Logging"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.TaskInclusaoProcessos"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.TaskMovimentarProcessos"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Views.FormResultado"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Models.OpenXls"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Logger"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Metodos"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Logger"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Metodos"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "src.Default.Controllers.Perfil"
+  },  
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject/config;config/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject/images;images/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject/prints;prints/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/tiago/PycharmProjects/clovis-pje/src/aplicacao/UniforTJceProject/icon_pje.ico;."
+  }  
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}
